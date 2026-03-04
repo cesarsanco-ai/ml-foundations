@@ -1,0 +1,370 @@
+\documentclass[12pt,a4paper,openany,oneside]{book}
+
+% --- Paquetes ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, es-noshorthands]{babel}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{hhline}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc}
+\pgfplotsset{compat=1.18}
+
+\geometry{margin=2.5cm}
+
+% --- Colores y estilos para código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Estilo de cabecera y pie ---
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[L]{\small Carlos César Sánchez Coronel}
+\fancyhead[R]{\small Sesión 4: Clasificación I - Regresión Logística y Métricas}
+\fancyfoot[L]{\small Carlos César Sánchez Coronel}
+\fancyfoot[C]{\thepage}
+
+% --- Portada ---
+\title{
+    \textbf{Sesión 4} \\ 
+    \Huge \textbf{CLASIFICACIÓN I: REGRESIÓN LOGÍSTICA Y MÉTRICAS} \\
+    \Large Modelos probabilísticos, evaluación y desbalance de clases
+}
+\author{
+    \small Por \\ \vspace{0.2cm}
+    \Large \textsc{Carlos César Sánchez Coronel}
+}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\addcontentsline{toc}{chapter}{Índice general}
+
+% ------------------------------------------------------------------
+% CAPÍTULO 4: SESIÓN 4 - CLASIFICACIÓN I
+% ------------------------------------------------------------------
+\chapter{Clasificación I: Regresión Logística y Métricas}
+
+En esta sesión se introduce el problema de clasificación binaria, el modelo de regresión logística como extensión probabilística de los modelos lineales, y se profundiza en la evaluación de clasificadores mediante métricas derivadas de la matriz de confusión, la curva ROC y el manejo de clases desbalanceadas.
+
+\section{Logro de la sesión}
+Implementar modelos de clasificación binaria y evaluarlos correctamente con las métricas adecuadas, comprendiendo el impacto del desbalance de clases y las técnicas para mitigarlo.
+
+\section{Introducción: de la regresión a la clasificación}
+Mientras que la regresión predice valores continuos, la clasificación asigna una etiqueta discreta a cada observación. El caso más simple es la clasificación binaria, donde la variable objetivo \(y \in \{0,1\}\). La regresión lineal no es adecuada para este problema porque:
+\begin{itemize}
+    \item Las predicciones pueden salirse del rango \([0,1]\), imposible para probabilidades.
+    \item Los errores no son homocedásticos ni normalmente distribuidos.
+\end{itemize}
+La regresión logística resuelve estos problemas modelando directamente la probabilidad de pertenencia a una clase mediante una función sigmoide.
+
+\section{Regresión logística}
+
+\subsection{Función sigmoide}
+La función logística o sigmoide transforma cualquier valor real en el intervalo \((0,1)\):
+\[
+\sigma(z) = \frac{1}{1 + e^{-z}}
+\]
+Propiedades:
+\begin{itemize}
+    \item \(\sigma(z) \to 0\) cuando \(z \to -\infty\)
+    \item \(\sigma(z) \to 1\) cuando \(z \to \infty\)
+    \item \(\sigma(0) = 0.5\)
+    \item Es monótona creciente y diferenciable, lo que facilita la optimización.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={$z$}, ylabel={$\sigma(z)$},
+    xmin=-6, xmax=6, ymin=0, ymax=1,
+    grid=both, width=0.8\textwidth
+]
+\addplot[blue, thick, domain=-6:6, samples=100] {1/(1+exp(-x))};
+\addplot[dashed] coordinates {(-6,0.5) (6,0.5)};
+\addplot[dashed] coordinates {(0,0) (0,1)};
+\end{axis}
+\end{tikzpicture}
+\caption{Función sigmoide.}
+\end{center}
+
+\subsection{Modelo probabilístico}
+En regresión logística, se modela la probabilidad de que la instancia \(x\) pertenezca a la clase 1:
+\[
+P(y=1|x) = \sigma(\beta_0 + \beta_1 x_1 + \dots + \beta_p x_p) = \frac{1}{1 + e^{-(\beta_0 + \beta^T x)}}
+\]
+y por tanto \(P(y=0|x) = 1 - P(y=1|x)\).
+
+\subsection{Interpretación de coeficientes}
+A diferencia de la regresión lineal, los coeficientes no representan cambios lineales en \(y\), sino en la escala de los log-odds (logit). El logit se define como:
+\[
+\text{logit}(p) = \ln\left(\frac{p}{1-p}\right) = \beta_0 + \beta^T x
+\]
+Así, un incremento unitario en \(x_j\) aumenta los log-odds en \(\beta_j\). Para interpretar en términos de odds, se usa \(e^{\beta_j}\): el odds ratio. Si \(\beta_j = 0.5\), entonces \(e^{0.5} \approx 1.65\), lo que significa que las odds de pertenecer a la clase 1 se multiplican por 1.65 por cada incremento unitario en \(x_j\), manteniendo constantes las demás variables.
+
+\subsection{Función de pérdida: entropía cruzada (log-loss)}
+No se utiliza el error cuadrático porque la salida es probabilística y la distribución de los errores no es normal. La función de pérdida para una muestra \((x_i, y_i)\) es la log-verosimilitud negativa:
+\[
+\mathcal{L}(\beta) = - \left[ y_i \ln(\hat{p}_i) + (1 - y_i) \ln(1 - \hat{p}_i) \right]
+\]
+donde \(\hat{p}_i = P(y=1|x_i)\). Para todo el conjunto de datos, la pérdida total es:
+\[
+J(\beta) = -\frac{1}{n} \sum_{i=1}^n \left[ y_i \ln(\hat{p}_i) + (1 - y_i) \ln(1 - \hat{p}_i) \right]
+\]
+Esta función es convexa, lo que garantiza un único mínimo global.
+
+\subsection{Optimización: gradiente descendente}
+No existe solución analítica cerrada. El gradiente de la función de pérdida respecto a \(\beta\) es:
+\[
+\nabla J(\beta) = \frac{1}{n} \sum_{i=1}^n (\hat{p}_i - y_i) x_i
+\]
+Sorprendentemente, tiene la misma forma que en regresión lineal, pero con \(\hat{p}_i\) definido mediante la sigmoide. Esto permite usar gradiente descendente y sus variantes.
+
+\subsection{Límite de decisión}
+El límite de decisión (frontera que separa las clases) es el conjunto de puntos donde \(P(y=1|x) = 0.5\), es decir:
+\[
+\beta_0 + \beta^T x = 0
+\]
+En el espacio de características, esta es una superficie lineal (recta en 2D, plano en 3D, hiperplano en dimensiones superiores). Por tanto, la regresión logística es un clasificador lineal.
+
+\subsection{Regularización en regresión logística}
+Al igual que en regresión lineal, se puede añadir regularización para controlar la complejidad y evitar sobreajuste. Las formulaciones son análogas:
+\begin{itemize}
+    \item \textbf{Ridge (L2):} añade \(\lambda \|\beta\|_2^2\) a la función de pérdida.
+    \item \textbf{Lasso (L1):} añade \(\lambda \|\beta\|_1\).
+    \item \textbf{Elastic Net:} combinación de ambas.
+\end{itemize}
+La regularización es especialmente útil cuando hay muchas características o cuando se busca selección de variables (Lasso).
+
+\subsection{Caso de uso: detección de spam}
+Se dispone de correos electrónicos con características como frecuencia de palabras sospechosas, presencia de enlaces, longitud del mensaje, etc. La regresión logística modela la probabilidad de que un correo sea spam. La interpretación de los coeficientes permite identificar qué palabras o características son más influyentes en la clasificación. Además, la salida probabilística permite establecer umbrales diferentes según el costo de clasificar erróneamente un correo legítimo como spam (falso positivo) frente a dejar pasar un spam (falso negativo).
+
+\section{Evaluación de clasificadores binarios}
+
+\subsection{Matriz de confusión}
+La matriz de confusión resume los resultados de la clasificación comparando las predicciones con los valores reales:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c|c|c}
+ & \textbf{Real Positivo} & \textbf{Real Negativo} \\
+\hline
+\textbf{Predicho Positivo} & VP (Verdaderos Positivos) & FP (Falsos Positivos) \\
+\textbf{Predicho Negativo} & FN (Falsos Negativos) & VN (Verdaderos Negativos) \\
+\end{tabular}
+\caption{Matriz de confusión.}
+\end{table}
+
+Cada celda tiene una interpretación específica en el contexto del problema:
+\begin{itemize}
+    \item \textbf{VP:} casos positivos correctamente identificados (ej. spam correctamente etiquetado).
+    \item \textbf{VN:} casos negativos correctamente identificados (ej. correo legítimo no marcado como spam).
+    \item \textbf{FP:} falsas alarmas (ej. correo legítimo marcado como spam).
+    \item \textbf{FN:} casos positivos omitidos (ej. spam que llega a la bandeja de entrada).
+\end{itemize}
+
+\subsection{Métricas derivadas de la matriz de confusión}
+
+\subsubsection{Exactitud (Accuracy)}
+\[
+\text{Accuracy} = \frac{VP + VN}{VP + VN + FP + FN}
+\]
+Proporción de aciertos totales. Es adecuada cuando las clases están balanceadas y los costos de error son simétricos. En problemas desbalanceados, puede ser engañosa (por ejemplo, un clasificador que siempre predice la clase mayoritaria tendrá alta exactitud pero será inútil).
+
+\subsubsection{Precisión (Precision)}
+\[
+\text{Precision} = \frac{VP}{VP + FP}
+\]
+De todas las instancias que el modelo clasificó como positivas, ¿cuántas realmente lo son? Mide la calidad de las predicciones positivas. Útil cuando los falsos positivos tienen un costo alto (ej. diagnóstico de una enfermedad grave donde un falso positivo genera estrés y pruebas adicionales).
+
+\subsubsection{Recall (Sensibilidad, Tasa de Verdaderos Positivos)}
+\[
+\text{Recall} = \frac{VP}{VP + FN}
+\]
+De todas las instancias positivas reales, ¿cuántas fueron capturadas por el modelo? Mide la cobertura de la clase positiva. Es crítica cuando los falsos negativos son costosos (ej. detectar fraudes bancarios, donde dejar pasar un fraude tiene gran impacto económico).
+
+\subsubsection{Especificidad (Specificity)}
+\[
+\text{Specificity} = \frac{VN}{VN + FP}
+\]
+De todas las instancias negativas reales, ¿cuántas fueron correctamente identificadas? Es el complemento de la tasa de falsos positivos. Útil cuando los falsos positivos son costosos.
+
+\subsubsection{F1-Score}
+\[
+F1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+\]
+Media armónica entre precisión y recall. Equilibra ambas métricas y es útil cuando se busca un balance entre ellas. Varía entre 0 y 1, siendo 1 el valor óptimo.
+
+\subsection{Comparación de métricas con ejemplos simulados}
+Supóngase un problema de detección de fraudes con 1000 transacciones: 20 fraudulentas (positivas) y 980 normales (negativas). Se evalúan dos clasificadores:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l|c|c|c|c}
+ & \textbf{VP} & \textbf{FP} & \textbf{VN} & \textbf{FN} \\
+\hline
+Modelo A & 18 & 10 & 970 & 2 \\
+Modelo B & 20 & 100 & 880 & 0 \\
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item \textbf{Exactitud:} A = (18+970)/1000 = 98.8\%, B = (20+880)/1000 = 90.0\%. Según exactitud, A es mejor.
+    \item \textbf{Precisión:} A = 18/(18+10) = 64.3\%, B = 20/(20+100) = 16.7\%. Mucho mejor A.
+    \item \textbf{Recall:} A = 18/(18+2) = 90.0\%, B = 20/(20+0) = 100\%. B captura todos los fraudes.
+    \item \textbf{F1:} A = 2*0.643*0.9/(0.643+0.9) = 0.75, B = 2*0.167*1/(0.167+1) = 0.286.
+\end{itemize}
+
+\textbf{Interpretación de negocio:} Si el costo de un fraude no detectado (FN) es muy alto, el modelo B (recall 100\%) es preferible a pesar de su baja precisión, ya que genera muchos falsos positivos que pueden revisarse manualmente. Si el costo de revisar falsos positivos es alto, el modelo A es mejor. Esta elección depende del contexto y no de una métrica aislada.
+
+\subsection{Curva ROC y AUC}
+
+\subsubsection{Concepto}
+La curva ROC (Receiver Operating Characteristic) muestra el rendimiento de un clasificador para todos los posibles umbrales de decisión. En el eje X se representa la tasa de falsos positivos (FPR = FP/(FP+VN)) y en el eje Y la tasa de verdaderos positivos (TPR = recall). Cada punto de la curva corresponde a un umbral diferente.
+
+\subsubsection{Interpretación}
+\begin{itemize}
+    \item Un clasificador perfecto tiene TPR=1 y FPR=0 en algún umbral (esquina superior izquierda).
+    \item La línea diagonal (TPR = FPR) representa un clasificador aleatorio.
+    \item Cuanto más se aleja la curva hacia la esquina superior izquierda, mejor es el clasificador.
+\end{itemize}
+
+\subsubsection{AUC (Area Under the Curve)}
+El AUC mide el área bajo la curva ROC. Varía entre 0.5 (clasificador aleatorio) y 1.0 (clasificador perfecto). Interpretación probabilística: el AUC es la probabilidad de que el modelo asigne una puntuación más alta a una instancia positiva aleatoria que a una negativa aleatoria. Es una métrica umbral-independiente y muy útil para comparar modelos globalmente.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={Tasa de Falsos Positivos (FPR)},
+    ylabel={Tasa de Verdaderos Positivos (TPR)},
+    xmin=0, xmax=1, ymin=0, ymax=1,
+    grid=both, width=0.7\textwidth,
+    legend pos=south east
+]
+\addplot[blue, thick, domain=0:1, samples=100] {1 - (1-x)^2};
+\addplot[dashed, red] coordinates {(0,0) (1,1)};
+\legend{Clasificador, Aleatorio}
+\end{axis}
+\end{tikzpicture}
+\caption{Ejemplo de curva ROC. El AUC es el área sombreada bajo la curva azul.}
+\end{center}
+
+\subsection{Cuándo usar cada métrica}
+\begin{itemize}
+    \item \textbf{Accuracy:} Clases balanceadas, costos simétricos.
+    \item \textbf{Precision:} Minimizar falsos positivos es prioritario (ej. notificaciones push, diagnóstico de enfermedades graves).
+    \item \textbf{Recall:} Minimizar falsos negativos es prioritario (ej. detección de fraudes, screening médico).
+    \item \textbf{F1-score:} Se necesita un balance entre precisión y recall; útil cuando las clases están desbalanceadas.
+    \item \textbf{AUC-ROC:} Comparar modelos independientemente del umbral; muy usado en investigación y competiciones.
+\end{itemize}
+
+\section{Manejo de clases desbalanceadas}
+En muchos problemas reales, una clase (la minoritaria) es mucho menos frecuente que la otra. Por ejemplo, en detección de fraudes, las transacciones fraudulentas pueden ser solo el 1\% del total. Los modelos tienden a ignorar la clase minoritaria si no se toman medidas.
+
+\subsection{Técnicas de muestreo}
+
+\subsubsection{Submuestreo (Undersampling)}
+Reducir aleatoriamente el número de instancias de la clase mayoritaria para igualar la frecuencia con la minoritaria. Ventaja: reduce el tamaño del dataset. Desventaja: puede descartar información valiosa.
+
+\subsubsection{Sobremuestreo (Oversampling)}
+Duplicar aleatoriamente instancias de la clase minoritaria. Puede llevar a sobreajuste por replicación exacta.
+
+\subsubsection{SMOTE (Synthetic Minority Over-sampling Technique)}
+Genera instancias sintéticas de la clase minoritaria interpolando entre vecinos cercanos. Para una muestra \(x_i\) de la clase minoritaria, se elige un vecino \(x_j\) y se crea una nueva muestra:
+\[
+x_{\text{nuevo}} = x_i + \lambda (x_j - x_i), \quad \lambda \in [0,1]
+\]
+Este método es más efectivo que el sobremuestreo simple porque introduce variedad.
+
+\subsection{Técnicas a nivel de algoritmo}
+\begin{itemize}
+    \item \textbf{Pesos en la función de pérdida:} Asignar un mayor peso a los errores en la clase minoritaria. La función de pérdida ponderada es:
+    \[
+    J_{\text{ponderada}} = -\frac{1}{n} \sum_{i=1}^n \left[ w_1 y_i \ln(\hat{p}_i) + w_0 (1 - y_i) \ln(1 - \hat{p}_i) \right]
+    \]
+    donde \(w_1\) y \(w_0\) son los pesos para las clases positiva y negativa. Típicamente \(w_1 = \frac{n}{n_1}\) y \(w_0 = \frac{n}{n_0}\).
+    \item \textbf{Umbral de decisión ajustable:} En lugar de usar 0.5 como umbral, se puede disminuir para favorecer la detección de la clase minoritaria, a costa de aumentar falsos positivos.
+\end{itemize}
+
+\subsection{Evaluación en problemas desbalanceados}
+En presencia de desbalance, la exactitud no es informativa. Se recomienda usar:
+\begin{itemize}
+    \item Matriz de confusión.
+    \item Precisión, recall y F1-score (especialmente F1 para la clase minoritaria).
+    \item Curva ROC y AUC (aunque puede ser optimista si hay mucho desbalance; se prefiere la curva Precision-Recall).
+    \item Curva Precision-Recall y su área (PR-AUC), más sensible al rendimiento en la clase minoritaria.
+\end{itemize}
+
+\section{Caso de estudio integrado: Diagnóstico médico}
+
+\subsection{Contexto}
+Se dispone de datos de pacientes con características clínicas (edad, presión arterial, niveles de glucosa, etc.) y un diagnóstico binario: presencia o ausencia de una enfermedad. La clase positiva (enfermos) representa solo el 10\% de los datos.
+
+\subsection{Preprocesamiento}
+\begin{itemize}
+    \item Estandarización de variables numéricas.
+    \item Manejo de valores faltantes.
+    \item División en entrenamiento (70\%) y prueba (30\%), estratificada para mantener la proporción de clases.
+\end{itemize}
+
+\subsection{Modelado}
+Se entrena una regresión logística con regularización L2. Se prueban tres enfoques:
+\begin{enumerate}
+    \item Sin tratamiento del desbalance.
+    \item Con pesos de clase (inversamente proporcionales a la frecuencia).
+    \item Con SMOTE aplicado al conjunto de entrenamiento.
+\end{enumerate}
+
+\subsection{Evaluación}
+Se calculan en el conjunto de prueba:
+\begin{itemize}
+    \item Matriz de confusión.
+    \item Precisión, recall, F1 para la clase positiva.
+    \item AUC-ROC y AUC-PR.
+\end{itemize}
+
+\subsection{Resultados esperados}
+\begin{itemize}
+    \item El modelo sin tratamiento tendrá alta exactitud pero muy bajo recall (casi no detecta enfermos).
+    \item Con pesos o SMOTE, el recall mejora sustancialmente, aunque la precisión puede bajar.
+    \item La elección final depende del contexto clínico: si el costo de un falso negativo es muy alto (dejar a un enfermo sin tratamiento), se prioriza el recall, aunque genere más falsos positivos (que requerirán pruebas adicionales).
+\end{itemize}
+
+\section{Conexión con el resto del curso}
+La regresión logística introduce conceptos que se extenderán a modelos más complejos:
+\begin{itemize}
+    \item La función sigmoide es la base de las capas de salida en redes neuronales para clasificación binaria.
+    \item La entropía cruzada es la función de pérdida estándar en clasificación, también usada en redes profundas.
+    \item Las métricas de evaluación y el manejo de desbalance son transversales a todos los problemas de clasificación, incluyendo árboles, SVM y redes neuronales.
+\end{itemize}
+En la siguiente sesión se abordarán otros clasificadores (kNN, árboles, SVM) y se compararán con la regresión logística.
+
+\end{document}

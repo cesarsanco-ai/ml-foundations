@@ -1,0 +1,397 @@
+\documentclass[12pt,a4paper,openany,oneside]{book}
+
+% --- Paquetes ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, es-noshorthands]{babel}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{hhline}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc, trees}
+\pgfplotsset{compat=1.18}
+
+\geometry{margin=2.5cm}
+
+% --- Colores y estilos para código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Estilo de cabecera y pie ---
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[L]{\small Carlos César Sánchez Coronel}
+\fancyhead[R]{\small Sesión 6: Árboles de Decisión y Random Forest}
+\fancyfoot[L]{\small Carlos César Sánchez Coronel}
+\fancyfoot[C]{\thepage}
+
+% --- Portada ---
+\title{
+    \textbf{Sesión 6} \\ 
+    \Huge \textbf{ÁRBOLES DE DECISIÓN Y RANDOM FOREST} \\
+    \Large Modelos interpretables y ensambles basados en bagging
+}
+\author{
+    \small Por \\ \vspace{0.2cm}
+    \Large \textsc{Carlos César Sánchez Coronel}
+}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\addcontentsline{toc}{chapter}{Índice general}
+
+% ------------------------------------------------------------------
+% CAPÍTULO 6: SESIÓN 6 - ÁRBOLES DE DECISIÓN Y RANDOM FOREST
+% ------------------------------------------------------------------
+\chapter{Árboles de Decisión y Random Forest}
+
+En esta sesión se aborda uno de los modelos más intuitivos y visualmente interpretables: los árboles de decisión, y su extensión mediante ensambles: Random Forest. Se exploran los fundamentos matemáticos de los criterios de división, la poda para controlar el sobreajuste, el concepto de bagging, el error Out-of-Bag (OOB) y la importancia de características. Se incluyen aplicaciones reales, comparativas de métricas y criterios para elegir entre modelos.
+
+\section{Logro de la sesión}
+Construir e interpretar árboles de decisión y modelos de ensamble basados en bagging (Random Forest), comprendiendo sus fundamentos matemáticos, sus parámetros clave y las métricas para evaluarlos, y aplicarlos a problemas de clasificación y regresión en contextos diversos.
+
+\section{Introducción: modelos basados en reglas}
+Los árboles de decisión son modelos predictivos que representan reglas de decisión en forma de estructura jerárquica [citation:1]. A diferencia de los modelos lineales que suponen una relación paramétrica global, los árboles particionan el espacio de características en regiones más simples donde es más fácil modelar la variable respuesta [citation:4]. Su principal ventaja es la interpretabilidad: cualquier persona puede entender por qué el modelo toma una decisión siguiendo el camino de preguntas binarias [citation:5].
+
+Sin embargo, un único árbol tiende a sobreajustar (alta varianza) y puede ser inestable: pequeños cambios en los datos generan estructuras muy distintas [citation:7]. Para superar estas limitaciones, los métodos de ensamble como Random Forest combinan múltiples árboles, reduciendo la varianza y mejorando la precisión sin sacrificar demasiado la interpretabilidad global [citation:6].
+
+\section{Árboles de Decisión}
+
+\subsection{Estructura de un árbol}
+Un árbol de decisión consta de los siguientes elementos [citation:5]:
+\begin{itemize}
+    \item \textbf{Nodo raíz}: contiene todos los datos de entrenamiento y es el punto donde se realiza la primera división.
+    \item \textbf{Nodos internos}: representan puntos de decisión donde se evalúa una característica y se bifurca según el resultado.
+    \item \textbf{Ramas}: conectan nodos y representan el resultado de una evaluación (sí/no, o un valor umbral).
+    \item \textbf{Nodos hoja (terminales)}: contienen la predicción final (una clase o un valor numérico).
+    \item \textbf{Profundidad}: número máximo de divisiones desde la raíz hasta una hoja.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[
+    every node/.style={draw, rectangle, rounded corners=2mm, align=center, minimum width=2.5cm, minimum height=1cm},
+    level distance=1.5cm,
+    sibling distance=4cm,
+    edge from parent/.style={draw, thick, -latex}
+]
+\node {¿Años experiencia $\geq$ 4.5?}
+    child { node {¿Hits $\geq$ 117.5?}
+        child { node {Salario \\ 5.11} }
+        child { node {Salario \\ 6.00} }
+    }
+    child { node {Salario \\ 4.62} };
+\end{tikzpicture}
+\caption{Ejemplo de árbol de regresión para predicción de salario de jugadores de béisbol (en unidades logarítmicas) [citation:4].}
+\end{center}
+
+\subsection{Criterios de división}
+
+\subsubsection{Árboles de clasificación}
+En cada nodo, se busca la característica y el umbral que maximicen la pureza de los hijos. Las medidas más comunes son:
+
+\begin{itemize}
+    \item \textbf{Índice de Gini}: mide la probabilidad de que dos elementos elegidos al azar (con reemplazo) del nodo pertenezcan a clases diferentes [citation:1][citation:7]. Se define como:
+    \[
+    G = 1 - \sum_{k=1}^{K} p_k^2
+    \]
+    donde \(p_k\) es la proporción de observaciones de la clase \(k\) en el nodo. Valores cercanos a 0 indican pureza máxima (todas las observaciones de una misma clase). El algoritmo CART utiliza Gini por defecto [citation:5].
+
+    \item \textbf{Entropía}: procedente de la teoría de la información, mide el desorden o incertidumbre [citation:1][citation:7]:
+    \[
+    H = -\sum_{k=1}^{K} p_k \log_2(p_k)
+    \]
+    La entropía es máxima (1 en binario) cuando hay igual proporción de clases, y mínima (0) cuando el nodo es puro. Se prefiere la entropía cuando se desea crear nodos más balanceados [citation:7].
+
+    \item \textbf{Ganancia de información}: es la reducción de entropía lograda al dividir según una característica [citation:1]:
+    \[
+    IG(D, a) = H(D) - \sum_{v \in Valores(a)} \frac{|D_v|}{|D|} H(D_v)
+    \]
+    donde \(D\) es el conjunto de datos en el nodo, \(a\) es el atributo considerado, y \(D_v\) son los subconjuntos tras la división. Se elige el atributo con mayor ganancia de información.
+\end{itemize}
+
+\subsubsection{Árboles de regresión}
+Para variables respuesta continuas, se minimiza la suma de cuadrados de los residuos (RSS) [citation:7]:
+\[
+RSS = \sum_{i \in \text{nodo}} (y_i - \bar{y}_{\text{nodo}})^2
+\]
+Al dividir un nodo en dos regiones \(R_1\) y \(R_2\), se busca minimizar:
+\[
+\sum_{i \in R_1} (y_i - \bar{y}_{R_1})^2 + \sum_{i \in R_2} (y_i - \bar{y}_{R_2})^2
+\]
+La predicción en cada hoja es la media de los valores de entrenamiento que caen en esa región [citation:4].
+
+\subsection{Ejemplo práctico: cálculo de Gini}
+Supóngase un nodo con 10 observaciones: 6 de clase A y 4 de clase B.
+\[
+G = 1 - \left(\frac{6}{10}\right)^2 - \left(\frac{4}{10}\right)^2 = 1 - 0.36 - 0.16 = 0.48
+\]
+Si una división propuesta separa en dos hijos:
+\begin{itemize}
+    \item Hijo izquierdo: 5 observaciones (5A, 0B) → \(G_1 = 0\)
+    \item Hijo derecho: 5 observaciones (1A, 4B) → \(G_2 = 1 - (1/5)^2 - (4/5)^2 = 1 - 0.04 - 0.64 = 0.32\)
+\end{itemize}
+El Gini ponderado de la división es: \(\frac{5}{10} \cdot 0 + \frac{5}{10} \cdot 0.32 = 0.16\), menor que 0.48, por lo que la división mejora la pureza.
+
+\subsection{Proceso de construcción: algoritmo de Hunt}
+El algoritmo recursivo de construcción sigue estos pasos [citation:5][citation:7]:
+\begin{enumerate}
+    \item Comenzar con todos los datos en el nodo raíz.
+    \item Si todas las observaciones pertenecen a la misma clase (o se cumple un criterio de parada), detenerse y crear un nodo hoja con esa clase (o el valor medio para regresión).
+    \item En caso contrario, evaluar todas las posibles divisiones para cada característica:
+        \begin{itemize}
+            \item Para características numéricas, ordenar los valores y considerar puntos de corte intermedios.
+            \item Para categóricas, considerar cada categoría como posible rama.
+        \end{itemize}
+    \item Seleccionar la división que maximice la pureza (minimice Gini, entropía o RSS).
+    \item Dividir los datos en subconjuntos según la regla elegida.
+    \item Repetir recursivamente para cada subconjunto.
+\end{enumerate}
+
+\subsection{Sobreajuste y poda}
+Los árboles tienden a crecer hasta que cada hoja contiene observaciones de una sola clase, lo que provoca sobreajuste [citation:4][citation:6]. Para controlarlo:
+\begin{itemize}
+    \item \textbf{Poda por complejidad-costo (cost-complexity pruning)}: se añade un término de penalización al error:
+    \[
+    RSS_{\text{podado}} = RSS + \alpha \cdot |T|
+    \]
+    donde \(|T|\) es el número de nodos hoja y \(\alpha\) es un hiperparámetro que controla la penalización. Mayores \(\alpha\) producen árboles más pequeños [citation:5].
+    \item \textbf{Hiperparámetros de parada}: profundidad máxima, mínimo de muestras por hoja, mínimo de muestras para dividir, etc. Se ajustan mediante validación cruzada.
+\end{itemize}
+
+\subsection{Ventajas y desventajas de los árboles}
+\begin{table}[h]
+\centering
+\begin{tabular}{|p{5cm}|p{5cm}|}
+\hline
+\textbf{Ventajas} & \textbf{Desventajas} \\
+\hline
+Fáciles de interpretar y visualizar [citation:5] & Alta varianza: pequeños cambios en datos generan árboles distintos [citation:7] \\
+No requieren estandarización de variables [citation:4] & Propensos al sobreajuste si no se podan [citation:6] \\
+Manejan variables numéricas y categóricas [citation:7] & Pueden ser sesgados si las clases están desbalanceadas [citation:5] \\
+Seleccionan automáticamente características relevantes [citation:4] & En regresión, suelen ser menos precisos que otros modelos [citation:7] \\
+Robustos a outliers [citation:4] & Inestables: la estructura puede cambiar drásticamente con nuevos datos [citation:5] \\
+\hline
+\end{tabular}
+\caption{Ventajas y desventajas de los árboles de decisión.}
+\end{table}
+
+\section{Random Forest}
+
+\subsection{Intuición: combinar múltiples árboles}
+Random Forest es un método de ensamble basado en bagging (bootstrap aggregating) que construye múltiples árboles de decisión y combina sus predicciones [citation:6]. La idea es que cada árbol individual tiene alta varianza, pero si se promedian muchos árboles no correlacionados, la varianza se reduce drásticamente sin aumentar el sesgo [citation:4].
+
+\subsection{Bootstrap aggregating (Bagging)}
+Para cada árbol \(b = 1, \dots, B\):
+\begin{enumerate}
+    \item Se toma una muestra bootstrap del conjunto de entrenamiento (muestreo con reemplazo del mismo tamaño que el original). Aproximadamente el 63.2\% de las observaciones originales aparecen al menos una vez en cada muestra [citation:2].
+    \item Se entrena un árbol de decisión profundo (sin podar) con esa muestra.
+    \item Para predecir una nueva observación:
+        \begin{itemize}
+            \item Clasificación: voto mayoritario de todos los árboles.
+            \item Regresión: promedio de las predicciones.
+        \end{itemize}
+\end{enumerate}
+
+\subsection{Aleatoriedad adicional: selección de características}
+Random Forest añade una capa extra de aleatoriedad: en cada división de cada árbol, solo se considera un subconjunto aleatorio de características (típicamente \(\sqrt{p}\) para clasificación y \(p/3\) para regresión, donde \(p\) es el número total de predictores) [citation:6]. Esto garantiza que los árboles estén menos correlacionados entre sí, ya que evita que todos elijan las mismas variables fuertes en las primeras divisiones.
+
+\subsection{Error Out-of-Bag (OOB)}
+Cada árbol se entrena con una muestra bootstrap. Las observaciones que no forman parte de esa muestra (aproximadamente el 36.8\%) se denominan \textit{out-of-bag} (OOB) [citation:2][citation:8]. Para una observación \(i\), se puede predecir su valor utilizando solo aquellos árboles para los cuales \(i\) era OOB. El error OOB se calcula como:
+\[
+\text{Error OOB} = \frac{1}{n} \sum_{i=1}^n L(y_i, \hat{y}_i^{\text{OOB}})
+\]
+donde \(L\) es la función de pérdida (error cuadrático para regresión, 0-1 para clasificación) y \(\hat{y}_i^{\text{OOB}}\) es la predicción agregada solo con árboles donde \(i\) era OOB [citation:2].
+
+\begin{itemize}
+    \item \textbf{Ventaja}: proporciona una estimación del error de prueba sin necesidad de validación cruzada separada, ya que cada observación nunca es vista por los árboles que la predicen [citation:8].
+    \item \textbf{Comparación con validación cruzada}: el error OOB converge al error de validación cruzada leave-one-out a medida que aumenta el número de árboles [citation:2].
+    \item \textbf{Precaución}: el error OOB puede sobreestimar el error en muestras balanceadas pequeñas o con predictores débilmente correlacionados [citation:2].
+\end{itemize}
+
+\subsection{Hiperparámetros principales}
+\begin{itemize}
+    \item \textbf{n\_estimators (B)}: número de árboles. A mayor número, más estable es el error. Se busca hasta que el error OOB se estabilice [citation:2].
+    \item \textbf{max\_features}: número de características consideradas en cada división. Valores típicos: \(\sqrt{p}\) (clasificación), \(p/3\) (regresión).
+    \item \textbf{max\_depth}: profundidad máxima de cada árbol. Si es None, los árboles crecen hasta hojas puras.
+    \item \textbf{min\_samples\_split}: mínimo de muestras requeridas para dividir un nodo.
+    \item \textbf{min\_samples\_leaf}: mínimo de muestras en una hoja.
+    \item \textbf{bootstrap}: si se usa muestreo bootstrap (True por defecto).
+\end{itemize}
+
+\subsection{Importancia de características}
+Random Forest proporciona dos formas de medir la importancia de cada variable [citation:6]:
+\begin{itemize}
+    \item \textbf{Importancia por impureza (MDI - Mean Decrease in Impurity)}: para cada árbol, se acumula la reducción de impureza (Gini o entropía) aportada por cada variable en todas las divisiones donde aparece. Se promedia sobre todos los árboles. Las variables con mayor reducción total son más importantes.
+    \item \textbf{Importancia por permutación (MDA - Mean Decrease in Accuracy)}: para cada variable, se permutan aleatoriamente sus valores en las muestras OOB y se mide cuánto empeora el error. Si al permutar una variable el error aumenta mucho, es señal de que esa variable es relevante.
+\end{itemize}
+
+\subsection{Ventajas y desventajas de Random Forest}
+\begin{table}[h]
+\centering
+\begin{tabular}{|p{5cm}|p{5cm}|}
+\hline
+\textbf{Ventajas} & \textbf{Desventajas} \\
+\hline
+Menor riesgo de sobreajuste que un solo árbol [citation:6] & Mayor costo computacional (entrenar muchos árboles) [citation:6] \\
+Muy preciso en problemas de clasificación y regresión [citation:4] & Pérdida de interpretabilidad global (aunque se puede medir importancia) \\
+Maneja bien datos de alta dimensionalidad [citation:6] & Puede ser lento en predicción si hay muchos árboles \\
+Proporciona estimación interna del error (OOB) [citation:8] & Requiere más memoria para almacenar el modelo \\
+Robusto a outliers y datos faltantes [citation:4] & No extrapola fuera del rango de entrenamiento [citation:4] \\
+Permite calcular importancia de variables [citation:6] & En regresión, puede tener problemas con datos muy ruidosos \\
+\hline
+\end{tabular}
+\caption{Ventajas y desventajas de Random Forest.}
+\end{table}
+
+\section{Comparación de métricas y criterios de selección}
+
+\subsection{Clasificación: precisión, recall, F1 y AUC}
+En un problema de clasificación con clases desbalanceadas (ej. detección de fraudes, donde los fraudes son <1\% del total), la exactitud (accuracy) puede ser engañosa. Por ejemplo, un modelo que siempre predice "no fraude" tendría 99\% de exactitud pero sería inútil. En estos casos, se prioriza:
+
+\begin{itemize}
+    \item \textbf{Recall}: minimizar falsos negativos (fraudes no detectados). Un falso negativo puede tener alto costo económico.
+    \item \textbf{Precisión}: minimizar falsos positivos (alertas falsas). Cada falso positivo requiere revisión manual.
+    \item \textbf{F1-score}: media armónica que equilibra ambas cuando no se quiere priorizar una sobre otra.
+    \item \textbf{AUC-ROC}: evalúa la capacidad discriminativa global independientemente del umbral.
+\end{itemize}
+
+\subsection{Regresión: RMSE vs. MAE}
+Supóngase dos modelos de predicción de precios de viviendas:
+\begin{itemize}
+    \item Modelo A: errores [5, 5, 5, 100] (un outlier grande)
+    \item Modelo B: errores [20, 20, 20, 20] (todos moderados)
+\end{itemize}
+MAE_A = 28.75, MAE_B = 20. Según MAE, B es mejor.
+RMSE_A = \(\sqrt{(25+25+25+10000)/4} = \sqrt{2518.75} \approx 50.19\), RMSE_B = 20. Según RMSE, B es mucho mejor, porque penaliza más el error grande de A.
+
+\textbf{Conclusión}: RMSE es sensible a outliers y se prefiere cuando los errores grandes son especialmente indeseables. MAE es más robusto y se prefiere cuando todos los errores tienen igual importancia [citation:7].
+
+\subsection{Importancia de la interpretabilidad}
+\begin{itemize}
+    \item \textbf{Árbol único}: cuando se requiere explicar las decisiones a audiencias no técnicas (ej. aprobación de créditos, diagnósticos médicos).
+    \item \textbf{Random Forest}: cuando la prioridad es la precisión predictiva, pero aún se desea entender qué variables influyen (mediante importancia).
+    \item \textbf{Modelos lineales}: cuando la relación es aproximadamente lineal y se necesita coeficientes interpretables (impacto marginal de cada variable).
+\end{itemize}
+
+\section{Casos de uso integrados}
+
+\subsection{Detección de fraudes en tarjetas de crédito}
+\textbf{Problema}: Identificar transacciones fraudulentas en tiempo real. Dataset con cientos de miles de transacciones, clases extremadamente desbalanceadas (<1\% fraude) [citation:3][citation:6].
+
+\textbf{Preprocesamiento}: Estandarización de montos, creación de variables agregadas por cliente (frecuencia de compras, desviación del gasto), variables temporales (hora, día semana).
+
+\textbf{Modelado}:
+\begin{itemize}
+    \item Árbol de decisión único: rápido de entrenar, pero tiende a sobreajustar y tiene bajo recall en la clase minoritaria.
+    \item Random Forest con class\_weight='balanced' (asigna mayor peso a la clase minoritaria) o con sobremuestreo SMOTE. El error OOB da una estimación confiable del rendimiento.
+\end{itemize}
+
+\textbf{Métricas críticas}: Recall (minimizar fraudes no detectados) y Precisión (evitar demasiadas alertas falsas). Se puede ajustar el umbral de decisión para equilibrar ambas.
+
+\subsection{Análisis de riesgo crediticio}
+\textbf{Problema}: Predecir si un solicitante de préstamo incumplirá el pago [citation:6].
+
+\textbf{Datos}: ingresos, edad, historial crediticio, monto solicitado, etc.
+
+\textbf{Modelado}: Random Forest proporciona importancia de variables, permitiendo identificar qué factores son más determinantes (ej. historial crediticio es el más importante, seguido de ingresos). Los árboles individuales pueden visualizarse para explicar decisiones específicas (ej. por qué se rechazó a un cliente).
+
+\textbf{Regulación}: En entornos regulados (banca), la interpretabilidad es clave. Se pueden extraer reglas de los árboles para justificar las decisiones ante auditores.
+
+\subsection{Predicción de precios de viviendas (regresión)}
+\textbf{Problema}: Predecir el precio de venta de viviendas en una ciudad [citation:4].
+
+\textbf{Datos}: área, número de habitaciones, antigüedad, ubicación, calidad de materiales, etc.
+
+\textbf{Modelado}:
+\begin{itemize}
+    \item Árbol de regresión: fácil de interpretar, pero puede tener bajo rendimiento predictivo.
+    \item Random Forest Regressor: mejora la precisión, permite calcular importancia de características (ubicación y área suelen ser las más importantes). El error OOB estima el RMSE esperado en nuevos datos.
+\end{itemize}
+
+\section{Implementación en scikit-learn}
+
+\subsection{Árbol de decisión}
+\begin{lstlisting}[language=Python]
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor, plot_tree
+import matplotlib.pyplot as plt
+
+# Clasificación
+clf = DecisionTreeClassifier(max_depth=5, min_samples_split=10, criterion='gini')
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
+
+# Visualización
+plt.figure(figsize=(20,10))
+plot_tree(clf, filled=True, feature_names=feature_names, class_names=class_names)
+plt.show()
+
+# Importancia de características
+importances = clf.feature_importances_
+\end{lstlisting}
+
+\subsection{Random Forest}
+\begin{lstlisting}[language=Python]
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+
+# Clasificación con error OOB
+rf = RandomForestClassifier(n_estimators=100, max_features='sqrt',
+                            oob_score=True, random_state=42)
+rf.fit(X_train, y_train)
+print(f"OOB Score: {rf.oob_score_}")  # Exactitud en muestras OOB
+
+# Importancia por Gini
+importances = rf.feature_importances_
+
+# Importancia por permutación (más fiable)
+from sklearn.inspection import permutation_importance
+perm_importance = permutation_importance(rf, X_test, y_test, n_repeats=10)
+\end{lstlisting}
+
+\section{Conexión con el resto del curso}
+Los árboles y Random Forest introducen conceptos fundamentales que se extienden a otros modelos:
+\begin{itemize}
+    \item \textbf{Ensambles}: Random Forest es un ejemplo de bagging. En sesiones posteriores se verá boosting (Gradient Boosting, XGBoost), que construye árboles secuencialmente.
+    \item \textbf{Importancia de características}: técnica utilizada también en modelos lineales regularizados y en análisis exploratorio.
+    \item \textbf{Manejo de no linealidades}: los árboles capturan interacciones complejas de forma natural, algo que los modelos lineales no pueden sin ingeniería manual.
+    \item \textbf{Validación interna}: el error OOB es una alternativa eficiente a la validación cruzada, aplicable también en otros métodos basados en bagging.
+\end{itemize}
+
+\section{Resumen}
+\begin{itemize}
+    \item Los árboles de decisión son modelos interpretables que particionan el espacio de características mediante reglas binarias. Utilizan criterios como Gini, entropía o RSS para seleccionar las mejores divisiones.
+    \item Su principal limitación es la alta varianza y tendencia al sobreajuste, controlable mediante poda o hiperparámetros.
+    \item Random Forest combina múltiples árboles entrenados con muestras bootstrap y aleatoriedad en las características, reduciendo la varianza y mejorando la precisión.
+    \item El error OOB proporciona una estimación interna del rendimiento sin necesidad de validación cruzada.
+    \item La importancia de características (por impureza o permutación) permite interpretar qué variables son más relevantes.
+    \item La elección entre árbol único y Random Forest depende del equilibrio entre interpretabilidad y precisión, así como del contexto del problema.
+\end{itemize}
+
+\end{document}

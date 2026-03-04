@@ -1,0 +1,427 @@
+\documentclass[12pt,a4paper,openany,oneside]{book}
+
+% --- Paquetes ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, es-noshorthands]{babel}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{hhline}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc, shapes}
+\pgfplotsset{compat=1.18}
+
+\geometry{margin=2.5cm}
+
+% --- Colores y estilos para código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Estilo de cabecera y pie ---
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[L]{\small Carlos César Sánchez Coronel}
+\fancyhead[R]{\small Sesión 14: Despliegue de Modelos (MLOps)}
+\fancyfoot[L]{\small Carlos César Sánchez Coronel}
+\fancyfoot[C]{\thepage}
+
+% --- Portada ---
+\title{
+    \textbf{Sesión 14} \\ 
+    \Huge \textbf{DESPLIEGUE DE MODELOS (MLOps)} \\
+    \Large De Jupyter Notebook a producción
+}
+\author{
+    \small Por \\ \vspace{0.2cm}
+    \Large \textsc{Carlos César Sánchez Coronel}
+}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\addcontentsline{toc}{chapter}{Índice general}
+
+% ------------------------------------------------------------------
+% CAPÍTULO 14: SESIÓN 14 - MLOps
+% ------------------------------------------------------------------
+\chapter{Despliegue de Modelos (MLOps)}
+
+Hasta ahora, el curso se ha centrado en construir, evaluar e interpretar modelos en entornos de desarrollo (Jupyter Notebooks, scripts locales). Sin embargo, el valor real de un modelo se materializa cuando se integra en un producto o sistema que lo utiliza para tomar decisiones en tiempo real. Esta última sesión aborda el ciclo de vida completo de un modelo en producción, conocido como MLOps (Machine Learning Operations). Se exploran desde la serialización, creación de APIs, contenerización, versionamiento, hasta el monitoreo continuo para detectar degradación.
+
+\section{Logro de la sesión}
+Llevar un modelo a producción, entender los conceptos básicos de MLOps y monitorear su rendimiento, asegurando que el valor generado por el modelo se mantenga en el tiempo.
+
+\section{Introducción: el último kilómetro del machine learning}
+
+Construir un modelo con alta precisión en un notebook es solo el 10\% del trabajo. El 90\% restante implica integrarlo en sistemas existentes, garantizar su disponibilidad, escalabilidad y mantenerlo actualizado. MLOps es la disciplina que combina machine learning, ingeniería de software y DevOps para gestionar este ciclo de vida.
+
+\begin{center}
+\begin{tikzpicture}[node distance=1.5cm, auto]
+\node (data) [draw, rectangle, rounded corners] {Datos};
+\node (train) [draw, rectangle, rounded corners, right of=data] {Entrenamiento};
+\node (val) [draw, rectangle, rounded corners, right of=train] {Validación};
+\node (deploy) [draw, rectangle, rounded corners, right of=val] {Despliegue};
+\node (monitor) [draw, rectangle, rounded corners, below of=deploy] {Monitoreo};
+\draw[->] (data) -- (train);
+\draw[->] (train) -- (val);
+\draw[->] (val) -- (deploy);
+\draw[->] (deploy) -- (monitor);
+\draw[->] (monitor) -| (data) node[pos=0.25, above] {retroalimentación};
+\end{tikzpicture}
+\caption{Ciclo de vida MLOps.}
+\end{center}
+
+\section{Separación entre entrenamiento e inferencia}
+
+En desarrollo, entrenamos y evaluamos en lotes (offline). En producción, necesitamos predicciones en tiempo real (online) o por lotes (batch). Esto implica:
+
+\begin{itemize}
+    \item \textbf{Inferencia online}: el modelo responde a peticiones individuales (API REST). Requiere baja latencia.
+    \item \textbf{Inferencia batch}: se procesan grandes volúmenes periódicamente (ej. cada noche). Se usa para recomendaciones masivas.
+\end{itemize}
+
+La arquitectura debe separar claramente el pipeline de entrenamiento (que puede ser pesado y poco frecuente) del de inferencia (ligero y continuo).
+
+\section{Serialización de modelos}
+
+Para desplegar un modelo, primero hay que guardarlo en disco en un formato que pueda ser cargado posteriormente.
+
+\subsection{Pickle}
+Módulo estándar de Python para serializar objetos. Útil para prototipos, pero tiene problemas de seguridad (no cargar archivos no confiables) y no siempre compatible entre versiones.
+
+\begin{lstlisting}[language=Python]
+import pickle
+
+# Guardar
+with open('modelo.pkl', 'wb') as f:
+    pickle.dump(model, f)
+
+# Cargar
+with open('modelo.pkl', 'rb') as f:
+    model = pickle.load(f)
+\end{lstlisting}
+
+\subsection{Joblib}
+Especialmente optimizado para objetos grandes como arrays de NumPy. Es la opción recomendada para scikit-learn.
+
+\begin{lstlisting}[language=Python]
+import joblib
+
+joblib.dump(model, 'modelo.joblib')
+model = joblib.load('modelo.joblib')
+\end{lstlisting}
+
+\subsection{ONNX (Open Neural Network Exchange)}
+Formato abierto para representar modelos de machine learning. Permite interoperabilidad entre frameworks (PyTorch, TensorFlow, scikit-learn) y optimizaciones para inferencia.
+
+\begin{lstlisting}[language=Python]
+import onnx
+import skl2onnx
+from skl2onnx import convert_sklearn
+from skl2onnx.common.data_types import FloatTensorType
+
+initial_type = [('float_input', FloatTensorType([None, X.shape[1]]))]
+onx = convert_sklearn(model, initial_types=initial_type)
+with open("model.onnx", "wb") as f:
+    f.write(onx.SerializeToString())
+\end{lstlisting}
+
+\subsection{MLflow}
+Plataforma para gestionar el ciclo de vida de ML. Incluye registro de modelos con versionado y metadata.
+
+\begin{lstlisting}[language=Python]
+import mlflow
+mlflow.sklearn.log_model(model, "model")
+\end{lstlisting}
+
+\section{Creación de APIs con Flask y FastAPI}
+
+Para exponer el modelo como servicio, se crea una API REST. Flask es sencillo; FastAPI es más moderno, rápido y con documentación automática.
+
+\subsection{Ejemplo con Flask}
+\begin{lstlisting}[language=Python]
+from flask import Flask, request, jsonify
+import joblib
+
+app = Flask(__name__)
+model = joblib.load('modelo.joblib')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.get_json()
+    features = data['features']
+    pred = model.predict([features])
+    return jsonify({'prediction': pred.tolist()})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+\end{lstlisting}
+
+\subsection{Ejemplo con FastAPI}
+\begin{lstlisting}[language=Python]
+from fastapi import FastAPI
+from pydantic import BaseModel
+import joblib
+
+app = FastAPI()
+model = joblib.load('modelo.joblib')
+
+class Item(BaseModel):
+    features: list
+
+@app.post('/predict')
+def predict(item: Item):
+    pred = model.predict([item.features])
+    return {'prediction': pred.tolist()}
+\end{lstlisting}
+
+FastAPI genera automáticamente documentación interactiva en \texttt{/docs}.
+
+\section{Contenerización básica con Docker}
+
+Docker permite empaquetar la aplicación con todas sus dependencias, garantizando que funcione igual en cualquier entorno.
+
+\subsection{Dockerfile para una API de modelo}
+\begin{lstlisting}[language=bash]
+FROM python:3.9-slim
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY model.joblib .
+COPY app.py .
+
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]
+\end{lstlisting}
+
+\subsection{Construir y ejecutar}
+\begin{lstlisting}[language=bash]
+docker build -t modelo-api .
+docker run -p 80:80 modelo-api
+\end{lstlisting}
+
+\section{Versionamiento de modelos y datos}
+
+En producción es crucial saber qué versión del modelo está corriendo, con qué datos fue entrenado y cuáles fueron sus hiperparámetros.
+
+\subsection{MLflow para seguimiento de experimentos}
+\begin{lstlisting}[language=Python]
+import mlflow
+
+with mlflow.start_run():
+    mlflow.log_param("n_estimators", 100)
+    mlflow.log_metric("auc", 0.85)
+    mlflow.sklearn.log_model(model, "model")
+\end{lstlisting}
+
+\subsection{DVC (Data Version Control)}
+Sistema de control de versiones para datasets y pipelines. Similar a Git pero para datos.
+
+\begin{lstlisting}[language=bash]
+dvc add data/raw.csv
+git add data/raw.csv.dvc .gitignore
+git commit -m "add raw data"
+dvc push
+\end{lstlisting}
+
+\section{Monitoreo de modelos en producción}
+
+Una vez desplegado, el modelo debe ser vigilado para detectar degradación. Las causas pueden ser:
+
+\begin{itemize}
+    \item \textbf{Data drift}: los datos de entrada cambian (por ejemplo, nuevos hábitos de consumo).
+    \item \textbf{Concept drift}: la relación entre entrada y salida cambia (por ejemplo, una crisis económica altera la probabilidad de impago).
+\end{itemize}
+
+\subsection{Métricas de rendimiento en datos nuevos}
+Se calculan las mismas métricas que en entrenamiento (RMSE, AUC, etc.) sobre lotes de datos recientes, si se dispone de la variable objetivo.
+
+\subsection{Detección de drift sin etiquetas}
+Cuando la variable objetivo no está disponible inmediatamente, se monitorean las distribuciones de las características y de las predicciones.
+
+\subsubsection{Population Stability Index (PSI)}
+Mide el cambio en la distribución de una variable entre dos momentos (entrenamiento y producción). Se calcula como:
+
+\[
+PSI = \sum_{i=1}^{B} (p_i - q_i) \cdot \ln\left(\frac{p_i}{q_i}\right)
+\]
+
+donde \(p_i\) es la proporción en la ventana de producción y \(q_i\) en la ventana base. Valores típicos:
+\begin{itemize}
+    \item PSI < 0.1: cambio pequeño.
+    \item 0.1 ≤ PSI < 0.25: cambio moderado (revisar).
+    \item PSI ≥ 0.25: cambio significativo (reentrenar).
+\end{itemize}
+
+\subsubsection{Test de Kolmogorov-Smirnov (KS)}
+Compara dos distribuciones continuas. El estadístico KS es la máxima diferencia entre las funciones de distribución acumulada. Si el p-valor es bajo, hay evidencia de drift.
+
+\subsection{Ejemplo de cálculo de PSI en Python}
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def psi(expected, actual, bins=10):
+    expected = np.clip(expected, 0.001, 0.999)  # evitar log(0)
+    actual = np.clip(actual, 0.001, 0.999)
+    psi_value = np.sum((actual - expected) * np.log(actual / expected))
+    return psi_value
+
+# Supongamos que esper es la distribución en entrenamiento
+# y actual es la distribución en producción (ambas discretizadas)
+\end{lstlisting}
+
+\subsection{Herramientas de monitoreo}
+\begin{itemize}
+    \item \textbf{Evidently AI}: genera reportes de drift.
+    \item \textbf{WhyLabs / Whylogs}: perfilado de datos.
+    \item \textbf{Great Expectations}: validación de datos.
+\end{itemize}
+
+\section{Caso integrado: Despliegue de un modelo de riesgo crediticio}
+
+\subsection{Paso 1: Entrenar y guardar el modelo}
+\begin{lstlisting}[language=Python]
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+import joblib
+
+df = pd.read_csv('credito.csv')
+X = df.drop('incumple', axis=1)
+y = df['incumple']
+model = RandomForestClassifier(n_estimators=100)
+model.fit(X, y)
+joblib.dump(model, 'credit_model.joblib')
+\end{lstlisting}
+
+\subsection{Paso 2: Crear API con FastAPI}
+\begin{lstlisting}[language=Python]
+from fastapi import FastAPI
+from pydantic import BaseModel
+import joblib
+import numpy as np
+
+app = FastAPI()
+model = joblib.load('credit_model.joblib')
+
+class Applicant(BaseModel):
+    edad: int
+    ingresos: float
+    deuda: float
+    antiguedad_laboral: int
+    # ... otras variables
+
+@app.post('/predict')
+def predict(applicant: Applicant):
+    features = np.array([[applicant.edad, applicant.ingresos,
+                          applicant.deuda, applicant.antiguedad_laboral]])
+    proba = model.predict_proba(features)[0, 1]
+    return {'probabilidad_incumplimiento': proba}
+\end{lstlisting}
+
+\subsection{Paso 3: Contenerizar}
+Dockerfile como el mostrado anteriormente.
+
+\subsection{Paso 4: Versionar con MLflow}
+\begin{lstlisting}[language=Python]
+import mlflow
+mlflow.sklearn.log_model(model, "credit_model")
+\end{lstlisting}
+
+\subsection{Paso 5: Monitoreo}
+Se guardan las predicciones diarias en una base de datos. Semanalmente se calcula el PSI de las características y de las predicciones respecto al conjunto de entrenamiento. Si PSI > 0.25 en alguna variable, se alerta al equipo.
+
+\section{Revisión general del curso}
+
+A lo largo de 14 semanas se ha construido una base sólida en machine learning. A continuación, un mapa conceptual que integra todos los temas:
+
+\begin{center}
+\begin{tikzpicture}[
+    nivel1/.style={draw, rectangle, rounded corners, fill=blue!10, minimum width=3cm, minimum height=1cm},
+    nivel2/.style={draw, rectangle, rounded corners, fill=green!10, minimum width=2.5cm, minimum height=0.8cm},
+    nivel3/.style={draw, rectangle, rounded corners, fill=yellow!10, minimum width=2cm, minimum height=0.6cm},
+    edge from parent/.style={draw, -latex}
+]
+
+\node[nivel1] (mat) {Matemáticas (S1-2)};
+\node[nivel1] (eda) [below left=1cm and -1cm of mat] {EDA \& FE (S3)};
+\node[nivel1] (sup) [below right=1cm and -1cm of mat] {Supervisado (S4-7)};
+\node[nivel1] (nsup) [below =2cm of sup] {No Supervisado (S9)};
+\node[nivel1] (val) [below left=1cm and -2cm of eda] {Validación (S8)};
+\node[nivel1] (series) [below right=1cm and -2cm of nsup] {Series Temporales (S10)};
+\node[nivel1] (comp) [below =2cm of nsup] {Complementarios (S11)};
+\node[nivel1] (rec) [below =2cm of comp] {Recomendación (S12)};
+\node[nivel1] (interp) [below =2cm of rec] {Interpretabilidad (S13)};
+\node[nivel1] (mlops) [below =2cm of interp] {MLOps (S14)};
+
+\draw[->] (mat) -- (eda);
+\draw[->] (mat) -- (sup);
+\draw[->] (eda) -- (sup);
+\draw[->] (sup) -- (val);
+\draw[->] (sup) -- (nsup);
+\draw[->] (sup) -- (series);
+\draw[->] (nsup) -- (comp);
+\draw[->] (sup) -- (comp);
+\draw[->] (series) -- (comp);
+\draw[->] (comp) -- (rec);
+\draw[->] (rec) -- (interp);
+\draw[->] (interp) -- (mlops);
+\end{tikzpicture}
+\caption{Mapa conceptual del curso.}
+\end{center}
+
+\textbf{Resumen por sesiones:}
+\begin{itemize}
+    \item \textbf{S1-2: Matemáticas}: álgebra lineal, cálculo, probabilidad, base para todo.
+    \item \textbf{S3: EDA y Feature Engineering}: análisis exploratorio y transformación de datos.
+    \item \textbf{S4: Regresión Lineal y Regularización}: modelos lineales, interpretación, Ridge, Lasso.
+    \item \textbf{S5: Clasificación I}: regresión logística, métricas, desbalance.
+    \item \textbf{S6: Clasificación II}: KNN, Naive Bayes, SVM.
+    \item \textbf{S7: Árboles y Random Forest}: criterios de división, bagging.
+    \item \textbf{S8: Gradient Boosting}: XGBoost, LightGBM, comparativas.
+    \item \textbf{S9: Validación}: sesgo-varianza, validación cruzada, búsqueda de hiperparámetros.
+    \item \textbf{S10: No Supervisado}: PCA, K-Means, DBSCAN, clustering jerárquico.
+    \item \textbf{S11: Series Temporales}: descomposición, ARIMA, ML con lags.
+    \item \textbf{S12: Complementarios}: regresión robusta, SVR, DBSCAN profundo, métricas externas.
+    \item \textbf{S13: Recomendación}: filtrado colaborativo, factorización matricial, métricas ranking.
+    \item \textbf{S14: Interpretabilidad}: SHAP, LIME, PDP, importancia.
+    \item \textbf{S15 (ésta): MLOps}: despliegue, monitoreo, producción.
+\end{itemize}
+
+\section{Conexión con el futuro profesional}
+
+El dominio de MLOps diferencia a un científico de datos junior de uno senior. Saber desplegar y mantener modelos es una habilidad muy valorada. Las empresas buscan perfiles que no solo construyan buenos modelos, sino que los lleven a producción y aseguren su calidad continua.
+
+\section{Resumen y conclusión del curso}
+
+A lo largo de 14 sesiones se ha recorrido el camino completo del machine learning: desde los fundamentos matemáticos hasta la puesta en producción. Se han explorado modelos supervisados, no supervisados, series temporales, sistemas de recomendación, interpretabilidad y MLOps. El estudiante ahora cuenta con un arsenal de técnicas y la capacidad de decidir cuál aplicar según el problema, los datos y las restricciones del negocio.
+
+El aprendizaje no termina aquí: la práctica continua, la lectura de papers, la participación en competencias y la actualización con nuevas herramientas serán clave para seguir creciendo. ¡Enhorabuena por llegar hasta el final!
+
+\end{document}

@@ -1,0 +1,420 @@
+\documentclass[12pt,a4paper,openany,oneside]{book}
+
+% --- Paquetes ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, es-noshorthands]{babel}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{hhline}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc, shapes}
+\pgfplotsset{compat=1.18}
+
+\geometry{margin=2.5cm}
+
+% --- Colores y estilos para código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Estilo de cabecera y pie ---
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[L]{\small Carlos César Sánchez Coronel}
+\fancyhead[R]{\small Sesión 12: Sistemas de Recomendación}
+\fancyfoot[L]{\small Carlos César Sánchez Coronel}
+\fancyfoot[C]{\thepage}
+
+% --- Portada ---
+\title{
+    \textbf{Sesión 12} \\ 
+    \Huge \textbf{SISTEMAS DE RECOMENDACIÓN} \\
+    \Large Filtrado colaborativo, factorización matricial y métricas de evaluación
+}
+\author{
+    \small Por \\ \vspace{0.2cm}
+    \Large \textsc{Carlos César Sánchez Coronel}
+}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\addcontentsline{toc}{chapter}{Índice general}
+
+% ------------------------------------------------------------------
+% CAPÍTULO 12: SESIÓN 12 - SISTEMAS DE RECOMENDACIÓN
+% ------------------------------------------------------------------
+\chapter{Sistemas de Recomendación}
+
+Los sistemas de recomendación se han convertido en el núcleo de las plataformas digitales modernas. Desde Netflix sugiriendo películas, Spotify creando listas personalizadas, Amazon recomendando productos, hasta TikTok decidiendo qué vídeo mostrar a continuación, todos estos sistemas comparten un objetivo común: predecir qué ítems serán más relevantes para un usuario en particular [citation:4]. Esta sesión aborda los fundamentos matemáticos, los algoritmos más utilizados, las métricas de evaluación y los desafíos prácticos de estos sistemas.
+
+\section{Logro de la sesión}
+Diseñar e implementar sistemas de recomendación basados en filtrado colaborativo y factorización matricial, comprendiendo las métricas de evaluación y los desafíos como el cold start y la escalabilidad.
+
+\section{Introducción: la revolución de la personalización}
+
+Antes del auge del machine learning, las recomendaciones se basaban principalmente en rankings de popularidad: los "más vendidos" o "más vistos" se mostraban a todos los usuarios por igual [citation:6]. Aunque esta estrategia aún tiene cabida (por ejemplo, en librerías con su sección de bestsellers), carece de personalización. Un usuario que ha visto muchas películas de terror no encontrará relevante una lista de comedias románticas populares.
+
+Los sistemas de recomendación modernos resuelven este problema utilizando dos tipos de datos fundamentales [citation:4]:
+\begin{itemize}
+    \item \textbf{Datos explícitos}: información que el usuario proporciona directamente, como valoraciones (1-5 estrellas), likes o comentarios.
+    \item \textbf{Datos implícitos}: derivados del comportamiento del usuario, como historial de clics, tiempo de visualización, compras realizadas o canciones escuchadas.
+\end{itemize}
+
+El impacto de estos sistemas es enorme: más del 35\% de las ventas de Amazon provienen de su motor de recomendaciones, y Netflix ha logrado reducir su tasa de cancelación en más de un 20\% gracias a la personalización [citation:9].
+
+\section{Tipos de sistemas de recomendación}
+
+\subsection{Sistemas basados en popularidad}
+Son los más simples: recomiendan los mismos ítems a todos los usuarios basándose en métricas globales como número de ventas, visualizaciones o valoraciones promedio [citation:6]. No requieren personalización y son útiles como punto de partida cuando no hay datos históricos (cold start del sistema).
+
+\subsection{Sistemas basados en contenido (Content-based)}
+Analizan las características de los ítems que un usuario ha valorado positivamente y recomiendan ítems similares en contenido [citation:4][citation:6]. Por ejemplo, si un usuario ha visto muchas películas de ciencia ficción, el sistema recomendará otras películas del mismo género.
+
+\textbf{Fundamento matemático:}
+Cada ítem \(i\) se representa mediante un vector de características \(\mathbf{x}_i \in \mathbb{R}^d\) (por ejemplo, género, director, actores). El perfil del usuario \(u\) se construye como el promedio (o suma ponderada) de los vectores de los ítems que ha valorado positivamente:
+\[
+\mathbf{p}_u = \frac{1}{|I_u^+|}\sum_{i \in I_u^+} \mathbf{x}_i
+\]
+La relevancia de un nuevo ítem \(j\) para el usuario \(u\) se calcula mediante similitud de coseno:
+\[
+\text{relevancia}(u,j) = \frac{\mathbf{p}_u \cdot \mathbf{x}_j}{\|\mathbf{p}_u\| \|\mathbf{x}_j\|}
+\]
+
+\textbf{Ventajas:} no sufre de cold start para nuevos ítems (si se conocen sus características), es interpretable. \textbf{Desventajas:} requiere características bien definidas, tiende a recomendar ítems muy similares (falta de diversidad).
+
+\subsection{Sistemas colaborativos (Collaborative Filtering)}
+Se basan en el principio de que usuarios con gustos similares en el pasado tendrán gustos similares en el futuro [citation:6][citation:7]. Existen dos variantes principales.
+
+\subsubsection{Filtrado colaborativo basado en usuarios (User-based)}
+Para un usuario activo \(u\), se encuentran los \(k\) usuarios más similares (vecinos) según sus valoraciones. La predicción para un ítem \(i\) no valorado por \(u\) se calcula como el promedio ponderado de las valoraciones de los vecinos.
+
+\textbf{Medida de similitud:} correlación de Pearson entre vectores de valoraciones de dos usuarios \(a\) y \(b\):
+\[
+\text{sim}(a,b) = \frac{\sum_{i \in I_{ab}} (r_{a,i} - \bar{r}_a)(r_{b,i} - \bar{r}_b)}{\sqrt{\sum_{i \in I_{ab}} (r_{a,i} - \bar{r}_a)^2} \sqrt{\sum_{i \in I_{ab}} (r_{b,i} - \bar{r}_b)^2}}
+\]
+donde \(I_{ab}\) son los ítems valorados por ambos usuarios, y \(\bar{r}_a\) es la valoración media del usuario \(a\).
+
+\textbf{Predicción:}
+\[
+\hat{r}_{u,i} = \bar{r}_u + \frac{\sum_{v \in N(u)} \text{sim}(u,v) \cdot (r_{v,i} - \bar{r}_v)}{\sum_{v \in N(u)} |\text{sim}(u,v)|}
+\]
+
+\subsubsection{Filtrado colaborativo basado en ítems (Item-based)}
+Análogo al anterior, pero se calcula la similitud entre ítems. Para predecir la valoración de un usuario \(u\) sobre un ítem \(i\), se buscan ítems similares a \(i\) que \(u\) haya valorado [citation:1].
+
+\textbf{Ventaja:} la similitud entre ítems es más estable que entre usuarios, por lo que puede precomputarse.
+
+\subsection{Sistemas híbridos}
+Combinan enfoques basados en contenido y colaborativos para mitigar las limitaciones de cada uno [citation:4]. Por ejemplo, Netflix utiliza un sistema híbrido que analiza tanto las valoraciones de los usuarios como las características de las películas.
+
+\section{Factorización matricial: SVD y Funk SVD}
+
+La factorización matricial se popularizó gracias al Premio Netflix de 1 millón de dólares en 2006. El objetivo era superar en un 10\% el algoritmo de recomendación de Netflix (que tenía un RMSE de 0.9514) [citation:1].
+
+\subsection{Formulación del problema}
+Se tiene una matriz de valoraciones \(\mathbf{R}\) de tamaño \(m \times n\) (usuarios \(\times\) ítems), con muchas celdas vacías (matriz dispersa). El objetivo es encontrar dos matrices \(\mathbf{P}\) (usuarios \(\times\) factores) y \(\mathbf{Q}\) (ítems \(\times\) factores) tales que:
+\[
+\mathbf{R} \approx \mathbf{P} \mathbf{Q}^T
+\]
+donde cada fila \(\mathbf{p}_u\) representa los factores latentes del usuario \(u\) (sus gustos en dimensiones no observables como "preferencia por películas con acción y drama"), y cada fila \(\mathbf{q}_i\) representa los factores latentes del ítem \(i\). La valoración predicha es el producto punto:
+\[
+\hat{r}_{u,i} = \mathbf{p}_u \cdot \mathbf{q}_i = \sum_{f=1}^k p_{u,f} \, q_{i,f}
+\]
+
+\subsection{SVD tradicional}
+La descomposición en valores singulares (SVD) clásica factoriza la matriz completa, pero tiene limitaciones [citation:1]:
+\begin{itemize}
+    \item Requiere pre-llenar los valores faltantes (lo que introduce sesgo).
+    \item Es computacionalmente costosa (\(O(m^2 n)\)).
+    \item No escala bien a matrices dispersas.
+\end{itemize}
+
+\subsection{Funk SVD (Simon Funk)}
+Simon Funk propuso una aproximación mediante optimización que revolucionó el campo [citation:1]. En lugar de descomponer la matriz completa, se optimiza solo sobre las valoraciones conocidas mediante gradiente descendente estocástico (SGD).
+
+\textbf{Función de pérdida con regularización:}
+\[
+\mathcal{L} = \sum_{(u,i) \in \mathcal{K}} (r_{u,i} - \mathbf{p}_u \cdot \mathbf{q}_i)^2 + \lambda (\|\mathbf{p}_u\|^2 + \|\mathbf{q}_i\|^2)
+\]
+donde \(\mathcal{K}\) es el conjunto de pares (usuario, ítem) con valoración conocida, y \(\lambda\) controla la regularización para evitar overfitting.
+
+\textbf{Actualización SGD:}
+Para cada valoración conocida \(r_{u,i}\):
+\begin{align*}
+e_{u,i} &= r_{u,i} - \mathbf{p}_u \cdot \mathbf{q}_i \\
+\mathbf{p}_u &\leftarrow \mathbf{p}_u + \eta (e_{u,i} \mathbf{q}_i - \lambda \mathbf{p}_u) \\
+\mathbf{q}_i &\leftarrow \mathbf{q}_i + \eta (e_{u,i} \mathbf{p}_u - \lambda \mathbf{q}_i)
+\end{align*}
+donde \(\eta\) es la tasa de aprendizaje.
+
+\textbf{Ventajas de Funk SVD} [citation:1]:
+\begin{itemize}
+    \item Funciona excelentemente con matrices dispersas.
+    \item La regularización controla el overfitting.
+    \item Es computacionalmente eficiente y escalable.
+\end{itemize}
+
+\subsection{Extensiones: sesgos y factores temporales}
+Los modelos modernos añaden términos de sesgo (bias) para capturar efectos globales:
+\[
+\hat{r}_{u,i} = \mu + b_u + b_i + \mathbf{p}_u \cdot \mathbf{q}_i
+\]
+donde \(\mu\) es la media global, \(b_u\) el sesgo del usuario (usuarios que tienden a valorar más alto o más bajo), y \(b_i\) el sesgo del ítem (ítems generalmente mejor valorados). También se incorporan factores temporales para capturar cambios en los gustos a lo largo del tiempo.
+
+\section{Métricas de evaluación en sistemas de recomendación}
+
+La evaluación depende del objetivo: predecir valoraciones numéricas o generar listas de recomendaciones ordenadas.
+
+\subsection{Métricas para predicción de rating}
+\begin{itemize}
+    \item \textbf{RMSE (Root Mean Square Error)}: 
+    \[
+    \text{RMSE} = \sqrt{\frac{1}{|\mathcal{K}|} \sum_{(u,i) \in \mathcal{K}} (r_{u,i} - \hat{r}_{u,i})^2}
+    \]
+    Penaliza más los errores grandes. Fue la métrica oficial del Premio Netflix [citation:1].
+    
+    \item \textbf{MAE (Mean Absolute Error)}:
+    \[
+    \text{MAE} = \frac{1}{|\mathcal{K}|} \sum_{(u,i) \in \mathcal{K}} |r_{u,i} - \hat{r}_{u,i}|
+    \]
+    Menos sensible a outliers que RMSE.
+\end{itemize}
+
+\subsection{Métricas para evaluación de rankings}
+
+\subsubsection{Precision@k y Recall@k}
+Miden la calidad de una lista ordenada de \(k\) recomendaciones [citation:2][citation:5][citation:8].
+
+\begin{itemize}
+    \item \textbf{Precision@k}: proporción de ítems relevantes dentro de las top-\(k\) recomendaciones:
+    \[
+    \text{Precision@k} = \frac{\text{número de ítems relevantes en top-}k}{k}
+    \]
+    Responde: "de lo que recomendé, ¿cuánto era relevante?"
+    
+    \item \textbf{Recall@k}: proporción de ítems relevantes totales que fueron capturados en las top-\(k\) recomendaciones:
+    \[
+    \text{Recall@k} = \frac{\text{número de ítems relevantes en top-}k}{\text{número total de ítems relevantes para el usuario}}
+    \]
+    Responde: "de lo relevante, ¿cuánto logré recomendar?"
+\end{itemize}
+
+\textbf{Ejemplo numérico:} [citation:5][citation:8]
+Un usuario tiene 6 películas relevantes en su historial. Dos algoritmos recomiendan 3 películas cada uno:
+\begin{itemize}
+    \item Algoritmo A: [Terminator, James Bond, Love Actually] → 2 relevantes.
+    \item Algoritmo B: [Cars, Toy Story, Iron Man] → 1 relevante.
+\end{itemize}
+Precision@3: A = 2/3 = 0.667, B = 1/3 = 0.333.
+Recall@3: A = 2/6 = 0.333, B = 1/6 = 0.167.
+
+\textbf{Compromiso Precision-Recall:} existe una relación inversa. Si se recomiendan muchos ítems, el recall aumenta pero la precisión disminuye [citation:2].
+
+\subsubsection{F-score@k}
+Media armónica que combina precisión y recall [citation:5]:
+\[
+F_{\beta}@k = (1 + \beta^2) \cdot \frac{\text{Precision@k} \cdot \text{Recall@k}}{\beta^2 \cdot \text{Precision@k} + \text{Recall@k}}
+\]
+Con \(\beta=1\) se obtiene F1-score, que da igual peso a ambas métricas.
+
+\subsubsection{Mean Average Precision (MAP)}
+Promedia la precisión en cada posición donde aparece un ítem relevante [citation:2]. Para un usuario, Average Precision (AP) se define como:
+\[
+\text{AP} = \frac{\sum_{k=1}^n \text{Precision@k} \cdot \text{rel}(k)}{\text{número total de ítems relevantes}}
+\]
+donde \(\text{rel}(k)=1\) si el ítem en posición \(k\) es relevante. MAP es el promedio de AP sobre todos los usuarios.
+
+\subsubsection{NDCG (Normalized Discounted Cumulative Gain)}
+Métrica que penaliza si un ítem relevante aparece en posiciones bajas del ranking [citation:2]. DCG (Discounted Cumulative Gain) se calcula como:
+\[
+\text{DCG}@k = \sum_{i=1}^k \frac{2^{\text{rel}_i} - 1}{\log_2(i+1)}
+\]
+donde \(\text{rel}_i\) puede ser una valoración binaria o un nivel de relevancia. NDCG normaliza dividiendo por el DCG ideal (IDCG), donde los ítems relevantes están ordenados óptimamente.
+
+\subsubsection{Cobertura (Coverage)}
+Mide qué porcentaje de usuarios o ítems pueden ser recomendados [citation:2]. Un sistema que solo recomienda los mismos ítems populares tiene alta precisión pero baja cobertura.
+
+\section{Problemas y desafíos en sistemas de recomendación}
+
+\subsection{Cold start}
+Es el problema más común y crítico [citation:3][citation:4]. Ocurre cuando no hay suficiente información para hacer recomendaciones. Tiene tres variantes:
+
+\begin{itemize}
+    \item \textbf{Nuevo usuario (new user)}: el usuario no tiene historial de interacciones. Soluciones: pedir valoraciones iniciales en un onboarding, usar datos demográficos (edad, ubicación), o recomendar ítems populares.
+    
+    \item \textbf{Nuevo ítem (new item)}: el ítem no tiene valoraciones. Soluciones: usar filtrado basado en contenido (características del ítem), o combinarlo con información de metadata.
+    
+    \item \textbf{Nuevo sistema (new system)}: la plataforma acaba de lanzarse y no hay datos. Soluciones: transfer learning desde dominios similares, usar encuestas iniciales.
+\end{itemize}
+
+\subsection{Escalabilidad}
+Con millones de usuarios e ítems, calcular similitudes entre todos los pares es inviable. Se requieren técnicas como [citation:1]:
+\begin{itemize}
+    \item Indexación para búsqueda de vecinos (locality-sensitive hashing).
+    \item Factorización matricial con SGD, que escala linealmente con el número de valoraciones.
+    \item Modelos basados en grafos (Graph Neural Networks) para capturar relaciones complejas.
+\end{itemize}
+
+\subsection{Matriz dispersa (sparse data)}
+La mayoría de los usuarios interactúan con una fracción muy pequeña de los ítems. La factorización matricial con regularización ayuda a generalizar, pero cuando la dispersión es extrema (menos de 5 valoraciones por usuario), incluso estos modelos fallan.
+
+\subsection{Diversidad y serendipia}
+Los sistemas tienden a recomendar siempre ítems muy similares, creando "filtros burbuja" [citation:4]. Es importante equilibrar precisión con diversidad y capacidad de sorprender al usuario (serendipia).
+
+\section{Caso integrado: recomendación de películas con MovieLens}
+
+\subsection{Datos}
+Se utiliza el dataset MovieLens 100k, que contiene 100,000 valoraciones (1-5) de 943 usuarios sobre 1,682 películas [citation:7]. Cada usuario ha valorado al menos 20 películas.
+
+\subsection{Preprocesamiento}
+\begin{enumerate}
+    \item Crear matriz usuario-película con valoraciones.
+    \item Dividir en entrenamiento (80\%) y prueba (20\%) de forma estratificada por usuario.
+    \item Para cold start simulado, se pueden eliminar algunos usuarios/ítems del entrenamiento.
+\end{enumerate}
+
+\subsection{Modelos implementados}
+\begin{enumerate}
+    \item \textbf{Línea base}: media global + sesgos de usuario e ítem.
+    \item \textbf{Filtrado colaborativo basado en ítems}: similitud de coseno.
+    \item \textbf{Funk SVD}: con 20 factores latentes, regularización \(\lambda=0.1\), 20 épocas.
+\end{enumerate}
+
+\subsection{Métricas de evaluación}
+\begin{itemize}
+    \item Para predicción: RMSE y MAE en el conjunto de prueba.
+    \item Para rankings: Precision@10, Recall@10 y NDCG@10.
+\end{itemize}
+
+\subsection{Resultados típicos}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Modelo} & \textbf{RMSE} & \textbf{MAE} & \textbf{Precision@10} & \textbf{NDCG@10} \\
+\hline
+Línea base (sesgos) & 1.12 & 0.91 & 0.18 & 0.35 \\
+Item-based CF & 0.98 & 0.78 & 0.24 & 0.47 \\
+Funk SVD (20 factores) & 0.92 & 0.73 & 0.29 & 0.54 \\
+\hline
+\end{tabular}
+\caption{Comparación de modelos en MovieLens 100k.}
+\end{table}
+
+Funk SVD supera consistentemente a los demás, confirmando su eficacia [citation:1]. La mejora en NDCG indica que además de acertar más, ordena mejor las recomendaciones.
+
+\section{Implementación en Python}
+
+\subsection{Filtrado colaborativo con Surprise}
+\begin{lstlisting}[language=Python]
+from surprise import Dataset, Reader, SVD
+from surprise.model_selection import train_test_split
+from surprise import accuracy
+
+# Cargar datos
+reader = Reader(line_format='user item rating', sep='\t')
+data = Dataset.load_from_file('u.data', reader=reader)
+trainset, testset = train_test_split(data, test_size=0.2)
+
+# Entrenar SVD
+algo = SVD(n_factors=20, reg_all=0.1, lr_all=0.005, n_epochs=20)
+algo.fit(trainset)
+
+# Evaluar
+predictions = algo.test(testset)
+rmse = accuracy.rmse(predictions)
+mae = accuracy.mae(predictions)
+\end{lstlisting}
+
+\subsection{Funk SVD desde cero con NumPy}
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+def funk_sgd(R, k=20, lambda_reg=0.1, lr=0.005, epochs=20):
+    m, n = R.shape
+    P = np.random.normal(0, 0.1, (m, k))
+    Q = np.random.normal(0, 0.1, (n, k))
+    
+    nonzeros = np.argwhere(~np.isnan(R))
+    
+    for epoch in range(epochs):
+        np.random.shuffle(nonzeros)
+        for u, i in nonzeros:
+            rui = R[u, i]
+            pred = np.dot(P[u], Q[i])
+            eui = rui - pred
+            # Actualizar
+            P[u] += lr * (eui * Q[i] - lambda_reg * P[u])
+            Q[i] += lr * (eui * P[u] - lambda_reg * Q[i])
+    return P, Q
+\end{lstlisting}
+
+\subsection{Cálculo de Precision@k}
+\begin{lstlisting}[language=Python]
+def precision_at_k(recommended_items, relevant_items, k):
+    recommended_k = recommended_items[:k]
+    hits = len(set(recommended_k) & set(relevant_items))
+    return hits / k
+\end{lstlisting}
+
+\section{Aplicaciones en la industria}
+
+\subsection{Netflix}
+Netflix utiliza un sistema híbrido que combina filtrado colaborativo, contenido y factores contextuales [citation:4][citation:9]. Además de recomendar películas, personaliza las carátulas según el perfil del usuario: si has visto muchas películas de una actriz, aparecerá su rostro en la miniatura [citation:7].
+
+\subsection{Amazon}
+Más del 35\% de las ventas de Amazon provienen de su motor de recomendaciones [citation:9]. Utiliza principalmente filtrado colaborativo basado en ítems ("los clientes que compraron esto también compraron...") junto con reglas de negocio y popularidad.
+
+\subsection{Spotify}
+Spotify combina filtrado colaborativo con análisis de audio y playlists colaborativas [citation:4][citation:9]. Su lista "Descubrimiento Semanal" es un ejemplo clásico de sistema híbrido.
+
+\subsection{TikTok e Instagram}
+Las redes sociales utilizan modelos de deep learning que consideran interacciones, tiempo de visualización y redes de seguidos para recomendar contenido en el feed [citation:4]. La personalización es extrema y en tiempo real.
+
+\section{Conexión con el resto del curso}
+\begin{itemize}
+    \item La factorización matricial (SVD) se basa en álgebra lineal, vista en sesiones previas.
+    \item Las métricas Precision@k y Recall@k extienden los conceptos de clasificación a rankings.
+    \item El cold start se relaciona con el problema de datos faltantes visto en feature engineering.
+    \item La optimización SGD en Funk SVD conecta con el entrenamiento de redes neuronales.
+\end{itemize}
+
+\section{Resumen}
+\begin{itemize}
+    \item Los sistemas de recomendación se clasifican en basados en popularidad, contenido, colaborativos e híbridos.
+    \item El filtrado colaborativo puede ser basado en usuarios o en ítems, utilizando medidas de similitud como Pearson o coseno.
+    \item La factorización matricial (Funk SVD) con SGD y regularización es el estado del arte para datos dispersos.
+    \item Las métricas de evaluación incluyen RMSE/MAE para ratings, y Precision@k, Recall@k, MAP, NDCG para rankings.
+    \item El cold start es el principal desafío, abordable con estrategias híbridas y datos demográficos.
+    \item Grandes tecnológicas como Netflix, Amazon y Spotify basan su negocio en estos sistemas, logrando incrementos significativos en ventas y retención.
+\end{itemize}
+
+\end{document}

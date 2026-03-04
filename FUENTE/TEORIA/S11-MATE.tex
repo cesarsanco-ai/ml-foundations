@@ -1,0 +1,501 @@
+\documentclass[12pt,a4paper,openany,oneside]{book}
+
+% --- Paquetes ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, es-noshorthands]{babel}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{hhline}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc, shapes}
+\pgfplotsset{compat=1.18}
+
+\geometry{margin=2.5cm}
+
+% --- Colores y estilos para código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Estilo de cabecera y pie ---
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[L]{\small Carlos César Sánchez Coronel}
+\fancyhead[R]{\small Sesión 11: Modelos Complementarios}
+\fancyfoot[L]{\small Carlos César Sánchez Coronel}
+\fancyfoot[C]{\thepage}
+
+% --- Portada ---
+\title{
+    \textbf{Sesión 11} \\ 
+    \Huge \textbf{MODELOS COMPLEMENTARIOS} \\
+    \Large Técnicas especializadas para problemas específicos
+}
+\author{
+    \small Por \\ \vspace{0.2cm}
+    \Large \textsc{Carlos César Sánchez Coronel}
+}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\addcontentsline{toc}{chapter}{Índice general}
+
+% ------------------------------------------------------------------
+% CAPÍTULO 11: SESIÓN 11 - MODELOS COMPLEMENTARIOS
+% ------------------------------------------------------------------
+\chapter{Modelos Complementarios}
+
+En las sesiones anteriores se han cubierto los modelos y técnicas más utilizados en machine learning. Sin embargo, en problemas reales surgen situaciones que requieren enfoques especializados: datos con outliers severos, relaciones no lineales que los árboles no capturan bien, necesidad de detectar clusters de forma arbitraria, o la obligación de interpretar jerarquías. Esta sesión presenta una colección de modelos complementarios que, aunque no son los más populares, resultan esenciales en contextos específicos y aparecen con frecuencia en entrevistas técnicas.
+
+\section{Logro de la sesión}
+Conocer otros algoritmos y técnicas que pueden aparecer en entrevistas o en problemas específicos, y entender cuándo aplicarlos según las características de los datos y los requisitos del problema.
+
+\section{Regresión Polinómica}
+
+\subsection{Extensión de la regresión lineal}
+La regresión polinómica consiste en añadir términos polinómicos de las variables originales como nuevas características. Para una variable \(x\), el modelo de grado \(d\) es:
+\[
+y = \beta_0 + \beta_1 x + \beta_2 x^2 + \dots + \beta_d x^d + \varepsilon
+\]
+A pesar del nombre, sigue siendo un modelo lineal en los parámetros \(\beta\), por lo que puede estimarse con mínimos cuadrados ordinarios.
+
+\subsection{Fundamento matemático}
+La matriz de diseño se construye como:
+\[
+\mathbf{X} = \begin{pmatrix}
+1 & x_1 & x_1^2 & \dots & x_1^d \\
+1 & x_2 & x_2^2 & \dots & x_2^d \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & x_n & x_n^2 & \dots & x_n^d
+\end{pmatrix}
+\]
+y se resuelve \(\hat{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}\).
+
+\subsection{Riesgo de overfitting}
+A medida que aumenta el grado \(d\), el modelo se vuelve más flexible y puede ajustarse excesivamente a los datos de entrenamiento, especialmente en las regiones extremas. Es fundamental validar el grado adecuado mediante validación cruzada.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={\(x\)},
+    ylabel={\(y\)},
+    xmin=-3, xmax=3,
+    ymin=-5, ymax=15,
+    grid=both,
+    width=0.6\textwidth,
+    legend pos=north west
+]
+\addplot[only marks, mark=*] coordinates {
+    (-2.5, 2) (-2, 1) (-1.5, 0.5) (-1, 1) (-0.5, 2) (0, 3) (0.5, 5) (1, 7) (1.5, 10) (2, 12)
+};
+\addplot[blue, thick, domain=-2.5:2, samples=100] {0.5 + 1.2*x + 0.8*x^2};
+\addplot[red, thick, domain=-2.5:2, samples=100] {0.5 + 1.2*x + 0.8*x^2 - 0.1*x^3 + 0.5*x^4 - 0.2*x^5};
+\legend{Datos, Grado 2, Grado 5}
+\end{axis}
+\end{tikzpicture}
+\caption{Regresión polinómica: grado 2 (azul) generaliza bien; grado 5 (rojo) sobreajusta.}
+\end{center}
+
+\subsection{Cuándo usar regresión polinómica}
+\begin{itemize}
+    \item Cuando se sospecha una relación no lineal pero suave.
+    \item Como alternativa a modelos más complejos cuando se necesita interpretabilidad (los coeficientes de los términos polinómicos indican la forma de la relación).
+    \item En problemas con pocas variables independientes.
+\end{itemize}
+
+\section{Regresión Robusta}
+
+Los modelos de regresión estándar (mínimos cuadrados) son muy sensibles a outliers. La regresión robusta utiliza funciones de pérdida que penalizan menos los errores grandes.
+
+\subsection{Regresión de Huber}
+La función de pérdida de Huber combina el error cuadrático para errores pequeños con el error absoluto para errores grandes:
+\[
+L_{\delta}(r) = 
+\begin{cases}
+\frac{1}{2} r^2 & \text{si } |r| \le \delta \\
+\delta(|r| - \frac{1}{2}\delta) & \text{en otro caso}
+\end{cases}
+\]
+donde \(r = y - \hat{y}\) es el residuo y \(\delta\) es un umbral que controla la transición. Para residuos pequeños, se comporta como MSE (diferenciable y eficiente); para residuos grandes, como MAE (menos sensible a outliers).
+
+\subsection{RANSAC (RANdom SAmple Consensus)}
+RANSAC es un algoritmo iterativo para estimar parámetros de un modelo en presencia de un gran número de outliers. Su filosofía es diferente: no busca minimizar una función de pérdida sobre todos los datos, sino encontrar un conjunto de puntos "inliers" que sean consistentes con un modelo.
+
+\begin{enumerate}
+    \item Seleccionar aleatoriamente un subconjunto mínimo de puntos para ajustar un modelo (ej. 2 puntos para una recta).
+    \item Calcular cuántos puntos del conjunto total están dentro de un umbral de distancia al modelo (inliers).
+    \item Si el número de inliers supera un umbral, reajustar el modelo con todos los inliers.
+    \item Repetir \(N\) iteraciones y quedarse con el modelo con más inliers.
+\end{enumerate}
+
+\begin{itemize}
+    \item \textbf{Ventaja}: extremadamente robusto, puede tolerar más del 50\% de outliers.
+    \item \textbf{Desventaja}: requiere ajustar parámetros (umbral de distancia, número de iteraciones) y no es determinista.
+\end{itemize}
+
+\subsection{Caso de uso: estimación de tendencia con outliers}
+En datos de precios de viviendas, pueden existir propiedades atípicas (mansiones) que distorsionan la regresión lineal. Huber o RANSAC proporcionan una estimación más representativa de la relación para la mayoría de los datos.
+
+\subsection{Comparación de pérdidas}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Función} & \textbf{Ecuación} & \textbf{Sensibilidad a outliers} \\
+\hline
+MSE & \(r^2\) & Alta \\
+MAE & \(|r|\) & Moderada \\
+Huber & \(L_{\delta}(r)\) & Baja (con \(\delta\) adecuado) \\
+\hline
+\end{tabular}
+\caption{Comparación de funciones de pérdida.}
+\end{table}
+
+\section{Support Vector Regression (SVR)}
+
+SVR extiende las ideas de SVM a problemas de regresión. En lugar de minimizar el error cuadrático, busca una función \(f(x)\) que tenga al menos \(\varepsilon\) de desviación respecto a los valores reales, y al mismo tiempo sea lo más plana posible.
+
+\subsection{Formulación}
+Para un modelo lineal \(f(x) = \mathbf{w}^T x + b\), SVR resuelve:
+\[
+\min_{\mathbf{w}, b} \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^n (\xi_i + \xi_i^*)
+\]
+sujeto a:
+\[
+y_i - (\mathbf{w}^T x_i + b) \le \varepsilon + \xi_i
+\]
+\[
+(\mathbf{w}^T x_i + b) - y_i \le \varepsilon + \xi_i^*
+\]
+\[
+\xi_i, \xi_i^* \ge 0
+\]
+donde:
+\begin{itemize}
+    \item \(\varepsilon\): margen de tolerancia (errores menores a \(\varepsilon\) no se penalizan).
+    \item \(C\): parámetro de regularización que controla la penalización por errores mayores a \(\varepsilon\).
+    \item \(\xi_i, \xi_i^*\): variables de holgura que miden la desviación fuera de la banda.
+\end{itemize}
+
+\subsection{Truco del kernel}
+Al igual que en SVM clasificación, SVR puede usar kernels para modelar relaciones no lineales:
+\[
+f(x) = \sum_{i=1}^n (\alpha_i - \alpha_i^*) K(x_i, x) + b
+\]
+donde \(K\) es una función kernel (lineal, polinomial, RBF).
+
+\subsection{Interpretación de parámetros}
+\begin{itemize}
+    \item \(\varepsilon\): define una banda "insensible" alrededor de la función. Un \(\varepsilon\) grande produce una función más plana, ignorando pequeñas desviaciones.
+    \item \(C\): controla la penalización por puntos fuera de la banda. Valores grandes de \(C\) ajustan más los datos, pudiendo sobreajustar.
+\end{itemize}
+
+\subsection{Caso de uso: predicción de series temporales con outliers}
+SVR es robusto a outliers si se elige un \(\varepsilon\) adecuado. Además, con kernel RBF puede capturar patrones no lineales.
+
+\section{DBSCAN a fondo}
+
+En la sesión 9 se introdujo DBSCAN. Aquí se profundiza en sus detalles y variantes.
+
+\subsection{Elección de parámetros}
+\begin{itemize}
+    \item \textbf{eps (\(\varepsilon\))}: se puede estimar mediante el gráfico de distancia al k-ésimo vecino. Para un \(k\) dado (usualmente minPts), se ordenan las distancias y se busca un punto de inflexión (codo).
+    \item \textbf{minPts}: regla general, minPts \(\ge\) dimensionalidad + 1. Valores típicos: 3-10.
+\end{itemize}
+
+\subsection{Métricas de distancia}
+DBSCAN funciona con cualquier métrica. En espacios de alta dimensionalidad, la distancia euclidiana pierde significado; se pueden usar distancias basadas en coseno o Manhattan.
+
+\subsection{Variantes}
+\begin{itemize}
+    \item \textbf{OPTICS} (Ordering Points To Identify the Clustering Structure): extiende DBSCAN para detectar clusters de densidad variable. Produce un diagrama de alcanzabilidad que permite visualizar la estructura jerárquica.
+    \item \textbf{HDBSCAN}: variante jerárquica que encuentra clusters de diferentes densidades y es menos sensible a los parámetros.
+\end{itemize}
+
+\subsection{Ventajas sobre K-Means}
+\begin{itemize}
+    \item No asume clusters esféricos.
+    \item No requiere especificar \(k\).
+    \item Identifica puntos como ruido.
+\end{itemize}
+
+\subsection{Limitaciones}
+\begin{itemize}
+    \item Sensible a la elección de eps y minPts.
+    \item Dificultad con densidades muy variables (aunque OPTICS lo mejora).
+\end{itemize}
+
+\section{Clustering Jerárquico a fondo}
+
+El clustering jerárquico construye una jerarquía de clusters. Se profundiza en los tipos de enlace y la interpretación del dendrograma.
+
+\subsection{Tipos de enlace y su efecto}
+\begin{itemize}
+    \item \textbf{Single linkage}: distancia mínima entre puntos de los clusters. Tiende a formar cadenas (efecto "encadenamiento").
+    \item \textbf{Complete linkage}: distancia máxima. Produce clusters compactos y esféricos.
+    \item \textbf{Average linkage}: promedio de distancias. Compromiso entre los anteriores.
+    \item \textbf{Ward linkage}: minimiza el incremento de la suma de cuadrados intra-cluster. Tiende a producir clusters de tamaño similar.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={\(x_1\)},
+    ylabel={\(x_2\)},
+    xmin=0, xmax=10,
+    ymin=0, ymax=10,
+    width=0.8\textwidth,
+    title={Efecto del tipo de enlace}
+]
+\addplot[only marks, mark=o] coordinates {(1,1) (2,2) (8,8) (9,9) (1,8) (2,7) (8,2) (9,1)};
+\end{axis}
+\end{tikzpicture}
+\caption{Diferentes tipos de enlace producirían distintas particiones.}
+\end{center}
+
+\subsection{Corte del dendrograma}
+El dendrograma se corta a una altura determinada para obtener los clusters. La altura puede elegirse mediante:
+\begin{itemize}
+    \item Criterio visual: buscar un salto grande en las distancias de fusión.
+    \item Método de la silueta: probar diferentes cortes y evaluar con silueta.
+\end{itemize}
+
+\subsection{Complejidad computacional}
+El clustering jerárquico aglomerativo tiene complejidad \(O(n^3)\) en su forma ingenua, o \(O(n^2 \log n)\) con estructuras de datos adecuadas. No es adecuado para grandes conjuntos de datos.
+
+\section{Métricas adicionales para clustering}
+
+Cuando se dispone de etiquetas verdaderas (ground truth), se pueden usar métricas externas.
+
+\subsection{Índice de Rand (Rand Index)}
+Mide la similitud entre dos particiones (la real y la obtenida). Para un conjunto de \(n\) puntos, se consideran todos los pares:
+\[
+RI = \frac{a + b}{\binom{n}{2}}
+\]
+donde:
+\begin{itemize}
+    \item \(a\): número de pares que están en el mismo cluster en ambas particiones.
+    \item \(b\): número de pares que están en diferentes clusters en ambas particiones.
+\end{itemize}
+Varía entre 0 y 1, siendo 1 la coincidencia perfecta.
+
+\subsection{Índice de Rand Ajustado (Adjusted Rand Index - ARI)}
+Corrige el RI por el azar, esperando que el valor sea 0 para particiones aleatorias:
+\[
+ARI = \frac{RI - \mathbb{E}[RI]}{\max(RI) - \mathbb{E}[RI]}
+\]
+Puede tomar valores negativos si la concordancia es peor que la aleatoria. Es la métrica externa más utilizada.
+
+\subsection{Información Mutua (Mutual Information)}
+Mide cuánta información comparten dos particiones:
+\[
+MI(U,V) = \sum_{i=1}^k \sum_{j=1}^l P(i,j) \log \frac{P(i,j)}{P(i)P(j)}
+\]
+donde \(P(i)\) es la probabilidad de que un punto pertenezca al cluster \(i\) en \(U\), etc.
+
+\subsection{Información Mutua Normalizada (NMI)}
+Escala la MI a \([0,1]\) dividiendo por la media de las entropías:
+\[
+NMI = \frac{MI(U,V)}{\sqrt{H(U)H(V)}}
+\]
+
+\subsection{Comparación de métricas}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Métrica} & \textbf{Rango} & \textbf{Corrige azar} & \textbf{Requiere etiquetas} \\
+\hline
+Silueta & \([-1,1]\) & No & No \\
+Davies-Bouldin & \([0,\infty)\) (menor mejor) & No & No \\
+Rand Index & \([0,1]\) & No & Sí \\
+ARI & \([-1,1]\) & Sí & Sí \\
+NMI & \([0,1]\) & Aproximadamente & Sí \\
+\hline
+\end{tabular}
+\caption{Comparación de métricas de clustering.}
+\end{table}
+
+\section{Comparación y cuándo usar cada técnica}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Técnica} & \textbf{Cuándo usarla} \\
+\hline
+Regresión polinómica & Relación no lineal suave, pocas variables, se necesita interpretabilidad. \\
+Regresión robusta (Huber) & Outliers moderados, se desea mantener eficiencia. \\
+RANSAC & Gran cantidad de outliers (hasta >50\%), se necesita un modelo de los inliers. \\
+SVR & Relaciones no lineales, robustez a outliers, control sobre la banda de error. \\
+DBSCAN & Clusters de forma arbitraria, presencia de ruido, no se conoce \(k\). \\
+Clustering jerárquico & Se necesita una jerarquía interpretable, pocos datos. \\
+\hline
+\end{tabular}
+\caption{Guía de selección de técnicas complementarias.}
+\end{table}
+
+\section{Caso integrado: Análisis de datos de sensores industriales}
+
+\subsection{Problema}
+Una planta industrial tiene sensores que registran temperatura, presión y vibración. Se sospecha que ciertas lecturas anómalas corresponden a fallos incipientes. Se dispone de 5000 lecturas sin etiquetar.
+
+\subsection{Objetivos}
+\begin{enumerate}
+    \item Identificar patrones de comportamiento normal y anomalías.
+    \item Agrupar las lecturas en perfiles de operación.
+    \item Modelar la relación entre presión y temperatura para predecir valores esperados.
+\end{enumerate}
+
+\subsection{Pasos}
+
+\subsubsection{Detección de outliers con RANSAC}
+Se ajusta una regresión lineal robusta con RANSAC para modelar temperatura en función de presión. Los puntos que quedan como outliers (no inliers) son candidatos a anomalías.
+
+\subsubsection{Clustering con DBSCAN}
+Sobre las variables originales (temperatura, presión, vibración), se aplica DBSCAN. Se elige eps mediante el gráfico de distancia al 5-vecino. DBSCAN identifica varios clusters densos y un conjunto de ruido que coincide en gran medida con los outliers de RANSAC.
+
+\subsubsection{Regresión polinómica por cluster}
+Para cada cluster denso, se ajusta una regresión polinómica de grado 2 para modelar la relación temperatura-presión dentro de ese modo de operación. Esto permite establecer límites de control: si una nueva lectura se desvía significativamente de la curva de su cluster, podría indicar un fallo.
+
+\subsubsection{Evaluación}
+\begin{itemize}
+    \item La silueta promedio de DBSCAN es 0.61, indicando buena separación.
+    \item Los outliers detectados por RANSAC y DBSCAN tienen una concordancia del 85\% según el índice de Rand ajustado.
+\end{itemize}
+
+\subsection{Conclusión}
+La combinación de técnicas complementarias permite una caracterización completa de los datos, identificando modos de operación y anomalías de forma robusta.
+
+\section{Implementación en Python}
+
+\subsection{Regresión polinómica}
+\begin{lstlisting}[language=Python]
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import Pipeline
+
+model = Pipeline([
+    ('poly', PolynomialFeatures(degree=3)),
+    ('linear', LinearRegression())
+])
+model.fit(X_train, y_train)
+\end{lstlisting}
+
+\subsection{Regresión robusta con Huber}
+\begin{lstlisting}[language=Python]
+from sklearn.linear_model import HuberRegressor
+
+huber = HuberRegressor(epsilon=1.35)
+huber.fit(X_train, y_train)
+\end{lstlisting}
+
+\subsection{RANSAC}
+\begin{lstlisting}[language=Python]
+from sklearn.linear_model import RANSACRegressor
+
+ransac = RANSACRegressor(min_samples=50, residual_threshold=5.0, max_trials=100)
+ransac.fit(X_train, y_train)
+inlier_mask = ransac.inlier_mask_
+\end{lstlisting}
+
+\subsection{SVR}
+\begin{lstlisting}[language=Python]
+from sklearn.svm import SVR
+
+svr = SVR(kernel='rbf', C=1.0, epsilon=0.1)
+svr.fit(X_train, y_train)
+\end{lstlisting}
+
+\subsection{DBSCAN con gráfico de distancias}
+\begin{lstlisting}[language=Python]
+from sklearn.cluster import DBSCAN
+from sklearn.neighbors import NearestNeighbors
+import numpy as np
+
+# Calcular distancias al k-ésimo vecino (k=minPts)
+neigh = NearestNeighbors(n_neighbors=5)
+neigh.fit(X)
+distances, _ = neigh.kneighbors(X)
+k_dist = np.sort(distances[:, -1])
+
+# Graficar para encontrar codo
+import matplotlib.pyplot as plt
+plt.plot(k_dist)
+plt.show()
+
+# Aplicar DBSCAN con eps elegido
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels = dbscan.fit_predict(X)
+\end{lstlisting}
+
+\subsection{Clustering jerárquico y dendrograma}
+\begin{lstlisting}[language=Python]
+from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+import matplotlib.pyplot as plt
+
+Z = linkage(X, method='ward')
+plt.figure(figsize=(10,5))
+dendrogram(Z)
+plt.show()
+
+# Cortar el dendrograma para obtener clusters
+clusters = fcluster(Z, t=3, criterion='maxclust')
+\end{lstlisting}
+
+\subsection{Métricas de clustering}
+\begin{lstlisting}[language=Python]
+from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
+
+# Si se tienen etiquetas verdaderas y_true
+ari = adjusted_rand_score(y_true, labels)
+nmi = normalized_mutual_info_score(y_true, labels)
+\end{lstlisting}
+
+\section{Conexión con el resto del curso}
+\begin{itemize}
+    \item La regresión robusta y SVR complementan los modelos de regresión vistos en sesiones anteriores.
+    \item DBSCAN y clustering jerárquico amplían las opciones de clustering más allá de K-Means.
+    \item Las métricas externas (ARI, NMI) permiten evaluar clustering cuando se dispone de ground truth, algo que no se había tratado.
+\end{itemize}
+
+\section{Resumen}
+\begin{itemize}
+    \item La regresión polinómica modela no linealidades añadiendo términos de mayor grado, pero debe controlarse el overfitting.
+    \item La regresión robusta (Huber, RANSAC) es esencial cuando los datos contienen outliers significativos.
+    \item SVR extiende SVM a regresión, permitiendo controlar la tolerancia al error mediante \(\varepsilon\) y usar kernels.
+    \item DBSCAN es una potente herramienta de clustering basada en densidad, con variantes como OPTICS para densidades variables.
+    \item El clustering jerárquico proporciona una visión multinivel de los datos mediante dendrogramas, con diferentes tipos de enlace.
+    \item Las métricas externas (ARI, NMI) permiten comparar clusters con etiquetas verdaderas.
+    \item La elección de la técnica adecuada depende de la naturaleza de los datos y del objetivo del análisis.
+\end{itemize}
+
+\end{document}

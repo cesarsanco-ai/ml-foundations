@@ -1,0 +1,316 @@
+\documentclass[12pt,a4paper,openany,oneside]{book}
+
+% --- Paquetes ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, es-noshorthands]{babel}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{hhline}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc}
+\pgfplotsset{compat=1.18}
+
+\geometry{margin=2.5cm}
+
+% --- Colores y estilos para código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Estilo de cabecera y pie ---
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[L]{\small Carlos César Sánchez Coronel}
+\fancyhead[R]{\small Sesión 5: Clasificación II - Algoritmos Clásicos}
+\fancyfoot[L]{\small Carlos César Sánchez Coronel}
+\fancyfoot[C]{\thepage}
+
+% --- Portada ---
+\title{
+    \textbf{Sesión 5} \\ 
+    \Huge \textbf{CLASIFICACIÓN II: ALGORITMOS CLÁSICOS} \\
+    \Large KNN, Naive Bayes y Máquinas de Vectores de Soporte
+}
+\author{
+    \small Por \\ \vspace{0.2cm}
+    \Large \textsc{Carlos César Sánchez Coronel}
+}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\addcontentsline{toc}{chapter}{Índice general}
+
+% ------------------------------------------------------------------
+% CAPÍTULO 5: SESIÓN 5 - CLASIFICACIÓN II
+% ------------------------------------------------------------------
+\chapter{Clasificación II: Algoritmos Clásicos}
+
+En esta sesión se presentan tres algoritmos fundamentales de clasificación: k-Vecinos más cercanos (KNN), Naive Bayes y Máquinas de Vectores de Soporte (SVM). Cada uno aborda el problema desde una perspectiva distinta: KNN desde la similitud geométrica, Naive Bayes desde la probabilidad condicional y SVM desde la optimización de márgenes. Se analizan sus fundamentos matemáticos, parámetros críticos, aplicaciones típicas y se comparan sus fortalezas y debilidades.
+
+\section{Logro de la sesión}
+Conocer y aplicar algoritmos de clasificación clásicos como KNN, Naive Bayes y SVM, entendiendo sus fundamentos, limitaciones y el contexto apropiado para cada uno.
+
+\section{Introducción: más allá de la regresión logística}
+La regresión logística, vista en la sesión anterior, es un modelo lineal y probabilístico. Sin embargo, muchos problemas requieren enfoques diferentes: relaciones no lineales, datos con estructuras específicas (texto, imágenes) o necesidad de interpretabilidad probabilística. Los algoritmos que se presentan a continuación amplían el espectro de herramientas del científico de datos.
+
+\section{K-Vecinos más cercanos (KNN)}
+
+\subsection{Fundamento geométrico}
+KNN es un algoritmo no paramétrico y basado en instancias. La predicción para una nueva observación \(x_q\) se obtiene a partir de las \(k\) observaciones más cercanas del conjunto de entrenamiento. Para clasificación, se asigna la clase por voto mayoritario; para regresión, se promedian los valores de salida.
+
+\subsection{Métrica de distancia}
+La noción de cercanía depende de una función de distancia. La más común es la distancia euclidiana:
+\[
+d(x_q, x_i) = \sqrt{\sum_{j=1}^p (x_{qj} - x_{ij})^2}
+\]
+Otras opciones incluyen:
+\begin{itemize}
+    \item \textbf{Manhattan:} \(d = \sum |x_{qj} - x_{ij}|\)
+    \item \textbf{Minkowski:} generalización \(d = \left(\sum |x_{qj} - x_{ij}|^r\right)^{1/r}\)
+    \item \textbf{Coseno:} para datos de alta dimensionalidad, \(d = 1 - \frac{x_q \cdot x_i}{\|x_q\| \|x_i\|}\)
+\end{itemize}
+
+\subsection{Influencia del parámetro \(k\)}
+\begin{itemize}
+    \item \(k\) pequeño (ej. 1): el modelo es muy flexible, con baja varianza pero alta varianza (sensible al ruido). Puede sobreajustar.
+    \item \(k\) grande: el modelo es más estable, pero puede suavizar en exceso los límites de decisión, aumentando el sesgo.
+\end{itemize}
+La elección óptima de \(k\) se realiza mediante validación cruzada.
+
+\subsection{Importancia del escalado}
+Dado que KNN se basa en distancias, las variables con escalas mayores dominarán el cálculo. Es imprescindible estandarizar o normalizar las características antes de aplicar el algoritmo.
+
+\subsection{Maldición de la dimensionalidad}
+A medida que aumenta el número de dimensiones \(p\), el espacio se vuelve cada vez más disperso y las distancias entre puntos tienden a ser similares, degradando el rendimiento de KNN. En altas dimensiones, suele ser necesario aplicar reducción de dimensionalidad previamente.
+
+\subsection{Caso de uso: sistemas de recomendación basados en similitud}
+En un sistema de recomendación de películas, se pueden representar usuarios por sus calificaciones. Para recomendar a un usuario activo, KNN encuentra los \(k\) usuarios más similares (según distancia de correlación o coseno) y sugiere películas que esos usuarios hayan valorado positivamente y que el activo no haya visto.
+
+\subsection{Implementación en scikit-learn}
+\begin{lstlisting}[language=Python]
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier(n_neighbors=5, metric='euclidean')
+knn.fit(X_train, y_train)
+y_pred = knn.predict(X_test)
+\end{lstlisting}
+
+\section{Naive Bayes}
+
+\subsection{Teorema de Bayes}
+El punto de partida es el teorema de Bayes:
+\[
+P(C_k | x) = \frac{P(C_k) P(x | C_k)}{P(x)}
+\]
+donde \(C_k\) es la clase \(k\)-ésima y \(x = (x_1, \dots, x_p)\) es el vector de características.
+
+\subsection{Supuesto de independencia condicional}
+Naive Bayes asume que, dada la clase, las características son independientes entre sí:
+\[
+P(x | C_k) = \prod_{j=1}^p P(x_j | C_k)
+\]
+Este supuesto es ``ingenuo'' porque rara vez se cumple en la realidad, pero simplifica enormemente el problema y, sorprendentemente, funciona bien en muchas aplicaciones.
+
+\subsection{Clasificación mediante máxima probabilidad a posteriori}
+La regla de clasificación es:
+\[
+\hat{y} = \arg\max_{C_k} P(C_k) \prod_{j=1}^p P(x_j | C_k)
+\]
+El denominador \(P(x)\) es constante para todas las clases y puede ignorarse.
+
+\subsection{Variantes de Naive Bayes}
+La forma de modelar \(P(x_j | C_k)\) depende del tipo de característica.
+
+\subsubsection{Gaussian Naive Bayes}
+Para características continuas, se asume una distribución normal:
+\[
+P(x_j | C_k) = \frac{1}{\sqrt{2\pi\sigma_{kj}^2}} \exp\left( -\frac{(x_j - \mu_{kj})^2}{2\sigma_{kj}^2} \right)
+\]
+Los parámetros \(\mu_{kj}\) y \(\sigma_{kj}^2\) se estiman por máxima verosimilitud a partir de los datos de entrenamiento.
+
+\subsubsection{Multinomial Naive Bayes}
+Para características que representan frecuencias (ej. conteo de palabras), se utiliza la distribución multinomial:
+\[
+P(x | C_k) = \frac{(\sum_j x_j)!}{\prod_j x_j!} \prod_j \theta_{kj}^{x_j}
+\]
+donde \(\theta_{kj}\) es la probabilidad de que la característica \(j\) aparezca en un documento de la clase \(k\). En la práctica, se usan versiones con suavizado Laplace para evitar probabilidades cero.
+
+\subsubsection{Bernoulli Naive Bayes}
+Para características binarias (presencia/ausencia), se modela cada característica como una variable Bernoulli:
+\[
+P(x_j | C_k) = \theta_{kj}^{x_j} (1 - \theta_{kj})^{1-x_j}
+\]
+
+\subsection{Caso de uso: clasificación de textos (spam)}
+En filtrado de spam, las características son la presencia o frecuencia de palabras. MultinomialNB es especialmente efectivo. La independencia condicional implica que la probabilidad de que aparezca la palabra ``viagra'' en un spam es independiente de que aparezca la palabra ``oferta'', lo cual no es cierto en la realidad, pero el modelo sigue siendo útil.
+
+\subsection{Implementación en scikit-learn}
+\begin{lstlisting}[language=Python]
+from sklearn.naive_bayes import GaussianNB, MultinomialNB, BernoulliNB
+
+# Para características continuas
+gnb = GaussianNB()
+gnb.fit(X_train, y_train)
+
+# Para características de frecuencia (ej. texto)
+mnb = MultinomialNB()
+mnb.fit(X_train_counts, y_train)
+
+# Para características binarias
+bnb = BernoulliNB()
+bnb.fit(X_train_binary, y_train)
+\end{lstlisting}
+
+\section{Máquinas de Vectores de Soporte (SVM)}
+
+\subsection{Margen máximo}
+SVM busca el hiperplano que separa las clases con el mayor margen posible. El margen es la distancia mínima desde el hiperplano a los puntos de entrenamiento más cercanos (vectores soporte).
+
+Para un problema linealmente separable, el hiperplano se define como:
+\[
+\mathbf{w}^T x + b = 0
+\]
+y la decisión de clasificación es \(\text{sign}(\mathbf{w}^T x + b)\). El margen es \(2 / \|\mathbf{w}\|\). Maximizar el margen equivale a minimizar \(\|\mathbf{w}\|^2 / 2\) sujeto a que todos los puntos estén bien clasificados y a distancia al menos 1 del hiperplano:
+\[
+y_i (\mathbf{w}^T x_i + b) \ge 1, \quad \forall i
+\]
+
+\subsection{Margen suave y parámetro \(C\)}
+En la práctica, los datos no son perfectamente separables. Se introducen variables de holgura \(\xi_i\) que permiten violaciones del margen. La formulación primal es:
+\[
+\min_{\mathbf{w}, b, \xi} \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^n \xi_i
+\]
+sujeto a \(y_i (\mathbf{w}^T x_i + b) \ge 1 - \xi_i\), \(\xi_i \ge 0\).
+
+El parámetro \(C\) controla el equilibrio entre maximizar el margen y minimizar las violaciones:
+\begin{itemize}
+    \item \(C\) grande: penaliza fuertemente las violaciones; el margen será estrecho pero con pocos errores (riesgo de sobreajuste).
+    \item \(C\) pequeño: permite más violaciones para obtener un margen más amplio (modelo más simple, mayor sesgo).
+\end{itemize}
+
+\subsection{Truco del kernel}
+Para problemas no lineales, SVM proyecta los datos a un espacio de mayor dimensión mediante una función \(\phi(x)\). El truco del kernel consiste en calcular el producto punto en ese espacio sin necesidad de conocer \(\phi\) explícitamente, mediante una función kernel \(K(x_i, x_j) = \phi(x_i)^T \phi(x_j)\).
+
+Algunos kernels comunes:
+\begin{itemize}
+    \item \textbf{Lineal:} \(K(x_i, x_j) = x_i^T x_j\)
+    \item \textbf{Polinomial:} \(K(x_i, x_j) = (\gamma x_i^T x_j + r)^d\)
+    \item \textbf{RBF (Radial Basis Function):} \(K(x_i, x_j) = \exp(-\gamma \|x_i - x_j\|^2)\)
+\end{itemize}
+
+\subsection{Parámetros clave en SVM con kernel RBF}
+\begin{itemize}
+    \item \(\gamma\): controla la influencia de un solo punto de entrenamiento. Un \(\gamma\) grande significa que solo los puntos muy cercanos influyen (modelo complejo, posible sobreajuste); \(\gamma\) pequeño produce un modelo más suave.
+    \item \(C\): como antes, controla la penalización por error.
+\end{itemize}
+Ambos parámetros deben ajustarse mediante validación cruzada.
+
+\subsection{Vectores soporte}
+Los puntos que quedan exactamente sobre el margen o del lado incorrecto son los vectores soporte. Son los únicos que influyen en la definición del hiperplano; el resto de puntos podrían eliminarse sin cambiar el modelo.
+
+\subsection{Caso de uso: reconocimiento facial}
+En reconocimiento facial, las imágenes se convierten en vectores de píxeles (alta dimensionalidad). SVM con kernel RBF puede encontrar límites de decisión no lineales que separen las caras de diferentes personas. Los vectores soporte son las imágenes más representativas o difíciles de clasificar.
+
+\subsection{Implementación en scikit-learn}
+\begin{lstlisting}[language=Python]
+from sklearn.svm import SVC
+
+# SVM lineal
+svm_lin = SVC(kernel='linear', C=1.0)
+svm_lin.fit(X_train, y_train)
+
+# SVM con kernel RBF (los más común)
+svm_rbf = SVC(kernel='rbf', C=1.0, gamma='scale')
+svm_rbf.fit(X_train, y_train)
+\end{lstlisting}
+
+\section{Comparación de los tres algoritmos}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Característica} & \textbf{KNN} & \textbf{Naive Bayes} & \textbf{SVM} \\
+\hline
+Tipo & No paramétrico, basado en instancias & Probabilístico generativo & Discriminativo, basado en márgenes \\
+Supuestos & Distancia, escala & Independencia condicional & Separabilidad mediante kernel \\
+Interpretabilidad & Baja (caja negra) & Alta (probabilidades) & Media (vectores soporte) \\
+Entrenamiento & Ninguno (perezoso) & Rápido (estimación de parámetros) & Lento en grandes conjuntos \\
+Predicción & Lenta (calcular distancias) & Rápida & Rápida (solo vectores soporte) \\
+Manejo de no linealidades & Sí (por distancia) & No (a menos que las características capturen no linealidad) & Sí (mediante kernel) \\
+Escalado necesario & Sí & No (para GaussianNB, pero sí para distancias) & Sí \\
+Alta dimensionalidad & Sufre maldición & Robusto (especialmente en texto) & Robusto con kernel lineal \\
+\hline
+\end{tabular}
+\caption{Comparación de algoritmos de clasificación clásicos.}
+\end{table}
+
+\section{Caso de estudio integrado: Clasificación de noticias}
+
+\subsection{Datos}
+Se utiliza el dataset de noticias de 20 grupos (20 Newsgroups), que contiene aproximadamente 20,000 documentos agrupados en 20 categorías. Para simplificar, se seleccionan dos categorías (ej. ``medicina'' vs ``espacio'') para un problema binario.
+
+\subsection{Preprocesamiento}
+\begin{itemize}
+    \item Se convierten los textos a una representación numérica: TF-IDF o conteo de palabras.
+    \item Se reduce la dimensionalidad mediante selección de las palabras más frecuentes.
+    \item Se divide en entrenamiento y prueba.
+\end{itemize}
+
+\subsection{Modelado y comparación}
+Se entrenan y evalúan cuatro modelos:
+\begin{enumerate}
+    \item KNN con \(k=5\) y distancia euclidiana.
+    \item Multinomial Naive Bayes.
+    \item SVM lineal.
+    \item SVM con kernel RBF (con búsqueda de hiperparámetros \(C\) y \(\gamma\) mediante validación cruzada).
+\end{enumerate}
+
+\subsection{Resultados esperados}
+\begin{itemize}
+    \item \textbf{MultinomialNB:} suele ser muy efectivo en texto, rápido y con buen rendimiento.
+    \item \textbf{SVM lineal:} también muy bueno, especialmente con representaciones TF-IDF.
+    \item \textbf{SVM con RBF:} puede mejorar si la frontera no es lineal, pero requiere más ajuste.
+    \item \textbf{KNN:} puede sufrir por la alta dimensionalidad (aunque TF-IDF reduce), y es lento en predicción.
+\end{itemize}
+
+\subsection{Análisis}
+Se comparan las métricas (precisión, recall, F1) y se discute la interpretabilidad: Naive Bayes permite inspeccionar las palabras más influyentes, mientras que SVM proporciona los vectores soporte (documentos atípicos).
+
+\section{Conexión con el resto del curso}
+Estos tres algoritmos constituyen la base de la clasificación clásica:
+\begin{itemize}
+    \item KNN introduce la noción de similitud, que reaparece en clustering y en sistemas de recomendación.
+    \item Naive Bayes es un ejemplo de modelo generativo, contrapunto a los discriminativos como regresión logística y SVM.
+    \item SVM, con su formulación de margen máximo y el truco del kernel, anticipa conceptos de regularización y espacios de características que se usarán en redes neuronales.
+\end{itemize}
+En sesiones posteriores se abordarán métodos ensemble (Random Forest, Gradient Boosting) que combinan las fortalezas de varios modelos.
+
+\end{document}
