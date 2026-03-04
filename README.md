@@ -15,6 +15,8 @@ Dentro de la carpeta de cada sesión, encontrarás únicamente los siguientes ar
 
 - **Material de Clase**:
   - `PPT*-ML.pdf`: Diapositivas utilizadas durante la sesión.
+- **Práctica (Laboratorio)**:
+  - `SESION*-NTB*-ML.ipynb`: Jupyter Notebooks con los ejercicios prácticos y ejemplos en código.
 - **Evaluaciones**:
   - `SOL-PC*-ML.pdf`: Solucionario de la Práctica Calificada de la sesión.
 
@@ -24,8 +26,9 @@ Dentro de la carpeta de cada sesión, encontrarás únicamente los siguientes ar
 
 1. Dirígete a la carpeta de la sesión que deseas revisar, empezando por la `Sesion1`.
 2. Utiliza las presentaciones (`PPT*-ML.pdf`) para repasar la teoría de cada clase.
-3. Evalúa tu conocimiento consultando los solucionarios de las prácticas (`SOL-PC*-ML.pdf`).
-4. Si te interesa el desarrollo del material, revisa el código LaTeX en la carpeta `FUENTE`.
+3. Ejecuta los Jupyter Notebooks (`.ipynb`) para ver los ejemplos de código relativos a la clase.
+4. Evalúa tu conocimiento consultando los solucionarios de las prácticas (`SOL-PC*-ML.pdf`).
+5. Si te interesa el desarrollo del material, revisa el código LaTeX en la carpeta `FUENTE`.
 
 ¡Mucho éxito en tu proceso de revisión de Machine Learning!
 

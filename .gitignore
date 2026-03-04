@@ -30,9 +30,10 @@
 # Sin embargo, dentro de esas carpetas de Sesión, ignorar todo por defecto
 /Sesion*/*
 
-# Y añadir como excepción únicamente los archivos que empiecen por PPT o SOL
+# Y añadir como excepción únicamente los archivos que empiecen por PPT o SOL, o que sean notebooks .ipynb
 !/Sesion*/PPT*
 !/Sesion*/SOL*
+!/Sesion*/*.ipynb
 
 # Ignorar archivos del sistema
 .DS_Store
