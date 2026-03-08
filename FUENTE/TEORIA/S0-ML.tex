@@ -1,0 +1,659 @@
+\documentclass[12pt,a4paper,openany,oneside]{book}
+
+% --- Paquetes ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, es-tabla]{babel}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{array}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+
+\geometry{margin=2.5cm}
+
+% --- Estilo de Código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Cabecera y Pie de Página ---
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[L]{\small Carlos César Sánchez Coronel}
+\fancyhead[R]{\small Machine Learning para IA}
+\fancyfoot[L]{\small Carlos César Sánchez Coronel}
+\fancyfoot[C]{\thepage}
+
+% --- Portada ---
+\title{
+    \textbf{Sílabo del Curso} \\ 
+    \Huge \textbf{MACHINE LEARNING} \\
+    \Large \textsc{para Inteligencia Artificial} \\[1cm]
+    \normalsize Fundamentos, algoritmos y aplicaciones prácticas
+}
+\author{
+    \small Por \\ \vspace{0.2cm}
+    \Large \textsc{Carlos César Sánchez Coronel}
+}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+% ------------------------------------------------------------------
+% PRESENTACIÓN DEL CURSO
+% ------------------------------------------------------------------
+\chapter*{Presentación del Curso}
+\addcontentsline{toc}{chapter}{Presentación del Curso}
+
+Este curso está diseñado para futuros ingenieros e científicos de datos que deseen dominar los fundamentos del machine learning desde una perspectiva práctica y orientada a la industria. A lo largo de 14 semanas, exploraremos los algoritmos más importantes, técnicas de preprocesamiento, evaluación, interpretabilidad y despliegue, con un enfoque en las preguntas y habilidades que se esperan en entrevistas técnicas y en el trabajo diario.
+
+Cada semana incluye:
+\begin{itemize}
+    \item \textbf{Logro de la sesión}: objetivo concreto.
+    \item \textbf{Conceptos}: fundamentos teóricos.
+    \item \textbf{Aplicaciones y casos típicos}: ejemplos reales de uso.
+    \item \textbf{Métricas}: indicadores de rendimiento relevantes.
+    \item \textbf{Python}: librerías y código de ejemplo.
+\end{itemize}
+
+\vspace{0.5cm}
+\textbf{Estructura del curso (14 semanas):}
+\begin{itemize}
+    \item[$\square$] Semanas 1-3: Fundamentos y preprocesamiento
+    \item[$\square$] Semanas 4-8: Modelos supervisados
+    \item[$\square$] Semanas 9-11: Técnicas especializadas
+    \item[$\square$] Semanas 12-14: Interpretabilidad y despliegue
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 1: INTRODUCCIÓN Y CICLO DE VIDA
+% ------------------------------------------------------------------
+\chapter{Semana 1: Introducción a Machine Learning y Ciclo de Vida}
+
+\section{Logro de la sesión}
+Comprender el flujo completo de un proyecto de machine learning, identificar los tipos de aprendizaje y reconocer casos de uso en la industria.
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item Definición de Machine Learning y su relación con la IA.
+    \item Tipos de aprendizaje: supervisado, no supervisado, por refuerzo y semi-supervisado.
+    \item Ciclo de vida de un proyecto ML: definición del problema, recolección de datos, preprocesamiento, modelado, evaluación, despliegue y monitoreo.
+    \item Roles involucrados: Data Scientist, ML Engineer, Data Analyst.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item Sistemas de recomendación (Netflix, Amazon).
+    \item Detección de fraude en transacciones bancarias.
+    \item Mantenimiento predictivo en maquinaria industrial.
+    \item Clasificación de imágenes (diagnóstico médico, vehículos autónomos).
+    \item Predicción de series temporales (ventas, demanda energética).
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item No aplican métricas específicas; se introducen conceptos de evaluación general.
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item Introducción a scikit-learn: estructura de la librería, datasets de ejemplo (iris, boston).
+    \item Carga y exploración básica con pandas.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 2: ANÁLISIS EXPLORATORIO Y FEATURE ENGINEERING
+% ------------------------------------------------------------------
+\chapter{Semana 2: Análisis Exploratorio y Feature Engineering}
+
+\section{Logro de la sesión}
+Realizar un análisis exploratorio eficaz y aplicar técnicas de feature engineering para preparar datos de calidad.
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item Análisis Exploratorio de Datos (EDA): estadísticas descriptivas, detección de outliers, análisis de correlaciones.
+    \item Visualizaciones: histogramas, boxplots, pairplots, mapas de calor.
+    \item Feature engineering: creación de nuevas características, transformaciones (log, polinómicas, interacciones), discretización.
+    \item Manejo de datos faltantes y outliers.
+    \item Pipelines de preprocesamiento.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item Identificación de patrones en datos de clientes para segmentación.
+    \item Creación de variables de tiempo (día de la semana, mes) en series temporales.
+    \item Normalización de imágenes para modelos de visión.
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item No se evalúan modelos, pero se usan métricas de correlación (Pearson, Spearman) y estadísticas descriptivas.
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item pandas para manipulación y estadísticas.
+    \item matplotlib y seaborn para visualizaciones.
+    \item \texttt{sklearn.preprocessing} para escalado, codificación, imputación.
+    \item \texttt{sklearn.pipeline.Pipeline}.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 3: REGRESIÓN LINEAL Y REGULARIZACIÓN
+% ------------------------------------------------------------------
+\chapter{Semana 3: Regresión Lineal y Regularización}
+
+\section{Logro de la sesión}
+Construir e interpretar modelos de regresión lineal, aplicando regularización para mejorar su generalización.
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item Regresión lineal simple y múltiple: formulación, interpretación de coeficientes.
+    \item Supuestos del modelo: linealidad, independencia, homocedasticidad, normalidad de residuos.
+    \item Regularización: Ridge (L2), Lasso (L1) y Elastic Net.
+    \item Interpretación de la regularización y selección de hiperparámetros.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item Predicción de precios de viviendas (Kaggle House Prices).
+    \item Estimación de demanda de productos.
+    \item Análisis de impacto de variables en marketing.
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item Error Cuadrático Medio (MSE), Raíz del Error Cuadrático Medio (RMSE), Error Absoluto Medio (MAE), Coeficiente de determinación \(R^2\).
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item \texttt{sklearn.linear\_model.LinearRegression}, \texttt{Ridge}, \texttt{Lasso}, \texttt{ElasticNet}.
+    \item \texttt{sklearn.metrics} para cálculo de métricas.
+    \item Validación cruzada con \texttt{GridSearchCV}.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 4: CLASIFICACIÓN I - REGRESIÓN LOGÍSTICA Y MÉTRICAS
+% ------------------------------------------------------------------
+\chapter{Semana 4: Clasificación I - Regresión Logística y Métricas}
+
+\section{Logro de la sesión}
+Implementar modelos de clasificación binaria y evaluarlos correctamente con las métricas adecuadas.
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item Regresión logística: función sigmoide, interpretación probabilística, límite de decisión.
+    \item Matriz de confusión: verdaderos positivos, falsos positivos, etc.
+    \item Métricas derivadas: precisión, recall (sensibilidad), especificidad, F1-score.
+    \item Curva ROC y AUC (Area Under the Curve).
+    \item Manejo de clases desbalanceadas: técnicas de muestreo (SMOTE, undersampling), pesos en la función de pérdida.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item Detección de spam en correos electrónicos.
+    \item Diagnóstico médico (enfermedad vs sano).
+    \item Clasificación de clientes (compradores/no compradores).
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item Precisión, recall, F1-score, AUC-ROC.
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item \texttt{sklearn.linear\_model.LogisticRegression}.
+    \item \texttt{sklearn.metrics}: \texttt{confusion\_matrix}, \texttt{classification\_report}, \texttt{roc\_curve}, \texttt{roc\_auc\_score}.
+    \item \texttt{imbalanced-learn} para SMOTE.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 5: CLASIFICACIÓN II - ALGORITMOS CLÁSICOS
+% ------------------------------------------------------------------
+\chapter{Semana 5: Clasificación II - Algoritmos Clásicos}
+
+\section{Logro de la sesión}
+Conocer y aplicar algoritmos de clasificación clásicos como KNN, Naive Bayes y SVM, entendiendo sus fundamentos y limitaciones.
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item K-Vecinos más cercanos (KNN): distancia, elección de $k$, influencia de la escala.
+    \item Naive Bayes: teorema de Bayes, supuesto de independencia, variantes (Gaussian, Multinomial, Bernoulli).
+    \item Máquinas de Vectores de Soporte (SVM): margen máximo, kernel lineal y no lineal (RBF), parámetros $C$ y $\gamma$.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item KNN: sistemas de recomendación (basados en similitud), reconocimiento de dígitos.
+    \item Naive Bayes: clasificación de textos (filtro de spam, análisis de sentimiento).
+    \item SVM: reconocimiento facial, clasificación de proteínas.
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item Las mismas que en clasificación (precisión, recall, F1, AUC).
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item \texttt{sklearn.neighbors.KNeighborsClassifier}.
+    \item \texttt{sklearn.naive\_bayes.GaussianNB}, \texttt{MultinomialNB}, \texttt{BernoulliNB}.
+    \item \texttt{sklearn.svm.SVC}.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 6: ÁRBOLES DE DECISIÓN Y RANDOM FOREST
+% ------------------------------------------------------------------
+\chapter{Semana 6: Árboles de Decisión y Random Forest}
+
+\section{Logro de la sesión}
+Construir e interpretar árboles de decisión y modelos de ensamble basados en bagging (Random Forest).
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item Árboles de clasificación y regresión: criterios de división (Gini, entropía, MSE), poda, sobreajuste.
+    \item Interpretación de árboles: importancia de características, visualización.
+    \item Bagging (Bootstrap Aggregating) y Random Forest: muestreo con reemplazo, aleatoriedad en la selección de características, Out-of-Bag (OOB) error.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item Detección de fraudes en tarjetas de crédito.
+    \item Análisis de riesgo crediticio.
+    \item Problemas de alta dimensionalidad (genómica, texto).
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item Para clasificación: precisión, recall, F1, AUC. Para regresión: MSE, RMSE, MAE, \(R^2\).
+    \item Importancia de características (Gini importance, permutación).
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item \texttt{sklearn.tree.DecisionTreeClassifier}, \texttt{DecisionTreeRegressor}.
+    \item \texttt{sklearn.ensemble.RandomForestClassifier}, \texttt{RandomForestRegressor}.
+    \item Visualización con \texttt{plot\_tree} y \texttt{export\_graphviz}.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 7: GRADIENT BOOSTING (XGBoost, LightGBM)
+% ------------------------------------------------------------------
+\chapter{Semana 7: Gradient Boosting (XGBoost, LightGBM)}
+
+\section{Logro de la sesión}
+Dominar los algoritmos de boosting modernos y ajustar sus hiperparámetros para obtener modelos de alto rendimiento.
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item Boosting: concepto de ensamblaje secuencial, corrección de errores.
+    \item Gradient Boosting: función de pérdida, árboles débiles, learning rate.
+    \item Implementaciones eficientes: XGBoost (regularización, manejo de nulos, early stopping), LightGBM (muestreo por gradiente, características categóricas).
+    \item Comparación con Random Forest.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item Competencias Kaggle (ganadoras de premios).
+    \item Predicción de clics en publicidad online.
+    \item Modelado de tablas en general.
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item Dependen del problema: clasificación (log-loss, AUC) o regresión (RMSE, MAE).
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item \texttt{xgboost.XGBClassifier}, \texttt{XGBRegressor}.
+    \item \texttt{lightgbm.LGBMClassifier}, \texttt{LGBMRegressor}.
+    \item Búsqueda de hiperparámetros con \texttt{GridSearchCV} o \texttt{RandomizedSearchCV}.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 8: EVALUACIÓN Y VALIDACIÓN DE MODELOS
+% ------------------------------------------------------------------
+\chapter{Semana 8: Evaluación y Validación de Modelos}
+
+\section{Logro de la sesión}
+Evaluar correctamente el rendimiento de los modelos, detectar overfitting y seleccionar los mejores hiperparámetros.
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item Underfitting y overfitting: causas y soluciones.
+    \item Compromiso sesgo-varianza (Bias-Variance tradeoff).
+    \item Validación cruzada: k-fold, stratified k-fold, leave-one-out.
+    \item Curvas de aprendizaje: diagnóstico de under/overfitting.
+    \item Búsqueda de hiperparámetros: Grid Search, Random Search, Bayesian Optimization.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item Ajuste de modelos en cualquier proyecto para garantizar generalización.
+    \item Selección de hiperparámetros en competencias.
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item Según el tipo de modelo, se usan las métricas ya vistas (RMSE, AUC, etc.) en validación cruzada.
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item \texttt{sklearn.model\_selection}: \texttt{cross\_val\_score}, \texttt{learning\_curve}, \texttt{GridSearchCV}, \texttt{RandomizedSearchCV}.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 9: APRENDIZAJE NO SUPERVISADO - CLUSTERING Y PCA
+% ------------------------------------------------------------------
+\chapter{Semana 9: Aprendizaje No Supervisado - Clustering y PCA}
+
+\section{Logro de la sesión}
+Aplicar técnicas de reducción de dimensionalidad y clustering para explorar datos no etiquetados.
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item PCA (Análisis de Componentes Principales): maximización de varianza, interpretación de componentes, scree plot.
+    \item K-Means: algoritmo, inicialización, elección de $k$ (método del codo, silueta).
+    \item Otros algoritmos de clustering: DBSCAN (concepto, parámetros eps y minPts), clustering jerárquico (dendrogramas).
+    \item Métricas de evaluación: coeficiente de silueta, índice de Davies-Bouldin.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item Segmentación de clientes en marketing.
+    \item Compresión de datos (PCA).
+    \item Detección de anomalías con DBSCAN.
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item Silueta, Davies-Bouldin, inercia (para K-Means).
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item \texttt{sklearn.decomposition.PCA}.
+    \item \texttt{sklearn.cluster.KMeans}, \texttt{DBSCAN}.
+    \item \texttt{sklearn.metrics.silhouette\_score}.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 10: SERIES DE TIEMPO
+% ------------------------------------------------------------------
+\chapter{Semana 10: Series de Tiempo}
+
+\section{Logro de la sesión}
+Modelar datos temporales utilizando técnicas estadísticas y de machine learning.
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item Componentes de una serie temporal: tendencia, estacionalidad, ciclos, ruido.
+    \item Descomposición aditiva y multiplicativa.
+    \item Feature engineering temporal: rezagos (lags), ventanas móviles, diferencias.
+    \item Modelos clásicos: ARIMA, SARIMA.
+    \item Modelos de machine learning para series: regresión con características temporales, XGBoost, Prophet.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item Pronóstico de ventas en retail.
+    \item Predicción de demanda energética.
+    \item Análisis de tráfico web.
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item MAE, MAPE, RMSE, MASE.
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item pandas para manejo de fechas y creación de lags.
+    \item \texttt{statsmodels} para ARIMA y descomposición.
+    \item Prophet (librería de Facebook).
+    \item Evaluación con sklearn métricas.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 11: MODELOS COMPLEMENTARIOS (REGRESIÓN, CLASIFICACIÓN, CLUSTERING)
+% ------------------------------------------------------------------
+\chapter{Semana 11: Modelos Complementarios}
+
+\section{Logro de la sesión}
+Conocer otros algoritmos y técnicas que pueden aparecer en entrevistas o en problemas específicos, y entender cuándo aplicarlos.
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item Regresión polinómica: extensión de la lineal, riesgo de overfitting.
+    \item Regresión robusta: Huber, RANSAC (para datos con outliers).
+    \item SVM en regresión: SVR.
+    \item DBSCAN a fondo: densidad, ruido, parámetros.
+    \item Clustering jerárquico: dendrogramas, aglomerativo vs divisivo.
+    \item Métricas de clustering adicionales: índice de Rand ajustado, información mutua.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item Regresión robusta: cuando hay outliers significativos (precios de vivienda atípicos).
+    \item DBSCAN: detección de clusters de forma arbitraria, identificación de ruido.
+    \item Clustering jerárquico: análisis filogenético, segmentación con interpretación jerárquica.
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item Para regresión robusta: mismas métricas que regresión.
+    \item Para clustering: silueta, Davies-Bouldin, Rand index.
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item \texttt{sklearn.linear\_model.HuberRegressor}, \texttt{RANSACRegressor}.
+    \item \texttt{sklearn.svm.SVR}.
+    \item \texttt{sklearn.cluster.DBSCAN}, \texttt{AgglomerativeClustering}.
+    \item \texttt{sklearn.metrics.adjusted\_rand\_score}.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 12: SISTEMAS DE RECOMENDACIÓN
+% ------------------------------------------------------------------
+\chapter{Semana 12: Sistemas de Recomendación}
+
+\section{Logro de la sesión}
+Diseñar e implementar sistemas de recomendación basados en filtrado colaborativo y factorización matricial.
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item Filtrado colaborativo basado en usuarios y en ítems.
+    \item Factorización matricial: SVD (descomposición en valores singulares), Funk SVD.
+    \item Métricas de evaluación: precisión@k, recall@k, NDCG, RMSE en predicciones de rating.
+    \item Problemas: cold start, escalabilidad, sparse data.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item Recomendación de productos en Amazon.
+    \item Películas en Netflix.
+    \item Música en Spotify.
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item Para clasificación: precisión@k, recall@k, NDCG. Para predicción de rating: RMSE, MAE.
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item Implementación con \texttt{surprise} (librería especializada) o usando SVD con \texttt{sklearn.decomposition.TruncatedSVD}.
+    \item Alternativa: uso de embeddings con redes neuronales (opcional).
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 13: INTERPRETABILIDAD DE MODELOS
+% ------------------------------------------------------------------
+\chapter{Semana 13: Interpretabilidad de Modelos}
+
+\section{Logro de la sesión}
+Explicar las predicciones de modelos complejos utilizando técnicas de interpretabilidad global y local.
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item Importancia de características en modelos basados en árboles.
+    \item Partial Dependence Plots (PDP) e Individual Conditional Expectation (ICE).
+    \item SHAP (SHapley Additive exPlanations): valores de Shapley, interpretación local y global.
+    \item LIME (Local Interpretable Model-agnostic Explanations).
+    \item Diferencias entre interpretabilidad global y local.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item Explicar predicciones a stakeholders (por qué se negó un crédito).
+    \item Cumplir regulaciones (GDPR, derecho a explicación).
+    \item Depurar modelos (identificar sesgos).
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item No hay métricas directas; se evalúa la consistencia de las explicaciones.
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item \texttt{sklearn.inspection} para PDP y ICE.
+    \item Librerías \texttt{shap} y \texttt{lime}.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% SEMANA 14: DESPLIEGUE DE MODELOS (MLOps)
+% ------------------------------------------------------------------
+\chapter{Semana 14: Despliegue de Modelos (MLOps)}
+
+\section{Logro de la sesión}
+Llevar un modelo a producción, entender los conceptos básicos de MLOps y monitorear su rendimiento.
+
+\subsection{Conceptos}
+\begin{itemize}
+    \item Separación entre entrenamiento e inferencia.
+    \item Serialización de modelos: pickle, joblib, ONNX.
+    \item Creación de APIs con Flask o FastAPI.
+    \item Contenerización básica con Docker.
+    \item Versionamiento de modelos y datos (DVC, MLflow).
+    \item Monitoreo de modelos en producción: data drift, concept drift, métricas de rendimiento.
+\end{itemize}
+
+\subsection{Aplicaciones y casos típicos}
+\begin{itemize}
+    \item Integrar modelo de recomendación en una app web.
+    \item Actualizar modelos periódicamente en producción.
+    \item Detectar degradación del modelo por cambios en los datos.
+\end{itemize}
+
+\subsection{Métricas}
+\begin{itemize}
+    \item Se monitorean las mismas métricas que en entrenamiento (RMSE, AUC, etc.) en datos nuevos.
+    \item Detección de drift usando tests estadísticos (KS, PSI).
+\end{itemize}
+
+\subsection{Python}
+\begin{itemize}
+    \item Serialización con \texttt{pickle} y \texttt{joblib}.
+    \item Ejemplo de API con Flask: carga del modelo y endpoint de predicción.
+    \item Introducción a MLflow para registro de experimentos y versionado.
+    \item Uso de \texttt{evidently} o \texttt{alibi-detect} para monitoreo.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% METODOLOGÍA Y EVALUACIÓN
+% ------------------------------------------------------------------
+\chapter{Metodología y Evaluación}
+
+\section{Estrategias metodológicas}
+\begin{itemize}
+    \item \textbf{Clases síncronas:} Exposición conceptual con diapositivas, resolución de problemas en pizarra y programación en vivo con Python utilizando cuadernos de Jupyter.
+    \item \textbf{Trabajo asíncrono:} Lectura de material complementario, resolución de ejercicios prácticos y pequeños proyectos semanales.
+    \item \textbf{Aprendizaje activo:} Discusión de casos reales, ejercicios de entrevistas técnicas y retos de código.
+    \item \textbf{Recursos:} Plataforma virtual, Zoom, grabaciones, foros y cuadernos de Jupyter.
+\end{itemize}
+
+\section{Materiales educativos}
+\begin{itemize}
+    \item Presentaciones interactivas (PPT, videos).
+    \item Cuadernos de Jupyter con ejemplos y ejercicios.
+    \item Bibliografía: libros clásicos (Géron, Hastie) y documentación oficial.
+    \item Google Colab para ejecución sin instalación.
+\end{itemize}
+
+\section{Evaluación}
+\begin{table}[h]
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Ítem} & \textbf{Ponderación} \\
+\midrule
+Evaluaciones continuas (EC) & 40\% \\
+Examen parcial (EP) & 30\% \\
+Examen final (EF) & 30\% \\
+\midrule
+\textbf{Promedio final (PF)} & PF = 0.4 \times EC + 0.3 \times EP + 0.3 \times EF \\
+\bottomrule
+\end{tabular}
+\caption{Sistema de evaluación}
+\end{table}
+\begin{itemize}
+    \item \textbf{Evaluaciones continuas:} Controles de lectura, entrega de ejercicios de programación, participación.
+    \item \textbf{Examen parcial:} Cubre semanas 1-7.
+    \item \textbf{Examen final:} Cubre semanas 8-14.
+    \item \textbf{Examen sustitutorio:} Semana 15, reemplaza la nota más baja entre parcial y final.
+\end{itemize}
+
+% ------------------------------------------------------------------
+% BIBLIOGRAFÍA
+% ------------------------------------------------------------------
+\chapter*{Bibliografía}
+\addcontentsline{toc}{chapter}{Bibliografía}
+
+\begin{itemize}
+    \item Géron, A. (2019). \textit{Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow}. O'Reilly.
+    \item Hastie, T., Tibshirani, R., Friedman, J. (2009). \textit{The Elements of Statistical Learning}. Springer.
+    \item Bishop, C. M. (2006). \textit{Pattern Recognition and Machine Learning}. Springer.
+    \item VanderPlas, J. (2016). \textit{Python Data Science Handbook}. O'Reilly.
+    \item Documentación oficial de scikit-learn, XGBoost, LightGBM, SHAP, etc.
+\end{itemize}
+
+\vspace{1cm}
+\begin{flushright}
+\textit{Elaborado por:} Mg. Carlos César Sánchez Coronel \\
+\textit{Aprobado por:} Dirección de Ingeniería de Inteligencia Artificial \\
+\textit{Fecha:} 29/03/2024
+\end{flushright}
+
+\end{document}
