@@ -1,39 +1,41 @@
-# Ignorar todo en el directorio raíz por defecto
+# 1. Ignorar archivos temporales y del sistema (Siempre primero)
+.DS_Store
+Thumbs.db
+*.log
+.ipynb_checkpoints/
+__pycache__/
+
+# 2. Ignorar TODO en la raíz por defecto
 /*
 
-# Excepciones en el directorio raíz:
-# Mantener el README.md y este .gitignore
+# 3. EXCEPCIONES (Lo que SÍ queremos que suba)
+
+# Archivos base
 !/.gitignore
 !/README.md
+!/requirements.txt
 
-# Mantener la carpeta TEORIA dentro de FUENTE y todo su contenido
-!/FUENTE/
-/FUENTE/*
-!/FUENTE/TEORIA/
+# Carpeta de Documentación (¡Fundamental para tu web!)
+!/docs/
+!/docs/**
 
-# Mantener las carpetas de las Sesiones de la 1 a la 14
-!/Sesion1/
-!/Sesion2/
-!/Sesion3/
-!/Sesion4/
-!/Sesion5/
-!/Sesion6/
-!/Sesion7/
-!/Sesion8/
-!/Sesion9/
-!/Sesion10/
-!/Sesion11/
-!/Sesion12/
-!/Sesion13/
-!/Sesion14/
+# Estructura de Sesiones (Permitir las carpetas)
+!/Sesion[1-9]/
+!/Sesion[1-9][0-9]/
 
-# Sin embargo, dentro de esas carpetas de Sesión, ignorar todo por defecto
+# Archivos específicos dentro de las Sesiones
+# Ignoramos todo dentro de cada Sesion primero...
 /Sesion*/*
-
-# Y añadir como excepción únicamente los archivos que empiecen por PPT o SOL, o que sean notebooks .ipynb
+# ...y rescatamos solo lo que nos interesa:
 !/Sesion*/PPT*
 !/Sesion*/SOL*
 !/Sesion*/*.ipynb
 
-# Ignorar archivos del sistema
-.DS_Store
+# Estructura de FUENTE/TEORIA
+!/FUENTE/
+!/FUENTE/TEORIA/
+!/FUENTE/TEORIA/**
+
+# 4. Permitir carpetas de recursos si las tienes
+!/data/
+!/static/
