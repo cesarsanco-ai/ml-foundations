@@ -1,35 +1,34 @@
-# Sesion 01
+# Sesión 01: Introducción al Machine Learning
 
-## Objetivo
+[⬅️ Volver al Índice](../index.md)
 
-> TODO: describe aqui el objetivo especifico de esta sesion (en 1-3 frases).
+## 🎯 Objetivo de la Sesión
+Comprender los fundamentos del aprendizaje supervisado y no supervisado, el flujo de trabajo de un proyecto de ML y la configuración del entorno de desarrollo.
 
-## Teoria
+---
 
-> TODO: este link es provisional. Si en el futuro conviertes la teoria (por ejemplo LaTeX) a Markdown/PDF para GitHub Pages, actualiza este enlace.
+## 📘 Contenido Teórico
+Conceptos clave sobre la taxonomía del aprendizaje automático y métricas iniciales.
 
-- [Ver teoria (S1-ML.tex)](https://github.com/cesarsanco-ai/ml-foundations/blob/main/FUENTE/TEORIA/S1-ML.tex)
+* 🖼️ **Slides de Clase (PDF):** [Descargar PPT1-ML.pdf](../../Sesion1/PPT1-ML.pdf)
+* 📄 **Notas en LaTeX (Source):** [Ver S1-ML.tex](../../FUENTE/TEORIA/S1-ML.tex)
+* 📂 **Explorar carpeta completa:** [Sesion 1 en GitHub](https://github.com/cesarsanco-ai/ml-foundations/tree/main/Sesion1)
 
-> Ruta relativa (si publicas desde la raiz del repo): `../../FUENTE/TEORIA/S1-ML.tex`
+---
 
-## Material de la sesion
+## 💻 Laboratorio Práctico
+Implementación inicial y exploración de librerías base (Scikit-Learn).
 
-- Notebook (desde `Sesion1/`): [SESION1-NTB1-ML.ipynb](https://github.com/cesarsanco-ai/ml-foundations/blob/main/Sesion1/SESION1-NTB1-ML.ipynb)
-- PDF (slides, desde `Sesion1/`): [PPT1-ML.pdf](https://github.com/cesarsanco-ai/ml-foundations/blob/main/Sesion1/PPT1-ML.pdf)
+* 📓 **Notebook Principal:** [Abrir SESION1-NTB1-ML.ipynb](../../Sesion1/SESION1-NTB1-ML.ipynb)
+* 🚀 **Ejecutar en Colab:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/cesarsanco-ai/ml-foundations/blob/main/Sesion1/SESION1-NTB1-ML.ipynb)
 
-> Rutas relativas (si publicas desde la raiz del repo):
-> - `../../Sesion1/SESION1-NTB1-ML.ipynb`
-> - `../../Sesion1/PPT1-ML.pdf`
+---
 
-## Carpeta completa de la sesion en GitHub
+## 📝 Ejercicios y Evaluación
+Para consolidar lo aprendido, revisa el material de práctica:
 
-> Nota: ajusta el `tree/main` si tu rama se llama distinto.
+* ✍️ **Solucionario Práctica 1:** [Ver SOL-PC1-ML.pdf](../../Sesion1/SOL-PC1-ML.pdf)
+* 💡 **Tarea:** Completar las secciones de "Desafío" dentro del notebook de laboratorio.
 
-- [Sesion1 en GitHub](https://github.com/cesarsanco-ai/ml-foundations/tree/main/Sesion1/)
-
-## Ejercicios
-
-> TODO: indica aqui como se trabajan los ejercicios (por ejemplo: "en el notebook", "en una hoja aparte", etc.).
-
-- Puedes comenzar con el mismo notebook: [SESION1-NTB1-ML.ipynb](https://github.com/cesarsanco-ai/ml-foundations/blob/main/Sesion1/SESION1-NTB1-ML.ipynb)
-
+---
+*Última actualización: 2026 | Carlos César Sánchez Coronel*
