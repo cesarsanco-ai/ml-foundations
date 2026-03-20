@@ -33,12 +33,11 @@ Cada sesión incluye material teórico, notebooks de laboratorio, ejercicios y r
 - **Proyecto Integrador**: Descripción y guía del proyecto final que integra todos los temas del curso.  
   [Ver proyecto integrador](proyecto-integrador/README.md)
 
-## 🔗 Repositorio original
+## 🔗 Repositorio 
 
 Todo el código fuente, notebooks y materiales adicionales están disponibles en GitHub:
 
 [https://github.com/cesarsanco-ai/ml-foundations](https://github.com/cesarsanco-ai/ml-foundations)
-
 
 
 ---
