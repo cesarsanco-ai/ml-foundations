@@ -1,34 +1,79 @@
 # Sesión 01: Introducción al Machine Learning
 
+
+
 [⬅️ Volver al Índice](../index.md)
 
+
+
 ## 🎯 Objetivo de la Sesión
-Comprender los fundamentos del aprendizaje supervisado y no supervisado, el flujo de trabajo de un proyecto de ML y la configuración del entorno de desarrollo.
+
+Comprender la taxonomía del aprendizaje automático (Supervisado, No Supervisado y Reinforcement Learning), el flujo de trabajo estándar de un proyecto de ML (ML Lifecycle) y la configuración del entorno profesional.
+
+
 
 ---
+
+
 
 ## 📘 Contenido Teórico
-Conceptos clave sobre la taxonomía del aprendizaje automático y métricas iniciales.
+
+Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
+
+
 
 * 🖼️ **Slides de Clase (PDF):** [Descargar PPT1-ML.pdf](../../Sesion1/PPT1-ML.pdf)
-* 📄 **Notas en LaTeX (Source):** [Ver S1-ML.tex](../../FUENTE/TEORIA/S1-ML.tex)
-* 📂 **Explorar carpeta completa:** [Sesion 1 en GitHub](https://github.com/cesarsanco-ai/ml-foundations/tree/main/Sesion1)
+
+* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S1-ML.pdf)
+
+* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion1/ANEXO-S1.pdf)
+
+
 
 ---
 
-## 💻 Laboratorio Práctico
-Implementación inicial y exploración de librerías base (Scikit-Learn).
 
-* 📓 **Notebook Principal:** [Abrir SESION1-NTB1-ML.ipynb](../../Sesion1/SESION1-NTB1-ML.ipynb)
-* 🚀 **Ejecutar en Colab:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/cesarsanco-ai/ml-foundations/blob/main/Sesion1/SESION1-NTB1-ML.ipynb)
+
+### 💻 Laboratorio 
+
+*Nivel: Introductorio/Intermedio* ⭐⭐☆
+
+
+
+* 📓 **Notebook 01:** [Fundamentos](../../Sesion1/SESION1-NTB1-ML.ipynb)  
+
+* 📓 **Notebook 02:** [Aplicaciones](../../Sesion1/SESION1-NTB2-ML.ipynb)
+
+
+
+
+
+
 
 ---
 
-## 📝 Ejercicios y Evaluación
-Para consolidar lo aprendido, revisa el material de práctica:
 
-* ✍️ **Solucionario Práctica 1:** [Ver SOL-PC1-ML.pdf](../../Sesion1/SOL-PC1-ML.pdf)
-* 💡 **Tarea:** Completar las secciones de "Desafío" dentro del notebook de laboratorio.
+
+## 🚀 Proyectos End-to-End
+
+Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
+
+
+
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+
+
+
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+
+
 
 ---
-*Última actualización: 2026 | Carlos César Sánchez Coronel*
+
+### 👤 Autor
+
+**Carlos César Sánchez Coronel** | *Data Scientist & AI Engineer*
+
+
+
+🔗 [LinkedIn](https://www.linkedin.com/in/cesar-sanchez-c/) | 📁 [GitHub](https://github.com/cesarsanco-ai)

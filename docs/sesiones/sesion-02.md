@@ -1,36 +1,46 @@
-# Sesion 02
+# Sesión 02: Análisis Exploratorio y Feature Engineering
 
-## Objetivo
+[⬅️ Volver al Índice](../index.md)
 
-> TODO: describe aqui el objetivo especifico de esta sesion (en 1-3 frases).
+## 🎯 Objetivo de la Sesión
 
-## Teoria
+Realizar un análisis exploratorio (EDA) y aplicar técnicas de feature engineering para preparar datos de calidad, identificando patrones, limpiando valores atípicos y construyendo características relevantes para los modelos.
 
-> TODO: este link es provisional. Si en el futuro conviertes la teoria (por ejemplo LaTeX) a Markdown/PDF para GitHub Pages, actualiza este enlace.
+---
 
-- [Ver teoria (S2-ML.tex)](https://github.com/cesarsanco-ai/ml-foundations/blob/main/FUENTE/TEORIA/S2-ML.tex)
+## 📘 Contenido Teórico
 
-> Ruta relativa (si publicas desde la raiz del repo): `../../FUENTE/TEORIA/S2-ML.tex`
+Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-## Material de la sesion
+* 🖼️ **Slides de Clase (PDF):** [Descargar PPT2-ML.pdf](../../Sesion2/PPT2-ML.pdf)
 
-- Notebook (desde `Sesion2/`): [SESION2_NTB1_ML.ipynb](https://github.com/cesarsanco-ai/ml-foundations/blob/main/Sesion2/SESION2_NTB1_ML.ipynb)
-- PDF (slides, desde `Sesion2/`): [PPT2-ML.pdf](https://github.com/cesarsanco-ai/ml-foundations/blob/main/Sesion2/PPT2-ML.pdf)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S2-EDA-FeatureEng.pdf)
 
-> Rutas relativas (si publicas desde la raiz del repo):
-> - `../../Sesion2/SESION2_NTB1_ML.ipynb`
-> - `../../Sesion2/PPT2-ML.pdf`
+* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion2/ANEXO-S2.pdf)
 
-## Carpeta completa de la sesion en GitHub
+---
 
-> Nota: ajusta el `tree/main` si tu rama se llama distinto.
+### 💻 Laboratorio 
 
-- [Sesion2 en GitHub](https://github.com/cesarsanco-ai/ml-foundations/tree/main/Sesion2/)
+*Nivel: Introductorio/Intermedio* ⭐⭐☆
 
-## Ejercicios
+* 📓 **Notebook 01:** [EDA con Python](../../Sesion2/SESION2-NTB1-EDA.ipynb)  
+* 📓 **Notebook 02:** [Feature Engineering avanzado](../../Sesion2/SESION2-NTB2-FeatureEng.ipynb)
 
-> TODO: indica aqui como se trabajan los ejercicios (por ejemplo: "NTB1 y NTB2", "solo NTB2", etc.).
+---
 
-- Puedes comenzar con el notebook principal: [SESION2_NTB1_ML.ipynb](https://github.com/cesarsanco-ai/ml-foundations/blob/main/Sesion2/SESION2_NTB1_ML.ipynb)
-- Si aplica, segundo notebook: [SESION2_NTB2_ML.ipynb](https://github.com/cesarsanco-ai/ml-foundations/blob/main/Sesion2/SESION2_NTB2_ML.ipynb)
+## 🚀 Proyectos End-to-End
 
+Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
+
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+
+---
+
+### 👤 Autor
+
+**Carlos César Sánchez Coronel** | *Data Scientist & AI Engineer*
+
+🔗 [LinkedIn](https://www.linkedin.com/in/cesar-sanchez-c/) | 📁 [GitHub](https://github.com/cesarsanco-ai)

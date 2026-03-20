@@ -43,5 +43,10 @@ Todo el código fuente, notebooks y materiales adicionales están disponibles en
 
 ---
 
-*Última actualización: 2026*  
-*Carlos César Sánchez Coronel*
+### 👤 Autor
+
+**Carlos César Sánchez Coronel** | *Data Scientist & AI Engineer*
+
+
+
+🔗 [LinkedIn](https://www.linkedin.com/in/cesar-sanchez-c/) | 📁 [GitHub](https://github.com/cesarsanco-ai)
