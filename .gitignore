@@ -27,6 +27,12 @@
 !/Sesion13/
 !/Sesion14/
 
+# Mantener la carpeta docs (GitHub Pages)
+!/docs/
+!/docs/*
+!/docs/sesiones/
+!/docs/sesiones/*
+
 # Sin embargo, dentro de esas carpetas de Sesión, ignorar todo por defecto
 /Sesion*/*
 
