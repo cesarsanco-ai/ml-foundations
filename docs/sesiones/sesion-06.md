@@ -12,20 +12,19 @@ Construir, interpretar y comparar modelos basados en árboles de decisión y ens
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar PPT6-ML.pdf](../../Sesion6/PPT6-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar PPT6-ML.pdf](../../Sesion06/slides/slides6-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S6-Arboles.pdf)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../../Sesion06/cheatsheet/)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion6/ANEXO-S6.pdf)
+* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion06/anexo/)
 
 ---
 
-### 💻 Laboratorio 
+### 💻 Laboratorio
 
-*Nivel: Intermedio/Avanzado* ⭐⭐⭐
+*Nivel: Básico/Intermedio* ⭐⭐⭐
 
-* 📓 **Notebook 01:** [Árboles de Decisión (clasificación y regresión)](../../Sesion6/SESION6-NTB1-Arboles.ipynb)  
-* 📓 **Notebook 02:** [Random Forest y análisis de importancia](../../Sesion6/SESION6-NTB2-RandomForest.ipynb)
+* 📓 **Notebooks y Práctica:** [Acceder a la carpeta de práctica](../../Sesion06/practica/)
 
 ---
 
@@ -33,9 +32,9 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
 
-* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
 
 ---
 
