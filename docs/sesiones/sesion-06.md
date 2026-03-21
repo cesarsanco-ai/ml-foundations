@@ -23,7 +23,7 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 *Nivel: Básico/Intermedio* ⭐⭐⭐
 
-* 📓 **Notebooks y Práctica:** [Acceder a la carpeta de práctica](../material/Sesion06/practica/SESION6-NTB1-ML.ipynb)
+* 📓 **Notebooks y Práctica:** [Acceder a la carpeta de práctica](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion06/practica/SESION6-NTB1-ML.ipynb)
 
 ---
 
