@@ -12,20 +12,19 @@ Evaluar, validar y seleccionar modelos de machine learning de forma robusta, ase
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar PPT8-ML.pdf](../../Sesion8/PPT8-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar slides8.pdf](../material/Sesion08/slides/slides8-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S8-Validacion.pdf)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion08/cheatsheet/)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion8/ANEXO-S8.pdf)
-
+* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion08/anexo/)
 ---
 
-### 💻 Laboratorio 
+### 💻 Laboratorio
 
 *Nivel: Intermedio/Avanzado* ⭐⭐⭐
 
-* 📓 **Notebook 01:** [Validación cruzada y curvas de aprendizaje](../../Sesion8/SESION8-NTB1-Validacion.ipynb)  
-* 📓 **Notebook 02:** [Grid Search, Randomized Search y comparación de modelos](../../Sesion8/SESION8-NTB2-HyperparamTuning.ipynb)
+* 📓 **Notebook Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion08/practica/SESION8-NTB1-ML.ipynb)
+* 📓 **Notebook Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion08/practica/SESION8-NTB2-ML.ipynb)
 
 ---
 
@@ -33,9 +32,9 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
 
-* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
 
 ---
 

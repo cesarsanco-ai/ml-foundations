@@ -12,20 +12,19 @@ Construir, comparar e interpretar modelos de clasificación utilizando algoritmo
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar PPT5-ML.pdf](../../Sesion5/PPT5-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar slides5.pdf](../material/Sesion05/slides/slides5-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S5-ClasificacionII.pdf)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion05/cheatsheet/)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion5/ANEXO-S5.pdf)
-
+* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion05/anexo/)
 ---
 
-### 💻 Laboratorio 
+### 💻 Laboratorio
 
 *Nivel: Intermedio* ⭐⭐⭐
 
-* 📓 **Notebook 01:** [KNN y Naive Bayes](../../Sesion5/SESION5-NTB1-KNN-NB.ipynb)  
-* 📓 **Notebook 02:** [SVM (lineal y kernel RBF)](../../Sesion5/SESION5-NTB2-SVM.ipynb)
+* 📓 **Notebook Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion05/practica/SESION5-NTB1-ML.ipynb)
+* 📓 **Notebook Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion05/practica/SESION5-NTB2-ML.ipynb)
 
 ---
 
@@ -33,9 +32,9 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
 
-* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
 
 ---
 

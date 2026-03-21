@@ -12,20 +12,19 @@ Explorar y extraer valor de datos no etiquetados mediante técnicas de clusterin
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar PPT9-ML.pdf](../../Sesion9/PPT9-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar slides9.pdf](../material/Sesion09/slides/slides9-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S9-NoSupervisado.pdf)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion09/cheatsheet/)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion9/ANEXO-S9.pdf)
-
+* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion09/anexo/)
 ---
 
-### 💻 Laboratorio 
+### 💻 Laboratorio
 
 *Nivel: Intermedio* ⭐⭐⭐
 
-* 📓 **Notebook 01:** [PCA y reducción de dimensionalidad](../../Sesion9/SESION9-NTB1-PCA.ipynb)  
-* 📓 **Notebook 02:** [Clustering (K-Means, DBSCAN, Jerárquico)](../../Sesion9/SESION9-NTB2-Clustering.ipynb)
+* 📓 **Notebook Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion09/practica/SESION9-NTB1-ML.ipynb)
+* 📓 **Notebook Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion09/practica/SESION9-NTB2-ML.ipynb)
 
 ---
 
@@ -33,9 +32,9 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
 
-* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
 
 ---
 

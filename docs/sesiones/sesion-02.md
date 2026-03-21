@@ -12,20 +12,19 @@ Realizar un análisis exploratorio (EDA) y aplicar técnicas de feature engineer
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar PPT2-ML.pdf](../../Sesion2/PPT2-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar slides2.pdf](../material/Sesion02/slides/slides2-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S2-EDA-FeatureEng.pdf)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion02/cheatsheet/)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion2/ANEXO-S2.pdf)
-
+* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion02/anexo/)
 ---
 
-### 💻 Laboratorio 
+### 💻 Laboratorio
 
 *Nivel: Introductorio/Intermedio* ⭐⭐☆
 
-* 📓 **Notebook 01:** [EDA con Python](../../Sesion2/SESION2-NTB1-EDA.ipynb)  
-* 📓 **Notebook 02:** [Feature Engineering avanzado](../../Sesion2/SESION2-NTB2-FeatureEng.ipynb)
+* 📓 **Notebook Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion02/practica/SESION2_NTB1_ML.ipynb)
+* 📓 **Notebook Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion02/practica/SESION2_NTB2_ML.ipynb)
 
 ---
 
@@ -33,9 +32,9 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
 
-* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
 
 ---
 

@@ -12,7 +12,7 @@ Construir, interpretar y comparar modelos basados en árboles de decisión y ens
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar slides6-ML.pdf](../material/Sesion06/slides/slides6-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar slides6.pdf](../material/Sesion06/slides/slides6-ML.pdf)
 
 * 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion06/cheatsheet/)
 
@@ -23,8 +23,8 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 *Nivel: Básico/Intermedio* ⭐⭐⭐
 
-* 📓 **Notebooks Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion06/practica/SESION6-NTB1-ML.ipynb)
-* 📓 **Notebooks Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion06/practica/SESION6-NTB2-ML.ipynb)
+* 📓 **Notebook Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion06/practica/SESION6-NTB1-ML.ipynb)
+* 📓 **Notebook Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion06/practica/SESION6-NTB2-ML.ipynb)
 
 ---
 

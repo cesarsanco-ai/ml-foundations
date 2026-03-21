@@ -12,20 +12,19 @@ Diseñar e implementar sistemas de recomendación basados en filtrado colaborati
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar PPT12-ML.pdf](../../Sesion12/PPT12-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar slides12.pdf](../material/Sesion12/slides/slides12-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S12-Recommender.pdf)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion12/cheatsheet/)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion12/ANEXO-S12.pdf)
-
+* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion12/anexo/)
 ---
 
-### 💻 Laboratorio 
+### 💻 Laboratorio
 
 *Nivel: Avanzado* ⭐⭐⭐⭐
 
-* 📓 **Notebook 01:** [Filtrado colaborativo (user-user, item-item)](../../Sesion12/SESION12-NTB1-FiltradoColaborativo.ipynb)  
-* 📓 **Notebook 02:** [Factorización matricial con SVD](../../Sesion12/SESION12-NTB2-SVD.ipynb)
+* 📓 **Notebook Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion12/practica/SESION12-NTB1-ML.ipynb)
+* 📓 **Notebook Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion12/practica/SESION12-NTB2-ML.ipynb)
 
 ---
 
@@ -33,9 +32,9 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
 
-* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
 
 ---
 

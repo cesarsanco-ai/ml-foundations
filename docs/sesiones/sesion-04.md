@@ -12,20 +12,19 @@ Construir, interpretar y evaluar modelos de clasificación binaria y multiclase 
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar PPT4-ML.pdf](../../Sesion4/PPT4-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar slides4.pdf](../material/Sesion04/slides/slides4-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S4-ClasificacionI.pdf)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion04/cheatsheet/)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion4/ANEXO-S4.pdf)
-
+* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion04/anexo/)
 ---
 
-### 💻 Laboratorio 
+### 💻 Laboratorio
 
 *Nivel: Intermedio* ⭐⭐⭐
 
-* 📓 **Notebook 01:** [Regresión Logística y métricas de clasificación](../../Sesion4/SESION4-NTB1-RegLogistica.ipynb)  
-* 📓 **Notebook 02:** [Balanceo de datos (SMOTE, undersampling, pesos)](../../Sesion4/SESION4-NTB2-Balanceo.ipynb)
+* 📓 **Notebook Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion04/practica/SESION4-NTB1-ML.ipynb)
+* 📓 **Notebook Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion04/practica/SESION4-NTB2-ML.ipynb)
 
 ---
 
@@ -33,9 +32,9 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
 
-* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
 
 ---
 

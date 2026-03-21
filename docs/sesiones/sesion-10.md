@@ -12,20 +12,19 @@ Modelar y pronosticar datos temporales utilizando técnicas estadísticas clási
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar PPT10-ML.pdf](../../Sesion10/PPT10-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar slides10.pdf](../material/Sesion10/slides/slides10-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S10-TimeSeries.pdf)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion10/cheatsheet/)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion10/ANEXO-S10.pdf)
-
+* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion10/anexo/)
 ---
 
-### 💻 Laboratorio 
+### 💻 Laboratorio
 
 *Nivel: Intermedio/Avanzado* ⭐⭐⭐
 
-* 📓 **Notebook 01:** [Análisis de series temporales y descomposición](../../Sesion10/SESION10-NTB1-AnalisisTS.ipynb)  
-* 📓 **Notebook 02:** [Pronóstico con ARIMA/SARIMA y Prophet](../../Sesion10/SESION10-NTB2-Forecast.ipynb)
+* 📓 **Notebook Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion10/practica/SESION10-NTB1-ML.ipynb)
+* 📓 **Notebook Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion10/practica/SESION10-NTB2-ML.ipynb)
 
 ---
 
@@ -33,9 +32,9 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
 
-* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
 
 ---
 

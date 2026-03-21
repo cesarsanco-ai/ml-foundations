@@ -12,20 +12,19 @@ Construir, optimizar e interpretar modelos de Gradient Boosting (XGBoost y Light
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar PPT7-ML.pdf](../../Sesion7/PPT7-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar slides7.pdf](../material/Sesion07/slides/slides7-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S7-Boosting.pdf)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion07/cheatsheet/)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion7/ANEXO-S7.pdf)
-
+* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion07/anexo/)
 ---
 
-### 💻 Laboratorio 
+### 💻 Laboratorio
 
 *Nivel: Avanzado* ⭐⭐⭐⭐
 
-* 📓 **Notebook 01:** [XGBoost (clasificación y regresión)](../../Sesion7/SESION7-NTB1-XGBoost.ipynb)  
-* 📓 **Notebook 02:** [LightGBM y optimización de hiperparámetros](../../Sesion7/SESION7-NTB2-LightGBM.ipynb)
+* 📓 **Notebook Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion07/practica/SESION7-NTB1-ML.ipynb)
+* 📓 **Notebook Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion07/practica/SESION7-NTB2-ML.ipynb)
 
 ---
 
@@ -33,9 +32,9 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
 
-* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
 
 ---
 

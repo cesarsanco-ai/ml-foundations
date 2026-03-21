@@ -12,20 +12,19 @@ Conocer y aplicar algoritmos adicionales de regresión y clustering que son úti
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar PPT11-ML.pdf](../../Sesion11/PPT11-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar slides11.pdf](../material/Sesion11/slides/slides11-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S11-ModelosComplementarios.pdf)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion11/cheatsheet/)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion11/ANEXO-S11.pdf)
-
+* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion11/anexo/)
 ---
 
-### 💻 Laboratorio 
+### 💻 Laboratorio
 
 *Nivel: Intermedio* ⭐⭐⭐
 
-* 📓 **Notebook 01:** [Regresión robusta (Huber, RANSAC) y SVR](../../Sesion11/SESION11-NTB1-RegresionRobusta.ipynb)  
-* 📓 **Notebook 02:** [Clustering avanzado (DBSCAN, Jerárquico)](../../Sesion11/SESION11-NTB2-ClusteringAvanzado.ipynb)
+* 📓 **Notebook Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion11/practica/SESION11-NTB1-ML.ipynb)
+* 📓 **Notebook Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion11/practica/SESION11-NTB2-ML.ipynb)
 
 ---
 
@@ -33,9 +32,9 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
 
-* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
 
 ---
 

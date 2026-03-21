@@ -12,20 +12,19 @@ Explicar las predicciones de modelos complejos mediante técnicas de interpretab
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar PPT13-ML.pdf](../../Sesion13/PPT13-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar slides13.pdf](../material/Sesion13/slides/slides13-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S13-Interpretabilidad.pdf)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion13/cheatsheet/)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion13/ANEXO-S13.pdf)
-
+* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion13/anexo/)
 ---
 
-### 💻 Laboratorio 
+### 💻 Laboratorio
 
 *Nivel: Avanzado* ⭐⭐⭐⭐
 
-* 📓 **Notebook 01:** [SHAP (Shapley Additive Explanations)](../../Sesion13/SESION13-NTB1-SHAP.ipynb)  
-* 📓 **Notebook 02:** [LIME, PDP e ICE](../../Sesion13/SESION13-NTB2-LIME-PDP.ipynb)
+* 📓 **Notebook Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion13/practica/SESION13-NTB1-ML.ipynb)
+* 📓 **Notebook Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion13/practica/SESION13-NTB2-ML.ipynb)
 
 ---
 
@@ -33,9 +32,9 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
 
-* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
 
 ---
 

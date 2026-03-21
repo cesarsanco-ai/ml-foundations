@@ -12,20 +12,19 @@ Llevar un modelo a producción, comprender los conceptos clave de MLOps, monitor
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar PPT14-ML.pdf](../../Sesion14/PPT14-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar slides14.pdf](../material/Sesion14/slides/slides14-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../../FUENTE/TEORIA/S14-MLOps.pdf)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion14/cheatsheet/)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion14/ANEXO-S14.pdf)
-
+* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion14/anexo/)
 ---
 
-### 💻 Laboratorio 
+### 💻 Laboratorio
 
 *Nivel: Avanzado* ⭐⭐⭐⭐
 
-* 📓 **Notebook 01:** [Creación de API con Flask/FastAPI](../../Sesion14/SESION14-NTB1-API.ipynb)  
-* 📓 **Notebook 02:** [Monitoreo, drift y A/B testing](../../Sesion14/SESION14-NTB2-Monitoreo.ipynb)
+* 📓 **Notebook Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion14/practica/SESION14-NTB1-ML.ipynb)
+* 📓 **Notebook Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion14/practica/SESION14-NTB2-ML.ipynb)
 
 ---
 
@@ -33,9 +32,9 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
 
-* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai/PROJECT-REPO-1):** Estructura base para proyectos de ML con validación y modularización.  
+* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai/PROJECT-REPO-2):** Aplicación práctica de modelos supervisados en entornos de negocio.  
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
 
 ---
 
