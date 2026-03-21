@@ -1,0 +1,525 @@
+% --- CORRECCIÓN IMPORTANTE EN LA PRIMERA LÍNEA ---
+% Agregamos "xcolor=table" para que funcione \rowcolor sin errores
+\documentclass[aspectratio=169, 10pt, xcolor=table]{beamer}
+
+% --- Configuración del Tema (estilo profesional como el ejemplo) ---
+\usetheme{Madrid}
+\usecolortheme{dolphin}
+
+% --- Paquetes necesarios ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+
+% --- Ruta de Imágenes (crea la carpeta "imagenes" y coloca ahí tus archivos) ---
+\graphicspath{{./imagenes/}}
+
+% --- Estilo para código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Pie de página personalizado ---
+\makeatletter
+
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}Sesión 9
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}Machine Learning \hfill \insertframenumber/\inserttotalframenumber \hspace*{0.3cm}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\makeatother
+
+% --- Datos de la portada ---
+\title[SESIÓN 9]{\textbf{Sesión 9}}
+\subtitle{Aprendizaje No Supervisado: \\ Clustering y Análisis de Componentes Principales}
+\author[Prof. C. Sánchez]{Carlos César Sánchez Coronel}
+\institute{\textbf{MACHINE LEARNING}}
+\date{}
+
+% Logo opcional (descomentar si tienes la imagen)
+% \titlegraphic{\includegraphics[height=1.5cm]{logo.png}}
+
+% --- Eliminar la barra de navegación (opcional) ---
+\setbeamertemplate{navigation symbols}{}
+
+% --- Índice al inicio de cada sección ---
+\AtBeginSection[]{
+  \begin{frame}
+    \frametitle{Contenido}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+% ============================================================================
+% INICIO DEL DOCUMENTO
+% ============================================================================
+\begin{document}
+
+% --- Portada ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Índice general ---
+\begin{frame}{Contenido}
+    \tableofcontents
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 1: INTRODUCCIÓN
+% ============================================================================
+\section{Introducción al Aprendizaje No Supervisado}
+
+\begin{frame}{¿Qué es el aprendizaje no supervisado?}
+    \begin{itemize}
+        \item Trabajamos con datos \textbf{sin etiquetas}.
+        \item Objetivos principales:
+        \begin{itemize}
+            \item Descubrir grupos o segmentos naturales (\textbf{clustering}).
+            \item Reducir la dimensionalidad para visualización, compresión o preprocesamiento (\textbf{PCA}).
+            \item Detectar anomalías o valores atípicos.
+        \end{itemize}
+        \item No hay una métrica de rendimiento única; la evaluación depende del objetivo y del conocimiento del dominio.
+    \end{itemize}
+    % Basado en introducción de la teoría
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 2: ANÁLISIS DE COMPONENTES PRINCIPALES (PCA)
+% ============================================================================
+\section{Análisis de Componentes Principales (PCA)}
+
+\begin{frame}{PCA: fundamento matemático}
+    \begin{block}{Objetivo}
+        Proyectar los datos en un espacio de menor dimensión maximizando la varianza retenida.
+    \end{block}
+    \begin{enumerate}
+        \item Centrar la matriz de datos $\mathbf{X}$ (restar media por columna).
+        \item Calcular matriz de covarianza: $\displaystyle \mathbf{\Sigma} = \frac{1}{n-1}\mathbf{X}^T\mathbf{X}$.
+        \item Obtener autovalores $\lambda_1 \ge \lambda_2 \ge \dots \ge \lambda_p$ y autovectores asociados $\mathbf{v}_1, \dots, \mathbf{v}_p$.
+        \item El $k$-ésimo componente principal es $\mathbf{X}\mathbf{v}_k$.
+    \end{enumerate}
+    % Basado en Pregunta 1
+    % IMAGEN: Esquema de proyección PCA
+\end{frame}
+
+\begin{frame}{Interpretación de componentes}
+    \begin{itemize}
+        \item \textbf{Autovalores}: representan la varianza explicada por cada componente.
+        \item \textbf{Proporción de varianza explicada}: $\displaystyle \frac{\lambda_j}{\sum_{i=1}^p \lambda_i}$.
+        \item \textbf{Loadings} (autovectores): indican la contribución de cada variable original al componente.
+        \item Un valor alto en magnitud señala variables importantes para ese componente.
+    \end{itemize}
+    % Basado en Pregunta 2
+\end{frame}
+
+\begin{frame}{Scree plot y elección del número de componentes}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Scree plot}: gráfico de autovalores en orden descendente.
+        \begin{itemize}
+            \item Se busca un ``codo'' donde la caída se vuelve marginal.
+            \item Se retienen los componentes hasta el codo.
+        \end{itemize}
+        \column{0.5\textwidth}
+        % IMAGEN: Ejemplo de scree plot
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{exampleblock}{Ejemplo numérico}
+        Autovalores: [4.5, 2.1, 1.3, 0.8, 0.6, 0.4, 0.3, 0.2, 0.1, 0.05] \\
+        Varianza total = 10.35. \\
+        Primer componente: 43.5\%, dos primeros: 63.8\%. El codo sugiere k=3.
+    \end{exampleblock}
+    % Basado en Pregunta 2
+\end{frame}
+
+\begin{frame}{Aplicaciones de PCA}
+    \begin{itemize}
+        \item \textbf{Visualización}: proyectar datos a 2D o 3D para inspección.
+        \item \textbf{Reducción de ruido}: descartar componentes de baja varianza (ruido).
+        \item \textbf{Preprocesamiento}: reducir dimensionalidad antes de modelos sensibles (KNN, clustering).
+        \item \textbf{Compresión}: almacenar solo las primeras componentes.
+    \end{itemize}
+    % Basado en Pregunta 3
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 3: K-MEANS CLUSTERING
+% ============================================================================
+\section{K-Means Clustering}
+
+\begin{frame}{Algoritmo de K-Means}
+    \begin{enumerate}
+        \item Inicializar $k$ centroides (aleatorio o K-Means++).
+        \item Asignar cada punto al centroide más cercano (distancia euclidiana).
+        \item Recalcular cada centroide como la media de los puntos asignados.
+        \item Repetir 2 y 3 hasta convergencia (centroides no cambian o máximo de iteraciones).
+    \end{enumerate}
+    \vspace{0.3cm}
+    \begin{block}{Función objetivo (inercia)}
+        \[
+        J = \sum_{j=1}^{k} \sum_{x \in C_j} \|x - \mu_j\|^2
+        \]
+        Minimiza la suma de distancias cuadráticas intra-cluster.
+    \end{block}
+    % Basado en Pregunta 4
+    % IMAGEN: Ilustración de iteraciones de K-Means
+\end{frame}
+
+\begin{frame}{Elección del número de clusters $k$}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Método del codo}
+        \begin{itemize}
+            \item Graficar inercia vs $k$.
+            \item Elegir $k$ donde la mejora se vuelve marginal.
+        \end{itemize}
+        \column{0.5\textwidth}
+        \textbf{Coeficiente de silueta}
+        \begin{itemize}
+            \item Mide cohesión y separación.
+            \item Promedio para cada $k$; se elige el $k$ con mayor valor.
+        \end{itemize}
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{exampleblock}{Ejemplo (Pregunta 5)}
+        Inercia: [1000,600,450,400,380,370,365,360,358] \\
+        Silueta: [0.35,0.48,0.52,0.50,0.47,0.44,0.41,0.38,0.35] \\
+        Codo sugiere $k=3$ o $4$; silueta máxima en $k=3$. Se elige $k=3$.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Inicialización: K-Means++}
+    \begin{itemize}
+        \item K-Means es sensible a la inicialización (óptimos locales).
+        \item \textbf{K-Means++} elige centroides dispersos:
+        \begin{enumerate}
+            \item Primer centroide aleatorio.
+            \item Para cada punto, calcular distancia al centroide más cercano ya elegido.
+            \item Elegir siguiente centroide con probabilidad proporcional al cuadrado de esa distancia.
+            \item Repetir hasta tener $k$ centroides.
+        \end{enumerate}
+        \item Es la implementación por defecto en scikit-learn.
+    \end{enumerate}
+    % Basado en Pregunta 4
+\end{frame}
+
+\begin{frame}{Limitaciones de K-Means}
+    \begin{itemize}
+        \item Asume clusters \textbf{esféricos} y de tamaño similar.
+        \item Sensible a \textbf{outliers}.
+        \item Requiere especificar $k$.
+        \item Puede converger a \textbf{óptimos locales}.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{exampleblock}{Aplicaciones típicas}
+        Segmentación de clientes, compresión de imágenes, agrupamiento de documentos.
+    \end{exampleblock}
+    % Basado en Pregunta 6
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 4: DBSCAN
+% ============================================================================
+\section{DBSCAN (Density-Based Clustering)}
+
+\begin{frame}{DBSCAN: conceptos básicos}
+    \begin{block}{Parámetros}
+        \begin{itemize}
+            \item $\varepsilon$ (eps): radio de vecindad.
+            \item \texttt{minPts}: número mínimo de puntos para formar una región densa.
+        \end{itemize}
+    \end{block}
+    \begin{block}{Clasificación de puntos}
+        \begin{itemize}
+            \item \textbf{Punto núcleo}: tiene al menos \texttt{minPts} vecinos dentro de $\varepsilon$.
+            \item \textbf{Punto borde}: no es núcleo pero es vecino de un núcleo.
+            \item \textbf{Ruido}: no es núcleo ni borde.
+        \end{itemize}
+    \end{block}
+    % Basado en Pregunta 7
+    % IMAGEN: Diagrama de puntos núcleo, borde y ruido
+\end{frame}
+
+\begin{frame}{Ventajas y desventajas de DBSCAN}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Ventajas}
+        \begin{itemize}
+            \item No requiere $k$ previo.
+            \item Detecta clusters de forma arbitraria.
+            \item Identifica outliers como ruido.
+        \end{itemize}
+        \column{0.5\textwidth}
+        \textbf{Desventajas}
+        \begin{itemize}
+            \item Sensible a $\varepsilon$ y \texttt{minPts}.
+            \item Difícil de ajustar si las densidades varían.
+        \end{itemize}
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{exampleblock}{Aplicaciones}
+        Detección de anomalías, datos geoespaciales, formas no convexas.
+    \end{exampleblock}
+    % Basado en Pregunta 8
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 5: CLUSTERING JERÁRQUICO
+% ============================================================================
+\section{Clustering Jerárquico}
+
+\begin{frame}{Clustering jerárquico aglomerativo}
+    \begin{enumerate}
+        \item Comenzar con cada punto como un cluster individual.
+        \item En cada paso, fusionar los dos clusters más cercanos según una medida de \textbf{enlace}.
+        \item Repetir hasta un solo cluster.
+    \end{enumerate}
+    \vspace{0.3cm}
+    \begin{block}{Tipos de enlace}
+        \begin{itemize}
+            \item \textbf{Single linkage}: distancia mínima entre puntos → forma cadenas.
+            \item \textbf{Complete linkage}: distancia máxima → clusters compactos.
+            \item \textbf{Average linkage}: distancia promedio.
+            \item \textbf{Ward}: minimiza el incremento de varianza intra-cluster.
+        \end{itemize}
+    \end{block}
+    % Basado en Pregunta 9
+\end{frame}
+
+\begin{frame}{Dendrograma y elección de clusters}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Dendrograma}
+        \begin{itemize}
+            \item Representa la jerarquía de fusiones.
+            \item Cortando a cierta altura se obtienen clusters.
+            \item La altura del corte se elige según la distancia de fusión (buscar un salto grande).
+        \end{itemize}
+        \column{0.5\textwidth}
+        % IMAGEN: Dendrograma de ejemplo
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item Ventaja: no requiere $k$ previo, jerarquía interpretable.
+        \item Desventaja: costoso computacionalmente ($O(n^3)$ o $O(n^2)$).
+    \end{itemize}
+    % Basado en Pregunta 9
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 6: MÉTRICAS DE EVALUACIÓN PARA CLUSTERING
+% ============================================================================
+\section{Métricas de Evaluación para Clustering}
+
+\begin{frame}{Coeficiente de silueta}
+    Para cada punto $i$:
+    \begin{itemize}
+        \item $a(i)$: distancia media a los puntos de su mismo cluster (cohesión).
+        \item $b(i)$: distancia media al cluster vecino más cercano (separación).
+    \end{itemize}
+    \[
+    s(i) = \frac{b(i) - a(i)}{\max\{a(i), b(i)\}}
+    \]
+    \begin{itemize}
+        \item $s(i) \approx 1$: cluster compacto y bien separado.
+        \item $s(i) \approx 0$: solapamiento.
+        \item $s(i) < 0$: asignación incorrecta.
+    \end{itemize}
+    Se promedia sobre todos los puntos.
+    % Basado en Pregunta 10
+\end{frame}
+
+\begin{frame}{Índice de Davies-Bouldin}
+    \begin{itemize}
+        \item Mide la similitud promedio entre cada cluster y su más similar.
+        \item Para cada cluster $i$, se define $R_i = \max_{j \neq i} \frac{s_i + s_j}{d_{ij}}$, donde $s_i$ es la dispersión intra-cluster (distancia media al centroide) y $d_{ij}$ es la distancia entre centroides.
+        \item Índice final = $\frac{1}{k}\sum_{i=1}^k R_i$.
+        \item \textbf{Valores más bajos indican mejor separación}.
+    \end{itemize}
+    % Basado en Pregunta 10
+\end{frame}
+
+\begin{frame}{Comparación de algoritmos de clustering}
+    \begin{table}
+        \centering
+        \begin{tabular}{l|c|c|c}
+            \toprule
+            \textbf{Algoritmo} & \textbf{Forma clusters} & \textbf{Número de clusters} & \textbf{Ruido} \\
+            \midrule
+            K-Means & Esféricos & Fijo $k$ & No \\
+            DBSCAN & Arbitraria & Automático & Sí \\
+            Jerárquico & Cualquier & Corte en dendrograma & No \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    % Basado en teoría
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 7: CASO INTEGRADO: SEGMENTACIÓN DE CLIENTES
+% ============================================================================
+\section{Caso Integrado: Segmentación de Clientes}
+
+\begin{frame}{Problema y datos}
+    \begin{itemize}
+        \item Empresa de retail con 5000 clientes.
+        \item Variables: monto total gastado, frecuencia de compra, antigüedad, edad.
+        \item Objetivo: segmentar para personalizar campañas de marketing.
+    \end{itemize}
+    % Basado en Pregunta 15
+\end{frame}
+
+\begin{frame}{Pipeline de segmentación}
+    \begin{enumerate}
+        \item \textbf{Preprocesamiento}: estandarización (Z-score) de variables numéricas.
+        \item \textbf{PCA}: reducir dimensionalidad para visualización (elegir componentes que expliquen al menos 75\% de varianza).
+        \item \textbf{K-Means}: probar $k$ de 2 a 10, usar método del codo y silueta.
+        \item \textbf{Seleccionar $k$ óptimo} (ej. $k=4$).
+        \item \textbf{Caracterizar clusters} mediante perfiles medios en variables originales.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Resultados y acciones de marketing}
+    \begin{table}
+        \centering
+        \begin{tabular}{l|c|c|c}
+            \toprule
+            \textbf{Cluster} & \textbf{Edad} & \textbf{Ingresos} & \textbf{Frecuencia} \\
+            \midrule
+            0 & Baja & Altos & Alta \\
+            1 & Media-alta & Bajos & Baja \\
+            2 & Alta & Medios & Baja \\
+            3 & Baja & Bajos & Media \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    \begin{itemize}
+        \item Cluster 0: ofertas exclusivas, productos premium.
+        \item Cluster 1: promociones para incentivar compras.
+        \item Cluster 2: productos adaptados a mayores.
+        \item Cluster 3: descuentos para jóvenes.
+    \end{itemize}
+    % Basado en Pregunta 14
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 8: IMPLEMENTACIÓN EN PYTHON
+% ============================================================================
+\section{Implementación en Python}
+
+\begin{frame}[fragile]{PCA con scikit-learn}
+    \begin{lstlisting}
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+
+print("Varianza explicada:", pca.explained_variance_ratio_)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{K-Means y selección de $k$}
+    \begin{lstlisting}
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
+inertias, silhouettes = [], []
+for k in range(2, 11):
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    labels = kmeans.fit_predict(X_scaled)
+    inertias.append(kmeans.inertia_)
+    silhouettes.append(silhouette_score(X_scaled, labels))
+
+# Elegir k con mayor silueta
+best_k = np.argmax(silhouettes) + 2
+kmeans = KMeans(n_clusters=best_k, random_state=42)
+labels = kmeans.fit_predict(X_scaled)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{DBSCAN y clustering jerárquico}
+    \begin{lstlisting}
+from sklearn.cluster import DBSCAN
+
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels_db = dbscan.fit_predict(X_scaled)  # -1 indica ruido
+
+# Clustering jerárquico y dendrograma
+from scipy.cluster.hierarchy import dendrogram, linkage
+import matplotlib.pyplot as plt
+
+Z = linkage(X_scaled, method='ward')
+plt.figure(figsize=(10,5))
+dendrogram(Z)
+plt.show()
+    \end{lstlisting}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 9: CONEXIÓN Y RESUMEN
+% ============================================================================
+\section{Conexión y Resumen}
+
+\begin{frame}{Conexión con el resto del curso}
+    \begin{itemize}
+        \item PCA se usa como preprocesamiento en modelos supervisados para reducir dimensionalidad y ruido.
+        \item Los clusters pueden servir como nuevas características en modelos supervisados.
+        \item DBSCAN es base para detectores de anomalías.
+        \item La interpretación de clusters complementa el análisis exploratorio.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Lo que hemos aprendido}
+    \begin{exampleblock}{Conceptos clave}
+        \begin{itemize}
+            \item \textbf{PCA}: reducción de dimensionalidad, autovalores, scree plot.
+            \item \textbf{K-Means}: algoritmo, inercia, método del codo, silueta, K-Means++.
+            \item \textbf{DBSCAN}: densidad, puntos núcleo/borde/ruido, parámetros.
+            \item \textbf{Clustering jerárquico}: aglomerativo, enlaces, dendrograma.
+            \item \textbf{Métricas}: silueta, Davies-Bouldin.
+            \item \textbf{Caso práctico}: segmentación de clientes.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% --- Diapositiva final ---
+\begin{frame}
+    \centering
+    \Huge \textbf{¡Gracias!}
+
+\end{frame}
+
+\end{document}

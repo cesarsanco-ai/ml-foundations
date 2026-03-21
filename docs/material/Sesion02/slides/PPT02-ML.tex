@@ -1,0 +1,588 @@
+% --- CORRECCIÓN IMPORTANTE EN LA PRIMERA LÍNEA ---
+% Agregamos "xcolor=table" para que funcione \rowcolor sin errores
+\documentclass[aspectratio=169, 10pt, xcolor=table]{beamer}
+
+% --- Configuración del Tema (estilo profesional como el ejemplo) ---
+\usetheme{Madrid}
+\usecolortheme{dolphin}
+
+% --- Paquetes necesarios ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+
+% --- Ruta de Imágenes (crea la carpeta "imagenes" y coloca ahí tus archivos) ---
+\graphicspath{{./imagenes/}}
+
+% --- Estilo para código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Pie de página personalizado ---
+\makeatletter
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}Sesión 2
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}Machine Learning \hfill \insertframenumber/\inserttotalframenumber \hspace*{0.3cm}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatother
+
+% --- Datos de la portada ---
+\title[SESIÓN 2]{\textbf{Sesión 2}}  
+\subtitle{Análisis Exploratorio y Feature Engineering}
+\author[Prof. C. Sánchez]{Carlos César Sánchez Coronel}
+\institute{\textbf{MACHINE LEARNING}} 
+\date{}
+
+% --- Eliminar la barra de navegación (opcional) ---
+\setbeamertemplate{navigation symbols}{}
+
+% --- Índice al inicio de cada sección ---
+\AtBeginSection[]{
+  \begin{frame}
+    \frametitle{Contenido}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+% ============================================================================
+% INICIO DEL DOCUMENTO
+% ============================================================================
+\begin{document}
+
+% --- Portada ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Índice general ---
+\begin{frame}{Contenido}
+    \tableofcontents
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 1: INTRODUCCIÓN Y ESTADÍSTICAS ROBUSTAS
+% ============================================================================
+\section{Introducción: El arte detectivesco del EDA}
+
+\begin{frame}{EDA como proceso detectivesco}
+    \begin{block}{Filosofía de John Tukey}
+        “Escuchar a los datos” mediante visualización y estadísticas robustas antes de modelar.
+    \end{block}
+    \begin{exampleblock}{Objetivo del Feature Engineering}
+        Traducir hallazgos en características matemáticas que maximicen el rendimiento de los algoritmos.
+    \end{exampleblock}
+    \begin{itemize}
+        \item Juntos, EDA y Feature Engineering determinan el límite superior del rendimiento de cualquier modelo.
+    \end{itemize}
+    % IMAGEN: Ilustración de detective con lupa sobre datos
+\end{frame}
+
+\section{Estadísticas robustas vs clásicas}
+
+\begin{frame}{Estadísticas descriptivas robustas}
+    % Basado en Pregunta 1 del solucionario
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \begin{alertblock}{Clásicas (sensibles a outliers)}
+            \begin{itemize}
+                \item Media: $\bar{x} = \frac{1}{n}\sum x_i$
+                \item Desviación estándar: $s = \sqrt{\frac{1}{n-1}\sum (x_i-\bar{x})^2}$
+            \end{itemize}
+        \end{alertblock}
+        \column{0.5\textwidth}
+        \begin{exampleblock}{Robustas (resistentes)}
+            \begin{itemize}
+                \item Mediana: $Median = x_{(n/2)}$
+                \item MAD: $MAD = median(|x_i - median(x)|)$
+            \end{itemize}
+        \end{exampleblock}
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{block}{¿Cuándo usar robustas?}
+        Cuando hay asimetría o outliers. Ej: salarios (media > mediana $\rightarrow$ sesgo derecho).
+    \end{block}
+    % Basado en Pregunta 1
+\end{frame}
+
+\begin{frame}{Detección de outliers con z-score modificado}
+    \begin{block}{Z-score modificado (basado en MAD)}
+        \[
+        M_i = \frac{0.6745(x_i - \text{mediana}(x))}{\text{MAD}}
+        \]
+        \begin{itemize}
+            \item Factor 0.6745 hace consistente la MAD con la desviación estándar en datos normales.
+            \item Umbral típico: $|M_i| > 3.5$ indica outlier.
+        \end{itemize}
+    \end{block}
+    % Basado en Pregunta 1c
+    % IMAGEN: Diagrama de caja con outliers
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 2: VISUALIZACIONES AVANZADAS
+% ============================================================================
+\section{Visualizaciones avanzadas}
+
+\begin{frame}{Histograma y KDE}
+    % Basado en Pregunta 2
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \begin{block}{Histograma}
+            \begin{itemize}
+                \item Ancho de bin óptimo (Freedman-Diaconis): 
+                \[
+                \text{ancho} = 2 \cdot \text{IQR} \cdot n^{-1/3}
+                \]
+                \item Útil para distribuciones con colas pesadas.
+            \end{itemize}
+        \end{block}
+        \column{0.5\textwidth}
+        \begin{block}{KDE (Kernel Density Estimation)}
+            \[
+            \hat{f}(x) = \frac{1}{nh}\sum_{i=1}^n K\left(\frac{x-x_i}{h}\right)
+            \]
+            \begin{itemize}
+                \item $h$: ancho de banda (controla suavizado).
+                \item $K$: kernel (gaussiano por defecto).
+            \end{itemize}
+        \end{block}
+    \end{columns}
+    % IMAGEN: Comparación histograma vs KDE
+\end{frame}
+
+\begin{frame}{ECDF y Mapas de calor de correlación}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \begin{block}{ECDF (Empirical CDF)}
+            \[
+            F_n(x) = \frac{1}{n}\sum_{i=1}^n \mathbf{1}_{x_i \le x}
+            \]
+            Muestra la proporción acumulada. Útil para comparar distribuciones.
+        \end{block}
+        \column{0.5\textwidth}
+        \begin{block}{Correlación de Pearson y Spearman}
+            Pearson: relación lineal. \\
+            Spearman: relación monótona (basada en rangos). \\
+            \vspace{0.2cm}
+            \textbf{Mapa de calor:} visualiza multicolinealidad.
+        \end{block}
+    \end{columns}
+    % Basado en Pregunta 3
+    % IMAGEN: Mapa de calor de correlaciones
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 3: DETECCIÓN DE OUTLIERS AVANZADA
+% ============================================================================
+\section{Detección de outliers avanzada}
+
+\begin{frame}{Métodos univariados: IQR y z-score modificado}
+    % Basado en Pregunta 4
+    \begin{block}{Regla del IQR}
+        \begin{itemize}
+            \item IQR = Q3 – Q1
+            \item Límites: $[Q1 - 1.5\cdot IQR,\ Q3 + 1.5\cdot IQR]$
+            \item Limitación: asume simetría; no detecta outliers contextuales.
+        \end{itemize}
+    \end{block}
+    \begin{exampleblock}{Ejemplo práctico: detección de fraudes}
+        En montos de transacciones, aplicar IQR por separado puede no detectar un monto normal en horario inusual. Para eso necesitamos métodos multivariados.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Métodos multivariados (I)}
+    % Basado en Pregunta 5
+    \begin{block}{Distancia de Mahalanobis}
+        \[
+        D_M(x) = \sqrt{(x-\mu)^T \Sigma^{-1}(x-\mu)}
+        \]
+        \begin{itemize}
+            \item Considera correlaciones entre variables.
+            \item Asume normalidad multivariante.
+            \item Se considera outlier si $D_M^2 > \chi^2_{p,0.975}$.
+        \end{itemize}
+    \end{block}
+    % IMAGEN: Elipse de Mahalanobis vs euclidiana
+\end{frame}
+
+\begin{frame}{Métodos multivariados (II)}
+    % Basado en Preguntas 5 y 6
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \begin{block}{LOF (Local Outlier Factor)}
+            Compara densidad local con vecinos.
+            \[
+            LOF(p) = \frac{\frac{1}{k}\sum_{o\in N_k(p)} lrd(o)}{lrd(p)}
+            \]
+            LOF $\gg 1$ indica outlier local.
+        \end{block}
+        \column{0.5\textwidth}
+        \begin{block}{Isolation Forest}
+            Aísla puntos con particiones aleatorias.
+            \begin{itemize}
+                \item Outliers requieren menos particiones.
+                \item Puntuación de anomalía: $s(x)=2^{-\frac{E(h(x))}{c(n)}}$.
+                \item $s \approx 1$ $\rightarrow$ anomalía.
+            \end{itemize}
+        \end{block}
+    \end{columns}
+    % IMAGEN: Ejemplo de LOF e Isolation Forest
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 4: MANEJO DE DATOS FALTANTES
+% ============================================================================
+\section{Manejo de datos faltantes}
+
+\begin{frame}{Mecanismos de ausencia}
+    % Basado en Pregunta 7
+    \begin{columns}[t]
+        \column{0.33\textwidth}
+        \begin{block}{MCAR}
+            Falta completamente al azar (ej. error de transcripción).
+        \end{block}
+        \column{0.33\textwidth}
+        \begin{block}{MAR}
+            Falta al azar condicionado a otras variables (ej. mujeres no responden ingresos).
+        \end{block}
+        \column{0.33\textwidth}
+        \begin{block}{MNAR}
+            Falta no al azar (depende del valor faltante mismo, ej. altos ingresos no declaran).
+        \end{block}
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{alertblock}{Importancia}
+        Identificar el mecanismo ayuda a elegir la imputación adecuada. Ignorar MNAR sesga estimaciones.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Imputación simple vs múltiple}
+    % Basado en Pregunta 8
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \begin{block}{Imputación simple}
+            \begin{itemize}
+                \item Media/mediana: rápido, subestima varianza.
+                \item Regresión: usa otras variables.
+                \item kNN: promedio de vecinos.
+            \end{itemize}
+        \end{block}
+        \column{0.5\textwidth}
+        \begin{block}{Imputación múltiple (MICE)}
+            \begin{itemize}
+                \item Genera $m$ conjuntos (ej. 5-10) mediante modelos iterativos.
+                \item Combina resultados con reglas de Rubin.
+                \item Incorpora incertidumbre de la imputación.
+            \end{itemize}
+        \end{block}
+    \end{columns}
+    % IMAGEN: Esquema de MICE
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 5: FEATURE ENGINEERING AVANZADO
+% ============================================================================
+\section{Feature Engineering Avanzado}
+
+\subsection{Transformaciones de variables}
+
+\begin{frame}{Normalización, estandarización y escalado robusto}
+    % Basado en Pregunta 9
+    \begin{columns}[t]
+        \column{0.33\textwidth}
+        \begin{block}{Normalización (Min-Max)}
+            $x' = \frac{x - x_{min}}{x_{max} - x_{min}} \in [0,1]$
+        \end{block}
+        \column{0.33\textwidth}
+        \begin{block}{Estandarización (Z-score)}
+            $x' = \frac{x - \mu}{\sigma}$
+        \end{block}
+        \column{0.33\textwidth}
+        \begin{block}{Escalado robusto}
+            $x' = \frac{x - \text{mediana}}{IQR}$
+        \end{block}
+    \end{columns}
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item SVM y PCA requieren estandarización.
+        \item Escalado robusto: preferible cuando hay outliers.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Transformaciones para asimetría}
+    % Basado en Pregunta 10
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \begin{block}{Logarítmica}
+            $x' = \log(x)$ para datos positivos con cola derecha.
+        \end{block}
+        \begin{block}{Box-Cox}
+            \[
+            x' = \begin{cases}
+                \frac{x^\lambda - 1}{\lambda} & \lambda \neq 0 \\
+                \log(x) & \lambda = 0
+            \end{cases}
+            \]
+            Requiere $x>0$.
+        \end{block}
+        \column{0.5\textwidth}
+        \begin{block}{Yeo-Johnson}
+            Extensión de Box-Cox que acepta valores negativos.
+        \end{block}
+    \end{columns}
+    \vspace{0.2cm}
+    % Basado en Pregunta 10
+\end{frame}
+
+\subsection{Creación de nuevas características}
+
+\begin{frame}{Términos polinomiales e interacciones}
+    % Basado en Pregunta 11
+    \begin{block}{Polinomiales}
+        $x^2, x^3$ capturan relaciones no lineales. Cuidado con overfitting.
+    \end{block}
+    \begin{block}{Interacciones}
+        $x_i \cdot x_j$ modelan sinergias. Ejemplo: en precios de viviendas, la interacción entre metros cuadrados y número de habitaciones puede ser más informativa.
+    \end{block}
+    % IMAGEN: Superficie de respuesta con interacción
+\end{frame}
+
+\begin{frame}{Binning y discretización}
+    % Basado en Pregunta 12
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \begin{block}{Igual ancho}
+            Divide el rango en intervalos fijos. Sensible a outliers.
+        \end{block}
+        \column{0.5\textwidth}
+        \begin{block}{Igual frecuencia}
+            Intervalos con igual número de observaciones. Mejor para distribuciones asimétricas.
+        \end{block}
+    \end{columns}
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item Discretizar pierde información, pero puede mejorar la robustez.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Variables temporales y agregadas}
+    % Basado en Preguntas 13 y 14
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \begin{block}{Rezagos y ventanas móviles}
+            \begin{itemize}
+                \item $y_{t-1}, y_{t-2}$: dependencia temporal.
+                \item Media móvil: $MA_t = \frac{1}{k}\sum_{i=0}^{k-1} y_{t-i}$
+                \item Desviación móvil: volatilidad.
+            \end{itemize}
+        \end{block}
+        \column{0.5\textwidth}
+        \begin{block}{Codicación cíclica (hora, día)}
+            \[
+            \sin\left(\frac{2\pi \cdot \text{hora}}{24}\right),\quad \cos\left(\frac{2\pi \cdot \text{hora}}{24}\right)
+            \]
+            Evita la discontinuidad entre 23h y 0h.
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Variables agregadas por grupo}
+    % Basado en Pregunta 14
+    \begin{block}{Agregaciones por cliente/usuario}
+        \begin{itemize}
+            \item Media, desviación, conteo, min, max, etc.
+            \item Ejemplo: en detección de fraude, frecuencia de transacciones en últimas 24h, monto promedio, etc.
+        \end{itemize}
+    \end{block}
+    \begin{alertblock}{¡Cuidado con el data leakage!}
+        Usar ventanas temporales: solo datos anteriores al momento de predicción.
+    \end{alertblock}
+\end{frame}
+
+\subsection{Codificación de variables categóricas}
+
+\begin{frame}{Codificación de alta cardinalidad}
+    % Basado en Pregunta 15
+    \begin{columns}[t]
+        \column{0.33\textwidth}
+        \begin{block}{One-hot encoding}
+            Crea muchas columnas. No escalable a cientos de categorías.
+        \end{block}
+        \column{0.33\textwidth}
+        \begin{block}{Target encoding}
+            Reemplaza categoría por media de la variable objetivo. ¡Requiere validación cruzada para evitar leakage!
+        \end{block}
+        \column{0.33\textwidth}
+        \begin{block}{Frequency encoding}
+            Reemplaza por frecuencia de aparición. Útil en NLP.
+        \end{block}
+    \end{columns}
+    \vspace{0.2cm}
+    \begin{block}{Weight of Evidence (WoE) para clasificación binaria}
+        $WoE = \ln\left(\frac{\%eventos}{\%no eventos}\right)$
+    \end{block}
+\end{frame}
+
+\subsection{Selección de características}
+
+\begin{frame}{Métodos de selección}
+    % Basado en Preguntas 16 y 17
+    \begin{columns}[t]
+        \column{0.33\textwidth}
+        \begin{block}{Filtro}
+            \begin{itemize}
+                \item Correlación
+                \item ANOVA (F-test)
+                \item Información mutua: $I(X;Y)=\sum p(x,y)\log\frac{p(x,y)}{p(x)p(y)}$
+            \end{itemize}
+        \end{block}
+        \column{0.33\textwidth}
+        \begin{block}{Wrapper}
+            \begin{itemize}
+                \item Selección hacia adelante
+                \item Eliminación hacia atrás
+                \item Costosos pero pueden encontrar interacciones.
+            \end{itemize}
+        \end{block}
+        \column{0.33\textwidth}
+        \begin{block}{Embedded}
+            \begin{itemize}
+                \item Importancia de árboles (Random Forest)
+                \item Regularización L1 (Lasso): $\min \sum (y-X\beta)^2 + \lambda\sum|\beta_j|$
+            \end{itemize}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 6: PIPELINES Y AUTOMATIZACIÓN
+% ============================================================================
+\section{Pipelines y automatización}
+
+\begin{frame}{Pipelines en scikit-learn}
+    % Basado en Pregunta 18
+    \begin{block}{Ventajas}
+        \begin{itemize}
+            \item Evitan data leakage (transformaciones solo en entrenamiento).
+            \item Facilitan validación cruzada y búsqueda de hiperparámetros.
+            \item Garantizan reproducibilidad.
+        \end{itemize}
+    \end{block}
+    \begin{exampleblock}{Ejemplo}
+        Pipeline con pasos: imputación, escalado, selección de características y modelo final.
+    \end{exampleblock}
+    % IMAGEN: Esquema de pipeline
+\end{frame}
+
+\begin{frame}{Feature engineering automático}
+    % Basado en Pregunta 19
+    \begin{block}{Deep Feature Synthesis (Featuretools)}
+        Genera automáticamente características a partir de relaciones entre tablas (agregaciones, transformaciones).
+    \end{block}
+    \begin{itemize}
+        \item Útil para datos relacionales (clientes, transacciones, productos).
+        \item Precaución: limitar profundidad y usar selección posterior para evitar cientos de características irrelevantes.
+    \end{itemize}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 7: CASOS DE USO INTEGRADOS
+% ============================================================================
+\section{Casos de uso integrados}
+
+\begin{frame}{Caso 1: Predicción de precios de viviendas}
+    % Basado en Pregunta 19
+    \begin{itemize}
+        \item \textbf{EDA}: Detectar asimetría en precio (aplicar log), outliers en área (IQR), correlaciones altas (eliminar redundantes).
+        \item \textbf{Feature engineering}: Interacciones (habitaciones × baños), variables temporales (año de construcción transformado con Box-Cox), target encoding de ubicación, escalado robusto.
+    \end{itemize}
+    % IMAGEN: Boxplots por ubicación
+\end{frame}
+
+\begin{frame}{Caso 2: Detección de fraude financiero}
+    % Basado en Pregunta 20 (el gran caso integrador)
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{EDA:}
+        \begin{itemize}
+            \item Histogramas de montos (log scale)
+            \item Boxplots por hora y día
+            \item Mapas de calor de transacciones por ubicación
+        \end{itemize}
+        \textbf{Feature engineering específico:}
+        \begin{itemize}
+            \item Log del monto
+            \item Variables temporales cíclicas
+            \item Agregadas por usuario (frecuencia, monto promedio, desviación en últimas 24h)
+            \item Distancia geográfica y temporal entre transacciones consecutivas
+            \item Puntuación de anomalía de Isolation Forest como característica
+        \end{itemize}
+        \column{0.5\textwidth}
+        \textbf{Codificación:} Target encoding con validación cruzada para tipo de comercio y ubicación. \\
+        \textbf{Manejo de desbalance:} SMOTE o pesos en pérdida. \\
+        \textbf{Pipeline:} Usar ventanas temporales para evitar leakage. \\
+        \textbf{Métricas:} AUC-ROC, precisión, recall, y en producción A/B test con tasa de fraude detectado.
+    \end{columns}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 8: CONCLUSIÓN
+% ============================================================================
+\section{Conclusión}
+
+\begin{frame}{Resumen de la sesión}
+    \begin{exampleblock}{Lo que hemos visto}
+        \begin{itemize}
+            \item Estadísticas robustas vs clásicas (media/mediana, MAD).
+            \item Visualizaciones avanzadas: KDE, ECDF, mapas de calor.
+            \item Detección de outliers: IQR, Mahalanobis, LOF, Isolation Forest.
+            \item Manejo de datos faltantes: MCAR/MAR/MNAR, MICE.
+            \item Transformaciones: estandarización, Box-Cox, Yeo-Johnson.
+            \item Creación de características: polinomiales, interacciones, binning, variables temporales y agregadas.
+            \item Codificación de categóricas: target encoding, WoE.
+            \item Selección de características: filtro, wrapper, embedded.
+            \item Pipelines y automatización (Featuretools).
+            \item Casos prácticos: viviendas y fraude.
+        \end{itemize}
+    \end{exampleblock}
+    \vspace{0.2cm}
+
+\end{frame}
+
+% --- Diapositiva final ---
+\begin{frame}
+    \centering
+    \Huge \textbf{¡Gracias!}
+
+\end{frame}
+
+\end{document}

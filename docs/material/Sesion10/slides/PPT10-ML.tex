@@ -1,0 +1,510 @@
+% --- CORRECCIÓN IMPORTANTE EN LA PRIMERA LÍNEA ---
+% Agregamos "xcolor=table" para que funcione \rowcolor sin errores
+\documentclass[aspectratio=169, 10pt, xcolor=table]{beamer}
+
+% --- Configuración del Tema (estilo profesional como el ejemplo) ---
+\usetheme{Madrid}
+\usecolortheme{dolphin}
+
+% --- Paquetes necesarios ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+
+% --- Ruta de Imágenes (crea la carpeta "imagenes" y coloca ahí tus archivos) ---
+\graphicspath{{./imagenes/}}
+
+% --- Estilo para código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Pie de página personalizado ---
+\makeatletter
+
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}Sesión 10
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}Machine Learning \hfill \insertframenumber/\inserttotalframenumber \hspace*{0.3cm}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\makeatother
+
+% --- Datos de la portada ---
+\title[SESIÓN 10]{\textbf{Sesión 10}}
+\subtitle{Series de Tiempo: \\ Modelado estadístico y aprendizaje automático}
+\author[Prof. C. Sánchez]{Carlos César Sánchez Coronel}
+\institute{\textbf{MACHINE LEARNING}}
+\date{}
+
+% Logo opcional (descomentar si tienes la imagen)
+% \titlegraphic{\includegraphics[height=1.5cm]{logo.png}}
+
+% --- Eliminar la barra de navegación (opcional) ---
+\setbeamertemplate{navigation symbols}{}
+
+% --- Índice al inicio de cada sección ---
+\AtBeginSection[]{
+  \begin{frame}
+    \frametitle{Contenido}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+% ============================================================================
+% INICIO DEL DOCUMENTO
+% ============================================================================
+\begin{document}
+
+% --- Portada ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Índice general ---
+\begin{frame}{Contenido}
+    \tableofcontents
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 1: INTRODUCCIÓN Y COMPONENTES
+% ============================================================================
+\section{Componentes de una Serie Temporal}
+
+\begin{frame}{¿Qué es una serie temporal?}
+    \begin{itemize}
+        \item Datos observados en secuencia temporal (diario, mensual, etc.).
+        \item Ejemplos: ventas diarias, tráfico web, indicadores económicos.
+        \item Objetivo: entender patrones y pronosticar valores futuros.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{block}{Componentes fundamentales}
+        \begin{description}
+            \item[Tendencia:] movimiento a largo plazo (creciente, decreciente, estable).
+            \item[Estacionalidad:] patrones regulares en períodos fijos (diario, semanal, anual).
+            \item[Ciclo:] fluctuaciones sin período fijo (asociadas a condiciones económicas).
+            \item[Ruido:] variaciones aleatorias no explicadas.
+        \end{description}
+    \end{block}
+    % Basado en Pregunta 1
+    % IMAGEN: Serie con tendencia y estacionalidad
+\end{frame}
+
+\begin{frame}{Descomposición de series}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Modelo aditivo}
+        \[
+        y_t = T_t + S_t + C_t + R_t
+        \]
+        Amplitud estacional constante.
+        \column{0.5\textwidth}
+        \textbf{Modelo multiplicativo}
+        \[
+        y_t = T_t \times S_t \times C_t \times R_t
+        \]
+        Amplitud estacional proporcional al nivel.
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item Método de descomposición: \textbf{STL} (Seasonal and Trend decomposition using Loess).
+        \item Ajuste estacional: eliminar la estacionalidad para analizar tendencia y ciclo.
+    \end{itemize}
+    % Basado en Pregunta 2
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 2: FEATURE ENGINEERING PARA SERIES
+% ============================================================================
+\section{Feature Engineering para Series Temporales}
+
+\begin{frame}{Creación de características supervisadas}
+    \begin{itemize}
+        \item Convertir el problema de series en aprendizaje supervisado generando predictores a partir de la historia.
+    \end{itemize}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Rezagos (lags)}
+        \begin{itemize}
+            \item $y_{t-1}, y_{t-2}, \dots, y_{t-L}$
+            \item Se seleccionan usando ACF/PACF.
+        \end{itemize}
+        \textbf{Ventanas móviles}
+        \begin{itemize}
+            \item Media móvil, desviación estándar, mínimo, máximo.
+            \item Capturan tendencia local y volatilidad.
+        \end{itemize}
+        \column{0.5\textwidth}
+        \textbf{Diferencias}
+        \begin{itemize}
+            \item $\Delta y_t = y_t - y_{t-1}$
+            \item Para hacer la serie estacionaria.
+        \end{itemize}
+        \textbf{Variables de calendario}
+        \begin{itemize}
+            \item Hora, día de semana, mes, año.
+            \item Festivos, fines de semana.
+        \end{itemize}
+    \end{columns}
+    % Basado en Pregunta 3
+\end{frame}
+
+\begin{frame}{Codificación de variables cíclicas}
+    \begin{problem}
+        Codificar hora como entero (0-23) no respeta la naturaleza circular (23 y 0 son cercanas).
+    \end{problem}
+    \begin{block}{Solución: transformación seno/coseno}
+        \[
+        \sin\left(\frac{2\pi \cdot \text{hora}}{24}\right),\quad \cos\left(\frac{2\pi \cdot \text{hora}}{24}\right)
+        \]
+        Se aplica también a día de semana (período 7), mes (período 12), etc.
+    \end{block}
+    % Basado en Pregunta 4
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 3: MODELOS CLÁSICOS: ARIMA Y SARIMA
+% ============================================================================
+\section{Modelos Clásicos: ARIMA y SARIMA}
+
+\begin{frame}{ARMA(p,q)}
+    \begin{block}{Ecuación}
+        \[
+        y_t = c + \phi_1 y_{t-1} + \cdots + \phi_p y_{t-p} + \varepsilon_t + \theta_1 \varepsilon_{t-1} + \cdots + \theta_q \varepsilon_{t-q}
+        \]
+        donde $\varepsilon_t$ es ruido blanco.
+    \end{block}
+    \begin{itemize}
+        \item AR(p): parte autorregresiva.
+        \item MA(q): parte de medias móviles.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{ARIMA(p,d,q)}
+    \begin{itemize}
+        \item Para series no estacionarias se aplican diferencias.
+        \item $d$: número de diferencias necesarias para lograr estacionariedad.
+        \item ARIMA(p,d,q) = ARMA(p,q) aplicado a la serie diferenciada $d$ veces.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{block}{Estacionariedad}
+        \begin{itemize}
+            \item Media y varianza constantes en el tiempo.
+            \item Se verifica con test de Dickey-Fuller (ADF).
+        \end{itemize}
+    \end{block}
+    % Basado en Pregunta 5
+\end{frame}
+
+\begin{frame}{Identificación de órdenes con ACF y PACF}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{ACF (autocorrelación)}
+        \begin{itemize}
+            \item Correlación con rezagos.
+            \item Para MA(q): corta después del rezago q.
+        \end{itemize}
+        \column{0.5\textwidth}
+        \textbf{PACF (autocorrelación parcial)}
+        \begin{itemize}
+            \item Correlación eliminando dependencias intermedias.
+            \item Para AR(p): corta después del rezago p.
+        \end{itemize}
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{exampleblock}{Ejemplo}
+        PACF significativa en rezago 1 y luego cero $\Rightarrow$ AR(1). \\
+        ACF significativa en rezago 1 y luego cero $\Rightarrow$ MA(1).
+    \end{exampleblock}
+    % Basado en Pregunta 6
+\end{frame}
+
+\begin{frame}{SARIMA: incorporando estacionalidad}
+    \begin{block}{Notación SARIMA(p,d,q)(P,D,Q)$_s$}
+        \begin{itemize}
+            \item $s$: período estacional (ej. 12 para mensual, 7 para diario).
+            \item $P, D, Q$: órdenes AR, diferencias, MA estacionales.
+        \end{itemize}
+    \end{block}
+    \begin{itemize}
+        \item Diferencias regulares ($d$) eliminan tendencia.
+        \item Diferencias estacionales ($D$) eliminan estacionalidad (ej. $y_t - y_{t-s}$).
+        \item Selección con criterios AIC, BIC.
+    \end{itemize}
+    % Basado en Pregunta 7
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 4: MODELOS DE MACHINE LEARNING
+% ============================================================================
+\section{Modelos de Machine Learning}
+
+\begin{frame}{XGBoost para series temporales}
+    \begin{itemize}
+        \item Requiere crear características (lags, ventanas, variables temporales).
+        \item Ventajas: captura no linealidades, múltiples predictores externos.
+        \item Desventajas: no extrapola tendencias fuera del rango de entrenamiento.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{block}{Características importantes}
+        \begin{itemize}
+            \item Lags de la variable objetivo.
+            \item Medias móviles y desviaciones.
+            \item Variables de calendario (día de semana, mes, festivos).
+            \item Variables exógenas (clima, promociones).
+        \end{itemize}
+    \end{block}
+    % Basado en Pregunta 8
+\end{frame}
+
+\begin{frame}{Prophet (Facebook)}
+    \begin{block}{Modelo aditivo}
+        \[
+        y(t) = g(t) + s(t) + h(t) + \varepsilon_t
+        \]
+        \begin{itemize}
+            \item $g(t)$: tendencia (lineal por tramos o logística).
+            \item $s(t)$: estacionalidad (series de Fourier).
+            \item $h(t)$: efectos de días festivos.
+        \end{itemize}
+    \end{block}
+    \begin{itemize}
+        \item Robusto a datos faltantes y outliers.
+        \item Fácil de usar, interpretable.
+        \item Permite incluir regresores externos (versión reciente).
+    \end{itemize}
+    % Basado en Pregunta 9
+\end{frame}
+
+\begin{frame}{Comparación de enfoques}
+    \begin{table}
+        \centering
+        \begin{tabular}{l|c|c|c}
+            \toprule
+            \textbf{Característica} & \textbf{ARIMA/SARIMA} & \textbf{XGBoost} & \textbf{Prophet} \\
+            \midrule
+            Variables exógenas & Limitado (ARIMAX) & Sí & Sí (regresores) \\
+            Estacionalidad & Explícita (SARIMA) & Variables dummy & Fourier \\
+            Extrapolación de tendencia & Sí & Limitada & Sí \\
+            Interpretabilidad & Media & Baja & Alta \\
+            Facilidad de uso & Media & Alta & Muy alta \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    % Basado en Pregunta 10
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 5: MÉTRICAS DE EVALUACIÓN
+% ============================================================================
+\section{Métricas de Evaluación}
+
+\begin{frame}{Métricas para pronósticos}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{MAE} (Mean Absolute Error)
+        \[
+        \frac{1}{n}\sum |y_t - \hat{y}_t|
+        \]
+        \textbf{RMSE} (Root Mean Squared Error)
+        \[
+        \sqrt{\frac{1}{n}\sum (y_t - \hat{y}_t)^2}
+        \]
+        \column{0.5\textwidth}
+        \textbf{MAPE} (Mean Absolute Percentage Error)
+        \[
+        \frac{100}{n}\sum \left|\frac{y_t - \hat{y}_t}{y_t}\right|
+        \]
+        \textbf{MASE} (Mean Absolute Scaled Error)
+        \[
+        \frac{\frac{1}{n}\sum |y_t - \hat{y}_t|}{\frac{1}{n-1}\sum |y_t - y_{t-1}|}
+        \]
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item MASE < 1: modelo supera al naive (pronóstico del día anterior).
+        \item MAPE tiene problemas con valores cercanos a cero.
+    \end{itemize}
+    % Basado en Preguntas 11 y 12
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 6: VALIDACIÓN EN SERIES TEMPORALES
+% ============================================================================
+\section{Validación en Series Temporales}
+
+\begin{frame}{Time Series Split}
+    \begin{alertblock}{¡No usar k-fold estándar!}
+        Mezcla datos futuros con pasados, causando data leakage.
+    \end{alertblock}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Expanding window}
+        \begin{itemize}
+            \item Entrenamiento creciente.
+            \item Validación fija.
+        \end{itemize}
+        \column{0.5\textwidth}
+        \textbf{Rolling window}
+        \begin{itemize}
+            \item Ventana de tamaño fijo se desliza.
+        \end{itemize}
+    \end{columns}
+    \vspace{0.3cm}
+    En scikit-learn: \texttt{TimeSeriesSplit}.
+    % Basado en Pregunta 13
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 7: CASO INTEGRADO: PRONÓSTICO DE VENTAS EN RETAIL
+% ============================================================================
+\section{Caso Integrado: Pronóstico de Ventas en Retail}
+
+\begin{frame}{Problema y datos}
+    \begin{itemize}
+        \item Cadena de supermercados: pronosticar ventas diarias por tienda/producto.
+        \item Datos: 5 años de ventas, precios, promociones, festivos, clima.
+        \item Horizonte: 7 días, actualización diaria.
+    \end{itemize}
+    % Basado en Pregunta 20
+\end{frame}
+
+\begin{frame}{Feature engineering específico}
+    \begin{enumerate}
+        \item Rezagos: ventas de los últimos 7, 14, 28 días.
+        \item Medias móviles: media de últimos 7 días, media del mismo día de la semana en últimas 4 semanas.
+        \item Variables de calendario: día de semana, mes, año, fin de semana, festivos.
+        \item Clima: temperatura, lluvia (y rezagos).
+        \item Promociones: precio actual, indicador de promoción, días desde inicio.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Comparación de modelos}
+    \begin{table}
+        \centering
+        \begin{tabular}{l|c|c|c}
+            \toprule
+            \textbf{Modelo} & \textbf{MAE} & \textbf{RMSE} & \textbf{MASE} \\
+            \midrule
+            Naive (día anterior) & 2450 & 3200 & 1.00 \\
+            SARIMA & 1850 & 2500 & 0.75 \\
+            XGBoost & 1420 & 1950 & 0.58 \\
+            Prophet & 1600 & 2100 & 0.65 \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    \begin{itemize}
+        \item XGBoost obtiene mejor desempeño, pero Prophet es más interpretable.
+        \item En producción se implementa XGBoost con reentrenamiento diario.
+    \end{itemize}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 8: IMPLEMENTACIÓN EN PYTHON
+% ============================================================================
+\section{Implementación en Python}
+
+\begin{frame}[fragile]{ARIMA con statsmodels}
+    \begin{lstlisting}
+import statsmodels.api as sm
+from statsmodels.tsa.arima.model import ARIMA
+
+model = ARIMA(series, order=(1,1,1), seasonal_order=(1,1,1,7))
+fitted = model.fit()
+forecast = fitted.forecast(steps=28)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{XGBoost con validación temporal}
+    \begin{lstlisting}
+import xgboost as xgb
+from sklearn.model_selection import TimeSeriesSplit
+
+tscv = TimeSeriesSplit(n_splits=5)
+for train_idx, val_idx in tscv.split(X):
+    X_train, X_val = X[train_idx], X[val_idx]
+    y_train, y_val = y[train_idx], y[val_idx]
+    model = xgb.XGBRegressor(n_estimators=100, learning_rate=0.1)
+    model.fit(X_train, y_train)
+    # evaluar...
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Prophet}
+    \begin{lstlisting}
+from prophet import Prophet
+import pandas as pd
+
+df = pd.DataFrame({'ds': fechas, 'y': ventas})
+model = Prophet(yearly_seasonality=True, weekly_seasonality=True)
+model.add_country_holidays(country_name='PE')
+model.fit(df)
+future = model.make_future_dataframe(periods=28)
+forecast = model.predict(future)
+    \end{lstlisting}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 9: CONEXIÓN Y RESUMEN
+% ============================================================================
+\section{Conexión y Resumen}
+
+\begin{frame}{Conexión con el resto del curso}
+    \begin{itemize}
+        \item Feature engineering para series usa transformaciones y agregaciones.
+        \item XGBoost (Sesión 7) se aplica aquí con características temporales.
+        \item Validación cruzada temporal (Sesión 8) es clave.
+        \item Métricas de regresión (MAE, RMSE) ya conocidas.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Lo que hemos aprendido}
+    \begin{exampleblock}{Conceptos clave}
+        \begin{itemize}
+            \item Componentes de series: tendencia, estacionalidad, ciclo, ruido.
+            \item Descomposición aditiva/multiplicativa, STL.
+            \item Feature engineering: lags, ventanas, variables cíclicas, calendario.
+            \item Modelos clásicos: ARIMA, SARIMA, identificación con ACF/PACF.
+            \item Machine learning: XGBoost, Prophet.
+            \item Métricas: MAE, RMSE, MAPE, MASE.
+            \item Validación temporal: TimeSeriesSplit.
+            \item Caso práctico: pronóstico de ventas en retail.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% --- Diapositiva final ---
+\begin{frame}
+    \centering
+    \Huge \textbf{¡Gracias!}
+
+\end{frame}
+
+\end{document}

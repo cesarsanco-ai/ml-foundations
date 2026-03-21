@@ -12,19 +12,18 @@ Construir, interpretar y comparar modelos basados en árboles de decisión y ens
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar PPT6-ML.pdf](../../Sesion06/slides/slides6-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Descargar slides6-ML.pdf](../material/Sesion06/slides/slides6-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../../Sesion06/cheatsheet/)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion06/cheatsheet/)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../../Sesion06/anexo/)
-
+* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion06/anexo/)
 ---
 
 ### 💻 Laboratorio
 
 *Nivel: Básico/Intermedio* ⭐⭐⭐
 
-* 📓 **Notebooks y Práctica:** [Acceder a la carpeta de práctica](../../Sesion06/practica/)
+* 📓 **Notebooks y Práctica:** [Acceder a la carpeta de práctica](../material/Sesion06/practica/)
 
 ---
 
