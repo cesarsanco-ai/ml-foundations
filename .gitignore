@@ -1,41 +1,10 @@
-# 1. Ignorar archivos temporales y del sistema (Siempre primero)
+# Ignorar sistema
 .DS_Store
 Thumbs.db
-*.log
-.ipynb_checkpoints/
+
+# Python / notebooks
 __pycache__/
+.ipynb_checkpoints/
 
-# 2. Ignorar TODO en la raíz por defecto
-/*
-
-# 3. EXCEPCIONES (Lo que SÍ queremos que suba)
-
-# Archivos base
-!/.gitignore
-!/README.md
-!/requirements.txt
-
-# Carpeta de Documentación (¡Fundamental para tu web!)
-!/docs/
-!/docs/**
-
-# Estructura de Sesiones (Permitir las carpetas)
-!/Sesion[1-9]/
-!/Sesion[1-9][0-9]/
-
-# Archivos específicos dentro de las Sesiones
-# Ignoramos todo dentro de cada Sesion primero...
-/Sesion*/*
-# ...y rescatamos solo lo que nos interesa:
-!/Sesion*/PPT*
-!/Sesion*/SOL*
-!/Sesion*/*.ipynb
-
-# Estructura de FUENTE/TEORIA
-!/FUENTE/
-!/FUENTE/TEORIA/
-!/FUENTE/TEORIA/**
-
-# 4. Permitir carpetas de recursos si las tienes
-!/data/
-!/static/
+# Ignorar recursos por sesión
+Sesion*/recursos/

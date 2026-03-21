@@ -1,0 +1,456 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries\color{blue}}{Semana \thesection}{1em}{}
+
+\title{\textbf{Curso de Machine Learning}\\ \large Syllabus de Notebooks por Semana}
+\author{Carlos César Sánchez Coronel}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introducción}
+Cada semana se trabajará con dos tipos de notebooks:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Notebook Conceptual (NB1):} Enfocado en la comprensión profunda. Se utilizan datos \textit{dummy} generados en el momento para operaciones matemáticas, visualización de ecuaciones, implementación de algoritmos desde cero (cuando sea pertinente) y experimentación con los parámetros de los modelos de scikit-learn. Aquí se exploran conceptos como complejidad computacional, efecto de hiperparámetros, representaciones gráficas de funciones de coste, etc.
+    \item \textbf{Notebook de Ejercicios (NB2):} Aplicación práctica sobre conjuntos de datos reales (de scikit-learn, Kaggle, UCI, etc.). Se plantean problemas concretos de regresión, clasificación, clustering, etc., donde el estudiante debe aplicar lo aprendido, evaluar métricas, comparar modelos y justificar decisiones.
+\end{itemize}
+
+\newpage
+
+\section{Herramientas y Fundamentos Matemáticos}
+\subsection*{Propósito}
+Familiarizar al estudiante con el entorno de trabajo (NumPy, Pandas, Matplotlib, Seaborn) y con las funciones matemáticas que aparecerán a lo largo del curso. Se busca que el alumno gane soltura en la manipulación de arrays, operaciones vectoriales y visualización, y que reconozca gráficamente las funciones clave de machine learning.
+
+\subsection*{Notebook Único (NB1) – Herramientas y Ecuaciones}
+\begin{itemize}
+    \item \textbf{Datos:} Datos sintéticos generados con NumPy (secuencias lineales, muestras aleatorias, etc.).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Repaso de NumPy: creación de arrays, indexado, operaciones elemento a elemento, broadcasting.
+        \item Cálculo de normas (L1, L2) y distancias (euclidiana, Manhattan) entre vectores.
+        \item Multiplicación de matrices y resolución de sistemas lineales sencillos.
+        \item Visualización con Matplotlib: curvas de funciones (lineal, cuadrática, exponencial, logarítmica, sigmoide, ReLU, tanh, etc.).
+        \item Representación de la función de pérdida MSE en 2D y 3D (variando coeficientes).
+        \briefitem Gráficas de distribuciones (histogramas, boxplots) con Seaborn sobre datos simulados.
+        \item Ejemplo práctico: generar datos con ruido y ajustar una recta "a ojo" variando pendiente e intercepto.
+    \end{enumerate}
+    \item \textbf{Conceptos matemáticos:} Álgebra lineal básica, cálculo de gradientes (nociones), funciones convexas.
+    \item \textbf{Herramientas:} NumPy, Matplotlib, Seaborn.
+\end{itemize}
+
+\section{Análisis Exploratorio y Feature Engineering}
+\subsection*{Propósito}
+Aprender a explorar, limpiar y transformar datos reales. Se introduce el concepto de pipeline y transformadores de scikit-learn, sentando las bases para los modelos.
+
+\subsection*{Notebook Conceptual (NB1) – Manipulación de Datos Dummy}
+\begin{itemize}
+    \item \textbf{Datos:} DataFrames creados con Pandas a partir de diccionarios, incluyendo valores nulos, outliers y variables categóricas.
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Generar un dataset dummy con variables numéricas, categóricas y nulos.
+        \item Aplicar estadísticas descriptivas y visualizaciones (histogramas, boxplots, countplots).
+        \item Detectar outliers usando el rango intercuartílico.
+        \item Imputar valores nulos con SimpleImputer (media, mediana, moda).
+        \item Codificar variables categóricas con OneHotEncoder y LabelEncoder.
+        \item Escalar variables con StandardScaler y MinMaxScaler.
+        \item Construir un pipeline con ColumnTransformer para preprocesar datos mixtos.
+    \end{enumerate}
+    \item \textbf{Conceptos:} Correlación de Pearson y Spearman, sesgo en variables, importancia de la escala.
+    \item \textbf{Herramientas:} Pandas, Seaborn, scikit-learn (preprocessing, pipeline).
+\end{itemize}
+
+\subsection*{Notebook de Ejercicios (NB2) – EDA sobre Dataset Real}
+\begin{itemize}
+    \item \textbf{Dataset:} "House Prices" (Kaggle) o "Titanic" (Kaggle).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Cargar datos y realizar un EDA completo: estadísticos, detección de nulos, análisis de correlaciones, visualizaciones multivariadas.
+        \item Crear nuevas características (feature engineering) como: superficie por habitación, interacciones, variables de tipo de cambio.
+        \item Aplicar transformaciones (log, Box-Cox) para normalizar distribuciones.
+        \item Construir un pipeline de preprocesamiento y guardarlo.
+    \end{enumerate}
+    \item \textbf{Entrega:} Notebook con el análisis y las transformaciones justificadas.
+\end{itemize}
+
+\section{Regresión Lineal y Regularización}
+\subsection*{Propósito}
+Comprender la regresión lineal desde sus fundamentos matemáticos, implementarla manualmente, y luego usar scikit-learn explorando el efecto de la regularización.
+
+\subsection*{Notebook Conceptual (NB1) – Experimentación con Datos Dummy}
+\begin{itemize}
+    \item \textbf{Datos:} Datos sintéticos univariados y multivariados con relación lineal más ruido gaussiano.
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Implementar la solución de la ecuación normal: $\hat{\beta} = (X^TX)^{-1}X^Ty$.
+        \item Calcular el error cuadrático medio (MSE) y visualizar la recta ajustada.
+        \item Derivar el gradiente del MSE y dar un paso de gradiente descendente manualmente.
+        \item Usar LinearRegression de scikit-learn y comparar coeficientes.
+        \item Añadir regularización Ridge (L2) y Lasso (L1): variar $\alpha$ y observar cómo cambian los coeficientes (mostrar la trayectoria de regularización).
+        \item Visualizar la función de coste con y sin regularización en 2D (para dos coeficientes).
+        \item Medir tiempos de ejecución de la ecuación normal vs gradiente descendente para diferentes tamaños de datos.
+    \end{enumerate}
+    \item \textbf{Conceptos:} Normal equations, complejidad $O(n^3)$, bias-variance tradeoff, interpretación de coeficientes.
+    \item \textbf{Herramientas:} NumPy, scikit-learn (LinearRegression, Ridge, Lasso), timeit.
+\end{itemize}
+
+\subsection*{Notebook de Ejercicios (NB2) – Predicción de Precios de Viviendas}
+\begin{itemize}
+    \item \textbf{Dataset:} California Housing (sklearn) o Ames Housing (Kaggle).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Dividir en train/test.
+        \item Entrenar regresión lineal y evaluar con RMSE, MAE, $R^2$.
+        \item Probar Ridge, Lasso y ElasticNet con validación cruzada (GridSearchCV).
+        \item Analizar los coeficientes resultantes y discutir la selección de características (en Lasso).
+        \item Comparar el rendimiento de los modelos regularizados vs el lineal simple.
+    \end{enumerate}
+\end{itemize}
+
+\section{Regresión Logística y Métricas de Clasificación}
+\subsection*{Propósito}
+Entender la regresión logística como modelo de clasificación, la función sigmoide, la log-loss, y aprender a evaluar clasificadores con métricas adecuadas.
+
+\subsection*{Notebook Conceptual (NB1) – Datos Dummy y Experimentación}
+\begin{itemize}
+    \item \textbf{Datos:} Datos sintéticos para clasificación binaria (dos clases separables linealmente y no linealmente).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Visualizar la función sigmoide y su derivada.
+        \item Implementar la log-loss y su gradiente; comprobar con un ejemplo pequeño.
+        \item Entrenar LogisticRegression de scikit-learn variando C (inverso de regularización) y observar el cambio en la frontera de decisión.
+        \item Visualizar la matriz de confusión y calcular precisión, recall, F1-score manualmente y con sklearn.
+        \item Dibujar la curva ROC y calcular AUC para diferentes umbrales.
+        \item Experimentar con clases desbalanceadas: usar class\_weight y comparar con sobremuestreo (SMOTE con imbalanced-learn).
+    \end{enumerate}
+    \item \textbf{Conceptos:} Odds, log-odds, entropía cruzada, sensibilidad/especificidad, AUC.
+    \item \textbf{Herramientas:} sklearn.linear\_model, sklearn.metrics, imbalanced-learn.
+\end{itemize}
+
+\subsection*{Notebook de Ejercicios (NB2) – Detección de Spam}
+\begin{itemize}
+    \item \textbf{Dataset:} SMS Spam Collection (UCI) o correos de spam.
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Convertir texto a características (CountVectorizer, TF-IDF).
+        \item Entrenar regresión logística y evaluar con precisión, recall, F1.
+        \item Analizar la matriz de confusión y decidir qué métrica es más importante para el negocio.
+        \item Probar diferentes valores de C y umbral de decisión.
+        \item (Opcional) Aplicar SMOTE y ver impacto.
+    \end{enumerate}
+\end{itemize}
+
+\section{KNN, Naive Bayes y SVM}
+\subsection*{Propósito}
+Conocer tres algoritmos clásicos de clasificación, sus fundamentos y cuándo aplicarlos. En el notebook conceptual se profundiza en la geometría del espacio de características y el efecto de hiperparámetros.
+
+\subsection*{Notebook Conceptual (NB1) – Experimentación}
+\begin{itemize}
+    \item \textbf{Datos:} Datos sintéticos en 2D (lunas, círculos, linealmente separables).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item \textbf{KNN:} Implementar manualmente la distancia euclidiana y el voto mayoritario. Probar distintos k y visualizar la frontera de decisión. Mostrar cómo cambia el tiempo de inferencia con el tamaño del dataset.
+        \item \textbf{Naive Bayes:} Para GaussianNB, visualizar las distribuciones condicionales estimadas (campanas de Gauss) sobre los datos. Probar con datos donde la independencia condicional se viola y observar el efecto.
+        \item \textbf{SVM:} Visualizar el margen máximo y los vectores soporte con kernel lineal. Probar kernel RBF y variar C y gamma, viendo cómo se modifica la frontera. Comparar con SVM lineal.
+        \item Medir complejidad computacional: tiempo de entrenamiento y predicción para diferentes tamaños.
+    \end{enumerate}
+    \item \textbf{Conceptos:} Distancias, teorema de Bayes, margen máximo, kernel trick.
+    \item \textbf{Herramientas:} sklearn.neighbors, sklearn.naive\_bayes, sklearn.svm, matplotlib.
+\end{itemize}
+
+\subsection*{Notebook de Ejercicios (NB2) – Clasificación de Dígitos y Textos}
+\begin{itemize}
+    \item \textbf{Datasets:} Digits (sklearn) para KNN y SVM; 20 Newsgroups para Naive Bayes.
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Clasificar dígitos con KNN: encontrar el mejor k con validación cruzada.
+        \item Clasificar textos con MultinomialNB y comparar accuracy.
+        \item Usar SVM con kernel RBF en dígitos y optimizar C y gamma con GridSearchCV.
+        \item Comparar tiempos de inferencia entre KNN y SVM.
+    \end{enumerate}
+\end{itemize}
+
+\section{Árboles de Decisión y Random Forest}
+\subsection*{Propósito}
+Entender cómo funcionan los árboles de decisión, su interpretabilidad y el ensamble bagging (Random Forest) para reducir varianza.
+
+\subsection*{Notebook Conceptual (NB1) – Construcción Manual y Visualización}
+\begin{itemize}
+    \item \textbf{Datos:} Datos sintéticos en 2D (por ejemplo, dos variables, tres clases).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Implementar un árbol de decisión recursivo (con profundidad limitada) usando el índice de Gini.
+        \item Visualizar las particiones del espacio y el árbol resultante.
+        \item Usar DecisionTreeClassifier de sklearn y variar max\_depth, min\_samples\_split; observar sobreajuste.
+        \item Visualizar la importancia de características (Gini importance) en un dataset dummy con variables ruidosas.
+        \item Construir un Random Forest con pocos árboles y visualizar las fronteras de cada árbol y la combinada.
+        \item Comparar el error OOB (Out-of-Bag) con validación cruzada.
+    \end{enumerate}
+    \item \textbf{Conceptos:} Entropía, ganancia de información, bagging, muestreo bootstrap.
+    \item \textbf{Herramientas:} sklearn.tree, sklearn.ensemble, graphviz (opcional).
+\end{itemize}
+
+\subsection*{Notebook de Ejercicios (NB2) – Riesgo Crediticio}
+\begin{itemize}
+    \item \textbf{Dataset:} German Credit o Give Me Some Credit (Kaggle).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Entrenar un árbol de decisión y visualizarlo (interpretabilidad).
+        \item Entrenar Random Forest y comparar con el árbol simple en términos de AUC.
+        \item Analizar la importancia de características y discutir implicaciones de negocio.
+        \item Ajustar hiperparámetros (n\_estimators, max\_features) con GridSearchCV.
+    \end{enumerate}
+\end{itemize}
+
+\section{Gradient Boosting (XGBoost, LightGBM)}
+\subsection*{Propósito}
+Introducir el concepto de boosting secuencial y las implementaciones modernas eficientes, mostrando cómo ajustan errores residuales.
+
+\subsection*{Notebook Conceptual (NB1) – Boosting desde Cero (sencillo) y Experimentación}
+\begin{itemize}
+    \item \textbf{Datos:} Datos sintéticos de regresión (una variable) para visualizar la mejora iterativa.
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Implementar un gradient boosting muy simple: en cada iteración ajustar un árbol pequeño a los residuos y actualizar la predicción.
+        \item Visualizar cómo las predicciones se acercan al valor real a medida que se añaden árboles.
+        \item Usar XGBoost o LightGBM con datos dummy y variar learning\_rate, n\_estimators, max\_depth; mostrar curvas de entrenamiento y validación.
+        \item Observar early stopping en acción.
+        \item Comparar tiempos de entrenamiento entre XGBoost y Random Forest para un dataset mediano.
+    \end{enumerate}
+    \item \textbf{Conceptos:} Boosting, shrinkage, regularización en XGBoost.
+    \item \textbf{Herramientas:} xgboost, lightgbm, sklearn.metrics.
+\end{itemize}
+
+\subsection*{Notebook de Ejercicios (NB2) – Predicción de Clics o Competencia Kaggle}
+\begin{itemize}
+    \item \textbf{Dataset:} Avazu (submuestra) o Porto Seguro (Kaggle).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Preprocesar datos (codificación, manejo de nulos).
+        \item Entrenar XGBoost y LightGBM con validación cruzada.
+        \item Optimizar hiperparámetros (learning\_rate, max\_depth, subsample, etc.) usando RandomizedSearchCV.
+        \item Evaluar con log-loss o AUC y comparar con modelos anteriores (Random Forest, etc.).
+    \end{enumerate}
+\end{itemize}
+
+\section{Evaluación y Validación de Modelos}
+\subsection*{Propósito}
+Consolidar las técnicas de evaluación, diagnóstico de overfitting y selección de hiperparámetros. Se trabaja con modelos ya conocidos.
+
+\subsection*{Notebook Conceptual (NB1) – Curvas de Aprendizaje y Validación Cruzada}
+\begin{itemize}
+    \item \textbf{Datos:} Datos sintéticos con ruido (por ejemplo, función seno con ruido).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Ajustar modelos de distinta complejidad (lineal, polinómico, árbol profundo) y dibujar curvas de aprendizaje (tamaño de entrenamiento vs error) para detectar high bias o high variance.
+        \item Implementar manualmente k-fold cross-validation y comparar con cross\_val\_score.
+        \item Visualizar el bias-variance tradeoff con modelos polinómicos de diferente grado.
+        \item Usar GridSearchCV y RandomizedSearchCV en un modelo (por ejemplo, Random Forest) y comparar resultados.
+        \item Analizar la importancia de la estratificación en clasificación.
+    \end{enumerate}
+    \item \textbf{Conceptos:} Underfitting, overfitting, curvas de aprendizaje, sesgo-varianza.
+    \item \textbf{Herramientas:} sklearn.model\_selection (learning\_curve, validation\_curve, GridSearchCV).
+\end{itemize}
+
+\subsection*{Notebook de Ejercicios (NB2) – Comparación de Modelos en un Problema Real}
+\begin{itemize}
+    \item \textbf{Dataset:} Churn prediction (Telco) o cualquier dataset de clasificación.
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Evaluar varios modelos (regresión logística, SVM, Random Forest, XGBoost) con validación cruzada.
+        \item Dibujar curvas ROC y comparar AUC.
+        \item Seleccionar los mejores hiperparámetros para cada uno.
+        \item Elegir el modelo final justificando con métricas y consideraciones de negocio.
+    \end{enumerate}
+\end{itemize}
+
+\section{Aprendizaje No Supervisado: Clustering y PCA}
+\subsection*{Propósito}
+Introducir técnicas para datos no etiquetados: reducción de dimensionalidad (PCA) y clustering (K-Means, DBSCAN).
+
+\subsection*{Notebook Conceptual (NB1) – Visualización de Componentes y Clusters}
+\begin{itemize}
+    \item \textbf{Datos:} Datos sintéticos en 2D y 3D (por ejemplo, blobs, círculos concéntricos, moons).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item \textbf{PCA:} Calcular autovalores y autovectores de la matriz de covarianza de los datos (centrados). Proyectar los datos y visualizar la varianza explicada.
+        \item \textbf{K-Means:} Implementar el algoritmo paso a paso (inicialización aleatoria, asignación, actualización) y visualizar la evolución de centroides. Mostrar el método del codo (inercia vs k) y el silhouette score.
+        \item \textbf{DBSCAN:} Visualizar el efecto de eps y minPts en la formación de clusters y detección de ruido. Comparar con K-Means en datos con formas no esféricas.
+    \end{enumerate}
+    \item \textbf{Conceptos:} Varianza, componentes principales, inercia, densidad.
+    \item \textbf{Herramientas:} sklearn.decomposition, sklearn.cluster, sklearn.metrics.silhouette\_score.
+\end{itemize}
+
+\subsection*{Notebook de Ejercicios (NB2) – Segmentación de Clientes}
+\begin{itemize}
+    \item \textbf{Dataset:} Mall Customers (Kaggle) o datos de compras.
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Aplicar K-Means para segmentar clientes; elegir k óptimo.
+        \item Visualizar los segmentos en 2D usando PCA.
+        \item Interpretar los perfiles de cada cluster (media de cada variable).
+        \item Probar DBSCAN y comparar resultados (posibles outliers).
+    \end{enumerate}
+\end{itemize}
+
+\section{Series de Tiempo}
+\subsection*{Propósito}
+Modelar datos temporales, descomponer series y aplicar tanto modelos clásicos (ARIMA) como ML con características temporales.
+
+\subsection*{Notebook Conceptual (NB1) – Descomposición y Features Temporales}
+\begin{itemize}
+    \item \textbf{Datos:} Serie temporal sintética (tendencia + estacionalidad + ruido) o serie real pequeña (como pasajeros de avión).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Descomposición aditiva y multiplicativa con statsmodels.
+        \item Creación de lags y ventanas móviles usando shift y rolling.
+        \item Visualizar autocorrelación (ACF, PACF).
+        \item Ajustar un modelo ARIMA manualmente y evaluar.
+        \item Convertir la serie en problema supervisado: crear X con lags y usar regresión (por ejemplo, Random Forest) para predecir.
+    \end{enumerate}
+    \item \textbf{Conceptos:} Estacionariedad, diferenciación, ACF/PACF.
+    \item \textbf{Herramientas:} pandas, statsmodels.tsa, sklearn.
+\end{itemize}
+
+\subsection*{Notebook de Ejercicios (NB2) – Predicción de Ventas Diarias}
+\begin{itemize}
+    \item \textbf{Dataset:} Store Sales (Kaggle) o datos de demanda.
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Análisis exploratorio de la serie.
+        \item Feature engineering temporal (día de semana, mes, festivos, lags).
+        \item Entrenar XGBoost con características temporales y evaluar con MAPE.
+        \item Comparar con un modelo ARIMA/SARIMA.
+    \end{enumerate}
+\end{itemize}
+
+\section{Modelos Complementarios (Regresión Robusta, SVR, Clustering Jerárquico)}
+\subsection*{Propósito}
+Cubrir técnicas adicionales que pueden ser útiles en situaciones específicas, como outliers o estructuras jerárquicas.
+
+\subsection*{Notebook Conceptual (NB1) – Comparación en Datos con Outliers}
+\begin{itemize}
+    \item \textbf{Datos:} Datos sintéticos con outliers añadidos.
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Comparar regresión lineal, HuberRegressor y RANSAC en presencia de outliers. Visualizar las rectas ajustadas.
+        \item Usar SVR con kernel RBF y comparar con regresión lineal en datos no lineales.
+        \item Clustering jerárquico: generar dendrograma y comparar cortes con K-Means.
+    \end{enumerate}
+    \item \textbf{Conceptos:} Robustez, funciones de pérdida robustas, dendrogramas.
+    \item \textbf{Herramientas:} sklearn.linear\_model.HuberRegressor, RANSACRegressor, sklearn.svm.SVR, sklearn.cluster.AgglomerativeClustering, scipy.cluster.hierarchy.
+\end{itemize}
+
+\subsection*{Notebook de Ejercicios (NB2) – Aplicación en Datos Atípicos}
+\begin{itemize}
+    \item \textbf{Dataset:} Precios de viviendas con outliers (o dataset de calidad de vinos con datos ruidosos).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Detectar outliers y aplicar regresión robusta.
+        \item Evaluar la mejora en RMSE frente a regresión lineal.
+        \item (Opcional) Usar clustering jerárquico para segmentar vinos.
+    \end{enumerate}
+\end{itemize}
+
+\section{Sistemas de Recomendación}
+\subsection*{Propósito}
+Implementar filtrado colaborativo y factorización matricial, entender el problema de cold start y evaluar con métricas top-k.
+
+\subsection*{Notebook Conceptual (NB1) – Factorización Matricial Manual}
+\begin{itemize}
+    \item \textbf{Datos:} Matriz usuario-ítem pequeña (generada con valores aleatorios o ejemplo clásico de ratings).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Implementar SVD (descomposición en valores singulares) con numpy.linalg.svd y reconstruir la matriz.
+        \item Calcular predicciones de ratings y comparar con original.
+        \item Usar la librería `surprise` para cargar un dataset pequeño y probar SVD.
+        \item Variar el número de factores latentes y observar el error de reconstrucción.
+        \item Calcular precisión@k y recall@k manualmente para un usuario.
+    \end{enumerate}
+    \item \textbf{Conceptos:} Factorización matricial, sesgo usuario/ítem, métricas top-k.
+    \item \textbf{Herramientas:} numpy, surprise (opcional), sklearn.metrics (para RMSE).
+\end{itemize}
+
+\subsection*{Notebook de Ejercicios (NB2) – Recomendación de Películas (MovieLens)}
+\begin{itemize}
+    \item \textbf{Dataset:} MovieLens 100k.
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Explorar los datos (distribución de ratings, usuarios, películas).
+        \item Implementar filtrado colaborativo basado en ítems (usando similitud de coseno) y hacer recomendaciones para un usuario.
+        \item Entrenar SVD con surprise y evaluar con RMSE en validación cruzada.
+        \item Simular un escenario de cold start: recomendar a un nuevo usuario usando popularidad o metadata.
+    \end{enumerate}
+\end{itemize}
+
+\section{Interpretabilidad de Modelos (SHAP, LIME, PDP)}
+\subsection*{Propósito}
+Aprender a explicar modelos complejos, tanto global como localmente, cumpliendo con necesidades de negocio y regulatorias.
+
+\subsection*{Notebook Conceptual (NB1) – Explicaciones con Modelos Sencillos}
+\begin{itemize}
+    \item \textbf{Datos:} Dataset de Boston (o California) con Random Forest entrenado.
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Calcular importancia de características (permutation importance) y comparar con la importancia del árbol.
+        \item Dibujar Partial Dependence Plots (PDP) para una o dos variables.
+        \item Usar SHAP: calcular valores SHAP para una predicción local y resumen global (summary plot, dependence plot).
+        \item Usar LIME para explicar una instancia específica.
+        \item Comparar las explicaciones de SHAP y LIME.
+    \end{enumerate}
+    \item \textbf{Conceptos:} Shapley values, explicaciones locales vs globales.
+    \item \textbf{Herramientas:} sklearn.inspection, shap, lime.
+\end{itemize}
+
+\subsection*{Notebook de Ejercicios (NB2) – Explicación de un Modelo de Crédito}
+\begin{itemize}
+    \item \textbf{Dataset:} German Credit o Lending Club.
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Entrenar un modelo (XGBoost o Random Forest) para aprobación de crédito.
+        \item Generar explicaciones globales (importancia SHAP) y locales para solicitudes rechazadas/aprobadas.
+        \item Redactar un breve informe para un cliente simulando la explicación de por qué se le negó el crédito.
+    \end{enumerate}
+\end{itemize}
+
+\section{Despliegue de Modelos (MLOps)}
+\subsection*{Propósito}
+Llevar un modelo a producción: serialización, creación de API, contenerización básica y monitoreo.
+
+\subsection*{Notebook Conceptual (NB1) – De Modelo a API Local}
+\begin{itemize}
+    \item \textbf{Datos:} Modelo entrenado previamente (por ejemplo, regresión logística con iris).
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Serializar el modelo con pickle y joblib.
+        \item Crear un script simple con Flask que cargue el modelo y exponga un endpoint /predict.
+        \item Probar el endpoint con requests desde el mismo notebook.
+        \item Escribir un Dockerfile básico para contenerizar la API.
+        \item (Opcional) Introducir MLflow para registrar experimentos.
+    \end{enumerate}
+    \item \textbf{Conceptos:} Serialización, API REST, contenedores, registro de modelos.
+    \item \textbf{Herramientas:} pickle, joblib, Flask, requests, Docker (conceptos), MLflow.
+\end{itemize}
+
+\subsection*{Notebook de Ejercicios (NB2) – Despliegue y Monitoreo Simulado}
+\begin{itemize}
+    \item \textbf{Dataset:} Modelo de recomendación o clasificación de la semana anterior.
+    \item \textbf{Actividades:}
+    \begin{enumerate}
+        \item Crear una API para el modelo y probarla localmente.
+        \item Simular un drift de datos (modificar ligeramente las entradas) y usar evidently para detectar el cambio.
+        \item Discutir estrategias de actualización del modelo.
+    \end{enumerate}
+\end{itemize}
+
+\end{document}

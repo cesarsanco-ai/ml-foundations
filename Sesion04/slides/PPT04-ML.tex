@@ -1,0 +1,505 @@
+% --- CORRECCIÓN IMPORTANTE EN LA PRIMERA LÍNEA ---
+% Agregamos "xcolor=table" para que funcione \rowcolor sin errores
+\documentclass[aspectratio=169, 10pt, xcolor=table]{beamer}
+
+% --- Configuración del Tema (estilo profesional como el ejemplo) ---
+\usetheme{Madrid}
+\usecolortheme{dolphin}
+
+% --- Paquetes necesarios ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+
+% --- Ruta de Imágenes (crea la carpeta "imagenes" y coloca ahí tus archivos) ---
+\graphicspath{{./imagenes/}}
+
+% --- Estilo para código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Pie de página personalizado ---
+\makeatletter
+
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}Sesión 4
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}Machine Learning \hfill \insertframenumber/\inserttotalframenumber \hspace*{0.3cm}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\makeatother
+
+% --- Datos de la portada ---
+\title[SESIÓN 4]{\textbf{Sesión 4}}
+\subtitle{Clasificación I: Regresión Logística y Métricas}
+\author[Prof. C. Sánchez]{Carlos César Sánchez Coronel}
+\institute{\textbf{MACHINE LEARNING}}
+\date{}
+
+% Logo opcional (descomentar si tienes la imagen)
+% \titlegraphic{\includegraphics[height=1.5cm]{logo.png}}
+
+% --- Eliminar la barra de navegación (opcional) ---
+\setbeamertemplate{navigation symbols}{}
+
+% --- Índice al inicio de cada sección ---
+\AtBeginSection[]{
+  \begin{frame}
+    \frametitle{Contenido}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+% ============================================================================
+% INICIO DEL DOCUMENTO
+% ============================================================================
+\begin{document}
+
+% --- Portada ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Índice general ---
+\begin{frame}{Contenido}
+    \tableofcontents
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 1: INTRODUCCIÓN A LA CLASIFICACIÓN
+% ============================================================================
+\section{Introducción a la Clasificación}
+
+\begin{frame}{¿Por qué no regresión lineal para clasificación?}
+    \begin{itemize}
+        \item Predicciones fuera del rango $[0,1]$ (no interpretables como probabilidad).
+        \item Errores no homocedásticos (varianza variable).
+        \item Relación no lineal; la sigmoide es más adecuada.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{exampleblock}{Conclusión}
+        La regresión logística modela directamente la probabilidad de pertenencia a una clase.
+    \end{exampleblock}
+    % Basado en Pregunta 1
+    % IMAGEN: Comparación de regresión lineal vs logística
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 2: REGRESIÓN LOGÍSTICA
+% ============================================================================
+\section{Regresión Logística}
+
+\begin{frame}{Función Sigmoide}
+    \begin{block}{Definición}
+        \[
+        \sigma(z) = \frac{1}{1 + e^{-z}}, \quad z \in \mathbb{R}
+        \]
+        \begin{itemize}
+            \item $\sigma(z) \to 0$ cuando $z \to -\infty$
+            \item $\sigma(z) \to 1$ cuando $z \to +\infty$
+            \item $\sigma(0) = 0.5$
+            \item Monótona creciente y diferenciable.
+        \end{itemize}
+    \end{block}
+    % Basado en Pregunta 2
+    % IMAGEN: Gráfica de la sigmoide
+\end{frame}
+
+\begin{frame}{Modelo Probabilístico}
+    \begin{block}{Probabilidad de clase positiva}
+        \[
+        P(y=1|\mathbf{x}) = \sigma(\beta_0 + \beta_1 x_1 + \dots + \beta_p x_p) = \frac{1}{1 + e^{-(\beta_0 + \boldsymbol{\beta}^T \mathbf{x})}}
+        \]
+        $P(y=0|\mathbf{x}) = 1 - P(y=1|\mathbf{x})$.
+    \end{block}
+    \begin{exampleblock}{Interpretación con log-odds}
+        \[
+        \text{logit}(p) = \ln\left(\frac{p}{1-p}\right) = \beta_0 + \boldsymbol{\beta}^T \mathbf{x}
+        \]
+        Cada $\beta_j$ mide el cambio en log-odds por unidad de $x_j$.
+    \end{exampleblock}
+    % Basado en Pregunta 3
+\end{frame}
+
+\begin{frame}{Interpretación de Coeficientes: Odds Ratio}
+    \begin{itemize}
+        \item \textbf{Odds ratio:} $e^{\beta_j}$.
+        \item Si $e^{\beta_j} > 1$, la variable aumenta las odds de la clase positiva.
+        \item Si $e^{\beta_j} < 1$, la variable disminuye las odds.
+    \end{itemize}
+    \begin{exampleblock}{Ejemplo}
+        En un modelo de riesgo crediticio, $\beta_{\text{ingresos}} = -0.05$ implica $e^{-0.05} \approx 0.951$, es decir, por cada unidad de ingreso adicional, las odds de default se reducen en un $4.9\%$.
+    \end{exampleblock}
+    % Basado en Pregunta 3
+\end{frame}
+
+\begin{frame}{Función de Pérdida: Log-Loss (Entropía Cruzada)}
+    \begin{block}{Para una muestra}
+        \[
+        \mathcal{L}(\hat{p}, y) = -[y \log(\hat{p}) + (1-y) \log(1-\hat{p})]
+        \]
+    \end{block}
+    \begin{block}{Para todo el conjunto}
+        \[
+        J(\boldsymbol{\beta}) = -\frac{1}{n} \sum_{i=1}^n \left[ y_i \log(\hat{p}_i) + (1-y_i) \log(1-\hat{p}_i) \right]
+        \]
+        \begin{itemize}
+            \item Convexa → mínimo global único.
+            \item Diferenciable → apta para gradiente descendente.
+        \end{itemize}
+    \end{block}
+    % Basado en Pregunta 4
+\end{frame}
+
+\begin{frame}{Optimización: Gradiente Descendente}
+    \begin{block}{Gradiente de la log-loss}
+        \[
+        \nabla J(\boldsymbol{\beta}) = \frac{1}{n} \sum_{i=1}^n (\hat{p}_i - y_i) \mathbf{x}_i
+        \]
+        Misma forma que en regresión lineal, pero con $\hat{p}_i$ definido por la sigmoide.
+    \end{block}
+    \begin{itemize}
+        \item Actualización: $\boldsymbol{\beta} := \boldsymbol{\beta} - \alpha \nabla J(\boldsymbol{\beta})$.
+        \item Se pueden usar variantes: SGD, mini-batch.
+    \end{itemize}
+    % Basado en Pregunta 5
+\end{frame}
+
+\begin{frame}{Límite de Decisión}
+    \begin{block}{Definición}
+        Puntos donde $P(y=1|\mathbf{x}) = 0.5$, es decir:
+        \[
+        \beta_0 + \boldsymbol{\beta}^T \mathbf{x} = 0
+        \]
+        \begin{itemize}
+            \item En 2D: una recta.
+            \item En 3D: un plano.
+            \item En dimensiones superiores: un hiperplano.
+        \end{itemize}
+    \end{block}
+    \begin{exampleblock}
+        La regresión logística es un \textbf{clasificador lineal}.
+    \end{exampleblock}
+    % Basado en Pregunta 2
+    % IMAGEN: Límite de decisión lineal en 2D
+\end{frame}
+
+\begin{frame}{Regularización en Regresión Logística}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \begin{block}{Ridge (L2)}
+            $J_{\text{ridge}} = J + \lambda \sum \beta_j^2$
+            \begin{itemize}
+                \item Encoge coeficientes, pero no los anula.
+            \end{itemize}
+        \end{block}
+        \column{0.5\textwidth}
+        \begin{block}{Lasso (L1)}
+            $J_{\text{lasso}} = J + \lambda \sum |\beta_j|$
+            \begin{itemize}
+                \item Puede fijar coeficientes a cero → selección de variables.
+            \end{itemize}
+        \end{block}
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item Útil con muchas variables para evitar sobreajuste.
+        \item Elastic Net combina ambas.
+    \end{itemize}
+    % Basado en Pregunta 6
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 3: EVALUACIÓN DE CLASIFICADORES
+% ============================================================================
+\section{Evaluación de Clasificadores Binarios}
+
+\begin{frame}{Matriz de Confusión}
+    \begin{table}
+        \centering
+        \begin{tabular}{c|c|c}
+            & \textbf{Real Positivo} & \textbf{Real Negativo} \\
+            \hline
+            \textbf{Pred. Positivo} & VP (Verdaderos Positivos) & FP (Falsos Positivos) \\
+            \textbf{Pred. Negativo} & FN (Falsos Negativos) & VN (Verdaderos Negativos) \\
+        \end{tabular}
+    \end{table}
+    \begin{itemize}
+        \item VP: spam correcto; FP: legítimo marcado como spam.
+        \item FN: spam no detectado; VN: legítimo correcto.
+    \end{itemize}
+    % Basado en Pregunta 7
+    % IMAGEN: Matriz de confusión con colores
+\end{frame}
+
+\begin{frame}{Métricas Derivadas}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \begin{block}{Exactitud (Accuracy)}
+            $\frac{VP+VN}{VP+VN+FP+FN}$
+        \end{block}
+        \begin{block}{Precisión (Precision)}
+            $\frac{VP}{VP+FP}$
+        \end{block}
+        \column{0.5\textwidth}
+        \begin{block}{Recall (Sensibilidad)}
+            $\frac{VP}{VP+FN}$
+        \end{block}
+        \begin{block}{F1-Score}
+            $2 \cdot \frac{\text{Prec} \cdot \text{Recall}}{\text{Prec} + \text{Recall}}$
+        \end{block}
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{exampleblock}{Ejemplo fraude (Pregunta 8)}
+        VP=15, FP=5, FN=5, VN=75 → Precision=0.75, Recall=0.75, F1=0.75.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Comparación de Métricas (Ejemplo Médico)}
+    Dos modelos para enfermedad rara (prevalencia 1\%):
+    \begin{table}
+        \centering
+        \begin{tabular}{l|c|c|c}
+            \textbf{Modelo} & \textbf{Precisión} & \textbf{Recall} & \textbf{F1} \\
+            \hline
+            A & 0.444 & 0.80 & 0.57 \\
+            B & 0.091 & 1.00 & 0.17 \\
+        \end{tabular}
+    \end{table}
+    \begin{itemize}
+        \item Si FN es muy costoso → elegir B (recall 1.0).
+        \item Si FP es muy costoso → elegir A (mejor precisión).
+    \end{itemize}
+    % Basado en Pregunta 9
+\end{frame}
+
+\begin{frame}{Curva ROC y AUC}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \begin{block}{Curva ROC}
+            \begin{itemize}
+                \item Eje X: Tasa de Falsos Positivos (FPR)
+                \item Eje Y: Tasa de Verdaderos Positivos (TPR = Recall)
+                \item Cada punto = un umbral diferente.
+            \end{itemize}
+        \end{block}
+        \column{0.5\textwidth}
+        \begin{block}{AUC (Area Under Curve)}
+            \begin{itemize}
+                \item AUC = 0.5: clasificador aleatorio.
+                \item AUC = 1.0: clasificador perfecto.
+                \item Probabilidad de que un positivo tenga score mayor que un negativo.
+            \end{itemize}
+        \end{block}
+    \end{columns}
+    % Basado en Pregunta 10
+    % IMAGEN: Curva ROC con AUC
+\end{frame}
+
+\begin{frame}{Cuándo usar cada métrica}
+    \begin{itemize}
+        \item \textbf{Accuracy:} clases balanceadas, costos simétricos.
+        \item \textbf{Precision:} minimizar falsos positivos (ej. spam, diagnósticos graves).
+        \item \textbf{Recall:} minimizar falsos negativos (ej. fraude, screening).
+        \item \textbf{F1:} balance entre precisión y recall, clases desbalanceadas.
+        \item \textbf{AUC-ROC:} comparación global de modelos independiente del umbral.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{alertblock}{¡Cuidado!}
+        En gran desbalance, AUC-ROC puede ser optimista; usar curva Precision-Recall (PR-AUC).
+    \end{alertblock}
+    % Basado en Pregunta 11
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 4: CLASES DESBALANCEADAS
+% ============================================================================
+\section{Manejo de Clases Desbalanceadas}
+
+\begin{frame}{Técnicas de Muestreo}
+    \begin{columns}[t]
+        \column{0.33\textwidth}
+        \begin{block}{Undersampling}
+            Reducir clase mayoritaria.
+            \begin{itemize}
+                \item Ventaja: reduce datos.
+                \item Desventaja: pierde información.
+            \end{itemize}
+        \end{block}
+        \column{0.33\textwidth}
+        \begin{block}{Oversampling}
+            Duplicar clase minoritaria.
+            \begin{itemize}
+                \item Puede causar sobreajuste.
+            \end{itemize}
+        \end{block}
+        \column{0.33\textwidth}
+        \begin{block}{SMOTE}
+            Genera muestras sintéticas interpolando.
+            \[
+            \mathbf{x}_{\text{nuevo}} = \mathbf{x}_i + \lambda(\mathbf{x}_j - \mathbf{x}_i)
+            \]
+            Más robusto que oversampling simple.
+        \end{block}
+    \end{columns}
+    % Basado en Pregunta 12
+\end{frame}
+
+\begin{frame}{Técnicas a Nivel de Algoritmo}
+    \begin{block}{Pesos en la función de pérdida}
+        \[
+        J_{\text{pond}} = -\frac{1}{n} \sum \left[ w_1 y \log(\hat{p}) + w_0 (1-y) \log(1-\hat{p}) \right]
+        \]
+        Pesos típicamente inversamente proporcionales a la frecuencia.
+    \end{block}
+    \begin{block}{Ajuste del umbral}
+        \begin{itemize}
+            \item Disminuir umbral para favorecer recall (detectar más positivos).
+            \item Aumentar umbral para favorecer precisión.
+        \end{itemize}
+    \end{block}
+    % Basado en Pregunta 13 y 14
+\end{frame}
+
+\begin{frame}{Evaluación en Problemas Desbalanceados}
+    \begin{itemize}
+        \item Evitar accuracy.
+        \item Usar matriz de confusión, precisión, recall, F1 (especialmente para la clase minoritaria).
+        \item Curva Precision-Recall y su área (PR-AUC) más informativa que ROC-AUC.
+    \end{itemize}
+    % Basado en Pregunta 11
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 5: CASO DE ESTUDIO INTEGRADO
+% ============================================================================
+\section{Caso de Estudio: Diagnóstico Médico}
+
+\begin{frame}{Contexto y Preprocesamiento}
+    \begin{itemize}
+        \item \textbf{Datos:} pacientes con características clínicas (edad, presión, glucosa...).
+        \item \textbf{Objetivo:} detectar enfermedad rara (prevalencia 10\%).
+        \item \textbf{Preprocesamiento:}
+        \begin{itemize}
+            \item Estandarización de variables numéricas.
+            \item Imputación de nulos.
+            \item División estratificada (70/30).
+        \end{itemize}
+    \end{itemize}
+    % Basado en Pregunta 19
+\end{frame}
+
+\begin{frame}{Modelado y Evaluación}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Estrategias probadas:}
+        \begin{enumerate}
+            \item Sin tratamiento del desbalance.
+            \item Con pesos de clase.
+            \item Con SMOTE.
+        \end{enumerate}
+        \column{0.5\textwidth}
+        \textbf{Métricas en prueba:}
+        \begin{itemize}
+            \item Matriz de confusión.
+            \item Precisión, recall, F1 para clase positiva.
+            \item AUC-ROC y AUC-PR.
+        \end{itemize}
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{exampleblock}{Resultados esperados}
+        Sin tratamiento: bajo recall. Con pesos o SMOTE: mejora recall (a costa de precisión). La elección depende del costo de FN vs FP.
+    \end{exampleblock}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 6: CASO AVANZADO: DETECCIÓN DE FRAUDE (Pregunta 20)
+% ============================================================================
+\section{Caso Avanzado: Detección de Fraude}
+
+\begin{frame}{Diseño de un sistema antifraude}
+    \begin{itemize}
+        \item 10M transacciones/día, fraude 0.1\%.
+        \item Requisitos: interpretabilidad (regulatorio), velocidad (ms), buena detección.
+    \end{itemize}
+    \begin{block}{Feature engineering específico}
+        \begin{enumerate}
+            \item Log del monto.
+            \item Hora del día (codificación cíclica seno/coseno).
+            \item Agregadas por usuario: frecuencia últimas 24h, monto promedio, desviación.
+            \item Ratios: monto actual vs promedio del usuario.
+            \item Puntuación de anomalía (Isolation Forest) como predictor.
+        \end{enumerate}
+    \end{block}
+    % Basado en Pregunta 20
+\end{frame}
+
+\begin{frame}{Manejo del desbalance extremo}
+    \begin{itemize}
+        \item \textbf{Nivel datos:} SMOTE (cuidado con ruido) o undersampling.
+        \item \textbf{Nivel algoritmo:} pesos de clase y ajuste de umbral.
+        \item \textbf{Métricas:} recall, precisión, F1, curva PR.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{block}{Monitoreo en producción}
+        \begin{itemize}
+            \item Técnicas: recall $\leftrightarrow$ fraude no detectado; precisión $\leftrightarrow$ transacciones legítimas bloqueadas.
+            \item Impacto de falsos positivos: cliente insatisfecho, costo de atención.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 7: RESUMEN Y CONEXIÓN
+% ============================================================================
+\section{Resumen y Conexión}
+
+\begin{frame}{Lo que hemos aprendido}
+    \begin{exampleblock}{Conceptos clave}
+        \begin{itemize}
+            \item Regresión logística: modelo probabilístico, sigmoide, log-loss, límite lineal.
+            \item Interpretación mediante odds ratios.
+            \item Evaluación: matriz de confusión, precisión, recall, F1, ROC/AUC.
+            \item Manejo de clases desbalanceadas: muestreo (SMOTE), pesos, umbral.
+            \item Aplicación a casos reales (spam, fraude, diagnóstico médico).
+        \end{itemize}
+    \end{exampleblock}
+
+\end{frame}
+
+% --- Diapositiva final ---
+\begin{frame}
+    \centering
+    \Huge \textbf{¡Gracias!}
+
+\end{frame}
+
+\end{document}

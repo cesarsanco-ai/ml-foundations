@@ -1,0 +1,560 @@
+% --- CORRECCIÓN IMPORTANTE EN LA PRIMERA LÍNEA ---
+% Agregamos "xcolor=table" para que funcione \rowcolor sin errores
+\documentclass[aspectratio=169, 10pt, xcolor=table]{beamer}
+
+% --- Configuración del Tema (estilo profesional como el ejemplo) ---
+\usetheme{Madrid}
+\usecolortheme{dolphin}
+
+% --- Paquetes necesarios ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+
+% --- Ruta de Imágenes (crea la carpeta "imagenes" y coloca ahí tus archivos) ---
+\graphicspath{{./imagenes/}}
+
+% --- Estilo para código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Pie de página personalizado ---
+\makeatletter
+
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}Sesión 6
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}Machine Learning \hfill \insertframenumber/\inserttotalframenumber \hspace*{0.3cm}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\makeatother
+
+% --- Datos de la portada ---
+\title[SESIÓN 6]{\textbf{Sesión 6}}
+\subtitle{Árboles de Decisión y Random Forest}
+\author[Prof. C. Sánchez]{Carlos César Sánchez Coronel}
+\institute{\textbf{MACHINE LEARNING}}
+\date{}
+
+% Logo opcional (descomentar si tienes la imagen)
+% \titlegraphic{\includegraphics[height=1.5cm]{logo.png}}
+
+% --- Eliminar la barra de navegación (opcional) ---
+\setbeamertemplate{navigation symbols}{}
+
+% --- Índice al inicio de cada sección ---
+\AtBeginSection[]{
+  \begin{frame}
+    \frametitle{Contenido}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+% ============================================================================
+% INICIO DEL DOCUMENTO
+% ============================================================================
+\begin{document}
+
+% --- Portada ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Índice general ---
+\begin{frame}{Contenido}
+    \tableofcontents
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 1: INTRODUCCIÓN
+% ============================================================================
+\section{Introducción}
+
+\begin{frame}{Modelos basados en reglas}
+    \begin{itemize}
+        \item Los árboles de decisión son modelos predictivos que representan reglas en forma jerárquica.
+        \item A diferencia de los modelos lineales (que suponen una relación paramétrica global), los árboles \textbf{particionan el espacio} en regiones más simples.
+        \item \textbf{Ventaja principal}: interpretabilidad.
+        \item \textbf{Problema}: un solo árbol tiene alta varianza (sobreajuste) y es inestable.
+        \item \textbf{Solución}: combinar múltiples árboles con \textbf{Random Forest} (ensamble basado en bagging).
+    \end{itemize}
+    % Basado en introducción de la teoría
+    % IMAGEN: Comparación de fronteras lineales vs árbol
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 2: ÁRBOLES DE DECISIÓN
+% ============================================================================
+\section{Árboles de Decisión}
+
+\begin{frame}{Estructura de un árbol}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \begin{itemize}
+            \item \textbf{Nodo raíz}: contiene todos los datos.
+            \item \textbf{Nodos internos}: evalúan una característica y bifurcan.
+            \item \textbf{Ramas}: resultados de la evaluación (sí/no, umbral).
+            \item \textbf{Nodos hoja}: contienen la predicción final (clase o valor).
+            \item \textbf{Profundidad}: número de niveles desde la raíz a una hoja.
+        \end{itemize}
+        \column{0.5\textwidth}
+        % IMAGEN: Diagrama de árbol simple
+        \begin{center}
+            \begin{tikzpicture}[
+                every node/.style={draw, rectangle, rounded corners, align=center, font=\tiny},
+                level distance=1cm,
+                sibling distance=2.5cm
+            ]
+                \node {¿Edad $>$ 50?}
+                    child { node {¿Ingreso $>$ 50k?}
+                        child { node {Clase A} }
+                        child { node {Clase B} }
+                    }
+                    child { node {Clase C} };
+            \end{tikzpicture}
+        \end{center}
+    \end{columns}
+    % Basado en Pregunta 1
+\end{frame}
+
+\begin{frame}{Criterios de división: Clasificación}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Índice de Gini}
+        \[
+        G = 1 - \sum_{k=1}^{K} p_k^2
+        \]
+        \begin{itemize}
+            \item Mide la probabilidad de clasificar erróneamente un elemento si se etiqueta al azar según la distribución del nodo.
+            \item $G=0$: nodo puro.
+        \end{itemize}
+        \column{0.5\textwidth}
+        \textbf{Entropía}
+        \[
+        H = -\sum_{k=1}^{K} p_k \log_2 p_k
+        \]
+        \begin{itemize}
+            \item Mide el desorden o incertidumbre.
+            \item $H=0$: nodo puro; máxima en distribución uniforme.
+        \end{itemize}
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{exampleblock}{Ejemplo (60\% A, 40\% B)}
+        Gini = $1 - (0.6^2 + 0.4^2) = 0.48$ \\
+        Entropía = $-(0.6\log_2 0.6 + 0.4\log_2 0.4) \approx 0.971$
+    \end{exampleblock}
+    % Basado en Pregunta 2
+\end{frame}
+
+\begin{frame}{Ganancia de información}
+    \begin{block}{Definición}
+        \[
+        IG(D, a) = H(D) - \sum_{v \in Valores(a)} \frac{|D_v|}{|D|} H(D_v)
+        \]
+        Mide la reducción de entropía al dividir según el atributo $a$.
+    \end{block}
+    \begin{exampleblock}{Ejemplo (Pregunta 3)}
+        Nodo padre con $H=0.9$. \\
+        División A: hijos con $H=0.3$ (50) y $0.4$ (50) $\Rightarrow IG = 0.9 - (0.5\cdot0.3 + 0.5\cdot0.4) = 0.55$. \\
+        División B: hijos con $H=0.1$ (80) y $0.6$ (20) $\Rightarrow IG = 0.9 - (0.8\cdot0.1 + 0.2\cdot0.6) = 0.70$. \\
+        Se elige la división B.
+    \end{exampleblock}
+    % Basado en Pregunta 3
+\end{frame}
+
+\begin{frame}{Árboles de regresión}
+    \begin{itemize}
+        \item Variable objetivo continua.
+        \item Criterio de división: minimizar la suma de cuadrados residual (RSS):
+        \[
+        RSS = \sum_{i \in R_1} (y_i - \bar{y}_{R_1})^2 + \sum_{i \in R_2} (y_i - \bar{y}_{R_2})^2
+        \]
+        \item Predicción en cada hoja: $\bar{y}$ de las observaciones en esa hoja.
+        \item Comparación con regresión lineal: más flexible, pero no extrapola.
+    \end{itemize}
+    % Basado en Pregunta 4
+    % IMAGEN: Árbol de regresión para precios de viviendas
+\end{frame}
+
+\begin{frame}{Sobreajuste y poda}
+    \begin{alertblock}{Problema}
+        Árboles sin restricciones crecen hasta hojas puras → sobreajuste (100\% en entrenamiento, pobre en prueba).
+    \end{alertblock}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Poda por complejidad-costo}
+        \[
+        RSS_{\text{podado}} = RSS + \alpha |T|
+        \]
+        donde $|T|$ = número de hojas, $\alpha$ penaliza la complejidad.
+        \column{0.5\textwidth}
+        \textbf{Hiperparámetros de parada}
+        \begin{itemize}
+            \item \texttt{max\_depth}
+            \item \texttt{min\_samples\_split}
+            \item \texttt{min\_samples\_leaf}
+        \end{itemize}
+    \end{columns}
+    % Basado en Pregunta 5
+\end{frame}
+
+\begin{frame}{Ventajas y desventajas de los árboles}
+    \begin{table}
+        \centering
+        \begin{tabular}{p{4.5cm}|p{4.5cm}}
+            \toprule
+            \textbf{Ventajas} & \textbf{Desventajas} \\
+            \midrule
+            Interpretables y visualizables & Alta varianza (inestables) \\
+            No requieren escalado & Propensos al sobreajuste \\
+            Manejan mixtura de variables & Pueden ser sesgados con clases desbalanceadas \\
+            Robustos a outliers & En regresión, menos precisos que otros modelos \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    % Basado en teoría y Pregunta 6
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 3: RANDOM FOREST
+% ============================================================================
+\section{Random Forest}
+
+\begin{frame}{Intuición: combinar múltiples árboles}
+    \begin{itemize}
+        \item Un solo árbol tiene alta varianza.
+        \item Si promediamos muchos árboles \textbf{no correlacionados}, la varianza se reduce drásticamente sin aumentar el sesgo.
+        \item Random Forest construye una colección de árboles con dos fuentes de aleatoriedad:
+        \begin{enumerate}
+            \item Muestras bootstrap (bagging).
+            \item Selección aleatoria de características en cada división.
+        \end{enumerate}
+    \end{itemize}
+    % Basado en Pregunta 7
+    % IMAGEN: Esquema de bagging
+\end{frame}
+
+\begin{frame}{Bootstrap aggregating (Bagging)}
+    \begin{block}{Procedimiento}
+        Para $b = 1,\dots,B$:
+        \begin{enumerate}
+            \item Generar una muestra bootstrap (con reemplazo) del mismo tamaño que el original.
+            \item Entrenar un árbol profundo (sin podar) en esa muestra.
+        \end{enumerate}
+        Predicción final:
+        \begin{itemize}
+            \item Clasificación: voto mayoritario.
+            \item Regresión: promedio.
+        \end{itemize}
+    \end{block}
+    \begin{itemize}
+        \item Aprox. 63.2\% de las observaciones originales aparecen en cada muestra.
+        \item El 36.8\% restante se llama \textbf{out-of-bag (OOB)}.
+    \end{itemize}
+    % Basado en Pregunta 7
+\end{frame}
+
+\begin{frame}{Aleatoriedad adicional: selección de características}
+    \begin{itemize}
+        \item En cada división de cada árbol, solo se considera un subconjunto aleatorio de características (\texttt{max\_features}).
+        \item Esto reduce la correlación entre árboles, ya que evita que todos elijan las mismas variables fuertes.
+        \item Valores típicos:
+        \begin{itemize}
+            \item Clasificación: $\sqrt{p}$ (raíz cuadrada del total de características).
+            \item Regresión: $p/3$ (un tercio).
+        \end{itemize}
+    \end{itemize}
+    % Basado en Pregunta 8
+\end{frame}
+
+\begin{frame}{Error Out-of-Bag (OOB)}
+    \begin{block}{Definición}
+        Para cada observación $i$, se predice usando solo los árboles donde $i$ no fue incluida en la muestra bootstrap. El error OOB es el error promedio en esas predicciones.
+    \end{block}
+    \begin{itemize}
+        \item Proporciona una estimación del error de prueba \textbf{sin necesidad de validación cruzada}.
+        \item Comparable a validación cruzada leave-one-out cuando $B$ es grande.
+        \item Precaución: puede ser optimista si hay dependencias (ej. series temporales).
+    \end{itemize}
+    % Basado en Pregunta 9
+\end{frame}
+
+\begin{frame}{Hiperparámetros principales}
+    \begin{table}
+        \centering
+        \begin{tabular}{l|l}
+            \toprule
+            \textbf{Hiperparámetro} & \textbf{Qué controla} \\
+            \midrule
+            \texttt{n\_estimators} & Número de árboles (a mayor, más estable) \\
+            \texttt{max\_features} & Características por división \\
+            \texttt{max\_depth} & Profundidad máxima de cada árbol \\
+            \texttt{min\_samples\_split} & Mínimo de muestras para dividir un nodo \\
+            \texttt{min\_samples\_leaf} & Mínimo de muestras en una hoja \\
+            \texttt{class\_weight} & Peso de clases (para desbalance) \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    % Basado en Pregunta 10
+\end{frame}
+
+\begin{frame}{Importancia de características}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Por impureza (MDI)}
+        \begin{itemize}
+            \item Suma la reducción de impureza (Gini o entropía) aportada por cada variable en todas las divisiones, promediada sobre todos los árboles.
+            \item Sesgo hacia variables numéricas o con muchos valores.
+        \end{itemize}
+        \column{0.5\textwidth}
+        \textbf{Por permutación (MDA)}
+        \begin{itemize}
+            \item Se permuta aleatoriamente la variable en las muestras OOB y se mide el aumento del error.
+            \item Más fiable, especialmente con variables correlacionadas.
+        \end{itemize}
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{alertblock}{Importancia negativa}
+        Si al permutar una variable el error disminuye, significa que esa variable no es importante y posiblemente añade ruido.
+    \end{alertblock}
+    % Basado en Pregunta 11
+\end{frame}
+
+\begin{frame}{Ventajas y desventajas de Random Forest}
+    \begin{table}
+        \centering
+        \begin{tabular}{p{4.5cm}|p{4.5cm}}
+            \toprule
+            \textbf{Ventajas} & \textbf{Desventajas} \\
+            \midrule
+            Menor sobreajuste que un solo árbol & Mayor costo computacional \\
+            Muy preciso en clasificación/regresión & Pérdida de interpretabilidad global \\
+            Maneja alta dimensionalidad & Lento en predicción con muchos árboles \\
+            Estima error OOB internamente & No extrapola \\
+            Importancia de variables & \\
+            Robusto a outliers y faltantes (con imputación) & \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    % Basado en teoría
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 4: COMPARACIÓN DE MÉTRICAS
+% ============================================================================
+\section{Comparación de Métricas}
+
+\begin{frame}{Clasificación: precisión, recall, F1, AUC}
+    \begin{itemize}
+        \item En problemas desbalanceados (ej. fraude 1\%), la \textbf{exactitud (accuracy)} es engañosa.
+        \item Métricas clave:
+        \begin{itemize}
+            \item \textbf{Recall}: $\frac{VP}{VP+FN}$ (minimizar falsos negativos).
+            \item \textbf{Precisión}: $\frac{VP}{VP+FP}$ (minimizar falsos positivos).
+            \item \textbf{F1-score}: media armónica de ambas.
+            \item \textbf{AUC-ROC}: capacidad discriminativa global.
+        \end{itemize}
+    \end{itemize}
+    % Basado en Pregunta 12
+\end{frame}
+
+\begin{frame}{Regresión: RMSE vs MAE}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{MAE} = $\frac{1}{n}\sum |y_i - \hat{y}_i|$
+        \begin{itemize}
+            \item Robusto a outliers.
+            \item Todos los errores pesan igual.
+        \end{itemize}
+        \column{0.5\textwidth}
+        \textbf{RMSE} = $\sqrt{\frac{1}{n}\sum (y_i - \hat{y}_i)^2}$
+        \begin{itemize}
+            \item Penaliza más los errores grandes.
+            \item Sensible a outliers.
+        \end{itemize}
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{exampleblock}{Ejemplo (Pregunta 13)}
+        Errores A: [5,5,5,100] → MAE=28.75, RMSE≈50.19 \\
+        Errores B: [20,20,20,20] → MAE=20, RMSE=20 \\
+        Si los errores grandes son costosos, elegir B.
+    \end{exampleblock}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 5: CASOS DE USO
+% ============================================================================
+\section{Casos de Uso}
+
+\begin{frame}{Detección de fraudes (clases desbalanceadas)}
+    \begin{itemize}
+        \item \textbf{Datos}: transacciones, fraude 0.1\%.
+        \item \textbf{Random Forest} con \texttt{class\_weight='balanced'} o SMOTE.
+        \item \textbf{Métricas prioritarias}: recall y precisión.
+        \item \textbf{Ajuste}: umbral de decisión para equilibrar costos.
+    \end{itemize}
+    % Basado en Pregunta 12 y 20
+\end{frame}
+
+\begin{frame}{Análisis de riesgo crediticio}
+    \begin{itemize}
+        \item \textbf{Objetivo}: predecir impago.
+        \item \textbf{Random Forest} proporciona importancia de variables (historial crediticio, ingresos).
+        \item Se pueden visualizar árboles individuales para explicar decisiones a auditores.
+    \end{itemize}
+    % Basado en Pregunta 11
+\end{frame}
+
+\begin{frame}{Predicción de precios de viviendas (regresión)}
+    \begin{itemize}
+        \item \textbf{Datos}: área, habitaciones, antigüedad, ubicación, etc.
+        \item \textbf{Árbol de regresión}: interpretable pero menos preciso.
+        \item \textbf{Random Forest Regressor}: mejora precisión, importancia de características.
+        \item \textbf{Limitación}: no extrapola a precios muy altos (fuera del rango de entrenamiento).
+    \end{itemize}
+    % Basado en Pregunta 4 y 17
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 6: IMPLEMENTACIÓN EN SCIKIT-LEARN
+% ============================================================================
+\section{Implementación en scikit-learn}
+
+\begin{frame}[fragile]{Árbol de decisión}
+    \begin{lstlisting}
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+import matplotlib.pyplot as plt
+
+clf = DecisionTreeClassifier(max_depth=5, min_samples_split=10,
+                             criterion='gini')
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
+
+# Visualización
+plt.figure(figsize=(20,10))
+plot_tree(clf, filled=True, feature_names=feature_names,
+          class_names=class_names)
+plt.show()
+
+# Importancia de características
+importances = clf.feature_importances_
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Random Forest}
+    \begin{lstlisting}
+from sklearn.ensemble import RandomForestClassifier
+
+rf = RandomForestClassifier(n_estimators=100, max_features='sqrt',
+                            oob_score=True, class_weight='balanced',
+                            random_state=42)
+rf.fit(X_train, y_train)
+print(f"OOB Score: {rf.oob_score_}")
+
+# Importancia por impureza
+importances = rf.feature_importances_
+
+# Importancia por permutación (más fiable)
+from sklearn.inspection import permutation_importance
+perm_importance = permutation_importance(rf, X_test, y_test,
+                                         n_repeats=10)
+    \end{lstlisting}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 7: CASO AVANZADO: DETECCIÓN DE FRAUDE (Pregunta 20)
+% ============================================================================
+\section{Caso Avanzado: Detección de Fraude}
+
+\begin{frame}{Diseño de un sistema antifraude con Random Forest}
+    \begin{itemize}
+        \item Millones de transacciones/día, fraude 0.1\%.
+        \item Requisitos: rapidez en inferencia, interpretabilidad (para analistas).
+    \end{itemize}
+    \begin{block}{Feature engineering}
+        \begin{enumerate}
+            \item Log del monto.
+            \item Hora del día (codificación cíclica seno/coseno).
+            \item Agregadas por usuario: frecuencia últimas 24h, monto promedio, desviación.
+            \item Distancia geográfica y tiempo desde última transacción.
+            \item Puntuación de anomalía (Isolation Forest) como predictor.
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Manejo del desbalance y evaluación}
+    \begin{itemize}
+        \item \textbf{Técnicas}: pesos de clase (\texttt{class\_weight='balanced'}), ajuste de umbral, SMOTE.
+        \item \textbf{Métricas}: recall (prioritario), precisión, F1, curva PR.
+        \item \textbf{Validación}: usar \texttt{StratifiedKFold} para mantener proporción de clases.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{block}{Interpretabilidad}
+        \begin{itemize}
+            \item Importancia por permutación para explicar variables globales.
+            \item SHAP para explicar predicciones individuales a analistas.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Monitoreo en producción}
+    \begin{itemize}
+        \item \textbf{Métricas de negocio}: recall $\leftrightarrow$ fraude no detectado (pérdidas), precisión $\leftrightarrow$ transacciones legítimas bloqueadas (insatisfacción).
+        \item \textbf{Error OOB} mensual para estimar rendimiento sin validación separada.
+        \item \textbf{Detectar drift} en distribuciones de características (PSI, KS).
+    \end{itemize}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 8: CONCLUSIÓN
+% ============================================================================
+\section{Conclusión}
+
+\begin{frame}{Lo que hemos aprendido}
+    \begin{exampleblock}{Conceptos clave}
+        \begin{itemize}
+            \item \textbf{Árboles de decisión}: estructura, criterios Gini/entropía, regresión, sobreajuste, poda.
+            \item \textbf{Random Forest}: bagging, aleatoriedad en características, error OOB, importancia de variables.
+            \item \textbf{Comparación de métricas}: RMSE/MAE en regresión, precisión/recall/F1 en clasificación desbalanceada.
+            \item \textbf{Casos de uso}: fraude, riesgo crediticio, predicción de precios.
+        \end{itemize}
+    \end{exampleblock}
+
+\end{frame}
+
+% --- Diapositiva final ---
+\begin{frame}
+    \centering
+    \Huge \textbf{¡Gracias!}
+
+\end{frame}
+
+\end{document}

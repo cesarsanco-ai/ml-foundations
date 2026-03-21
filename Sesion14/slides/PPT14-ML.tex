@@ -1,0 +1,632 @@
+% --- CORRECCIÓN IMPORTANTE EN LA PRIMERA LÍNEA ---
+% Agregamos "xcolor=table" para que funcione \rowcolor sin errores
+\documentclass[aspectratio=169, 10pt, xcolor=table]{beamer}
+
+% --- Configuración del Tema (estilo profesional como el ejemplo) ---
+\usetheme{Madrid}
+\usecolortheme{dolphin}
+
+% --- Paquetes necesarios ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+
+% --- Ruta de Imágenes (crea la carpeta "imagenes" y coloca ahí tus archivos) ---
+\graphicspath{{./imagenes/}}
+
+% --- Estilo para código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Pie de página personalizado ---
+\makeatletter
+
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}Sesión 14
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}Machine Learning \hfill \insertframenumber/\inserttotalframenumber \hspace*{0.3cm}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\makeatother
+
+% --- Datos de la portada ---
+\title[SESIÓN 14]{\textbf{Sesión 14}}
+\subtitle{Despliegue de Modelos (MLOps): \\ De Jupyter Notebook a producción}
+\author[Prof. C. Sánchez]{Carlos César Sánchez Coronel}
+\institute{\textbf{MACHINE LEARNING}}
+\date{}
+
+% Logo opcional (descomentar si tienes la imagen)
+% \titlegraphic{\includegraphics[height=1.5cm]{logo.png}}
+
+% --- Eliminar la barra de navegación (opcional) ---
+\setbeamertemplate{navigation symbols}{}
+
+% --- Índice al inicio de cada sección ---
+\AtBeginSection[]{
+  \begin{frame}
+    \frametitle{Contenido}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+% ============================================================================
+% INICIO DEL DOCUMENTO
+% ============================================================================
+\begin{document}
+
+% --- Portada ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Índice general ---
+\begin{frame}{Contenido}
+    \tableofcontents
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 1: INTRODUCCIÓN A MLOps
+% ============================================================================
+\section{Introducción a MLOps}
+
+\begin{frame}{El último kilómetro del machine learning}
+    \begin{itemize}
+        \item Construir un modelo en Jupyter es solo el 10\% del trabajo.
+        \item El 90\% restante es llevarlo a producción y mantenerlo.
+        \item \textbf{MLOps}: disciplina que combina ML, ingeniería de software y DevOps.
+        \item Objetivos: disponibilidad, escalabilidad, reproducibilidad, monitoreo continuo.
+    \end{itemize}
+    % Basado en introducción
+    % IMAGEN: Ciclo de vida MLOps
+\end{frame}
+
+\begin{frame}{Entrenamiento vs Inferencia}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Entrenamiento}
+        \begin{itemize}
+            \item Offline, por lotes.
+            \item Puede ser lento (horas/días).
+            \item Grandes volúmenes de datos.
+            \item Poco frecuente.
+        \end{itemize}
+        \column{0.5\textwidth}
+        \textbf{Inferencia}
+        \begin{itemize}
+            \item Online (tiempo real) o batch.
+            \item Baja latencia (online).
+            \item Alta concurrencia.
+            \item Continua.
+        \end{itemize}
+    \end{columns}
+    \vspace{0.3cm}
+    La arquitectura debe separar ambos pipelines.
+    % Basado en Pregunta 1
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 2: SERIALIZACIÓN DE MODELOS
+% ============================================================================
+\section{Serialización de Modelos}
+
+\begin{frame}{Formatos de serialización}
+    \begin{columns}[t]
+        \column{0.33\textwidth}
+        \textbf{Pickle}
+        \begin{itemize}
+            \item Estándar de Python.
+            \item Inseguro, problemas de compatibilidad.
+        \end{itemize}
+        \column{0.33\textwidth}
+        \textbf{Joblib}
+        \begin{itemize}
+            \item Optimizado para arrays NumPy.
+            \item Recomendado para scikit-learn.
+        \end{itemize}
+        \column{0.33\textwidth}
+        \textbf{ONNX}
+        \begin{itemize}
+            \item Formato abierto e interoperable.
+            \item Permite optimizaciones de inferencia.
+        \end{itemize}
+    \end{columns}
+    \vspace{0.3cm}
+    \textbf{MLflow}: plataforma para gestionar modelos, con registro y versionado.
+    % Basado en Preguntas 2 y 3
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplos de serialización}
+    \begin{lstlisting}
+import pickle
+with open('modelo.pkl', 'wb') as f:
+    pickle.dump(model, f)
+
+import joblib
+joblib.dump(model, 'modelo.joblib')
+model = joblib.load('modelo.joblib')
+
+# ONNX (skl2onnx)
+from skl2onnx import convert_sklearn
+from skl2onnx.common.data_types import FloatTensorType
+initial_type = [('float_input', FloatTensorType([None, X.shape[1]]))]
+onx = convert_sklearn(model, initial_types=initial_type)
+with open("model.onnx", "wb") as f:
+    f.write(onx.SerializeToString())
+    \end{lstlisting}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 3: CREACIÓN DE APIs CON FLASK Y FASTAPI
+% ============================================================================
+\section{Creación de APIs con Flask y FastAPI}
+
+\begin{frame}{Flask vs FastAPI}
+    \begin{table}
+        \centering
+        \begin{tabular}{l|c|c}
+            \toprule
+            \textbf{Característica} & \textbf{Flask} & \textbf{FastAPI} \\
+            \midrule
+            Rendimiento & Bajo & Alto (asíncrono) \\
+            Documentación automática & No & Sí (Swagger, ReDoc) \\
+            Validación de datos & Con extensiones & Integrada (Pydantic) \\
+            Soporte asíncrono & Limitado & Nativo \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    % Basado en Pregunta 5
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplo con Flask}
+    \begin{lstlisting}
+from flask import Flask, request, jsonify
+import joblib
+
+app = Flask(__name__)
+model = joblib.load('modelo.joblib')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.get_json()
+    features = data['features']
+    pred = model.predict([features])
+    return jsonify({'prediction': pred.tolist()})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplo con FastAPI}
+    \begin{lstlisting}
+from fastapi import FastAPI
+from pydantic import BaseModel
+import joblib
+
+app = FastAPI()
+model = joblib.load('modelo.joblib')
+
+class Item(BaseModel):
+    features: list
+
+@app.post('/predict')
+def predict(item: Item):
+    pred = model.predict([item.features])
+    return {'prediction': pred.tolist()}
+    \end{lstlisting}
+    \begin{itemize}
+        \item Documentación interactiva en \texttt{/docs}.
+        \item Validación automática con Pydantic.
+    \end{itemize}
+    % Basado en Preguntas 5 y 6
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 4: CONTENERIZACIÓN CON DOCKER
+% ============================================================================
+\section{Contenerización con Docker}
+
+\begin{frame}{¿Por qué Docker?}
+    \begin{itemize}
+        \item Elimina el problema de ``funciona en mi máquina''.
+        \item Empaqueta la aplicación con todas sus dependencias.
+        \item Misma ejecución en cualquier entorno.
+    \end{itemize}
+    % Basado en Pregunta 7
+\end{frame}
+
+\begin{frame}[fragile]{Dockerfile para una API de modelo}
+    \begin{lstlisting}
+FROM python:3.9-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY model.joblib .
+COPY app.py .
+
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]
+    \end{lstlisting}
+    \begin{itemize}
+        \item Construir: \texttt{docker build -t modelo-api .}
+        \item Ejecutar: \texttt{docker run -p 80:80 modelo-api}
+    \end{itemize}
+    % Basado en Pregunta 7
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 5: VERSIONAMIENTO DE MODELOS Y DATOS
+% ============================================================================
+\section{Versionamiento de Modelos y Datos}
+
+\begin{frame}{MLflow para seguimiento de experimentos}
+    \begin{block}{Componentes principales}
+        \begin{itemize}
+            \item \textbf{Tracking}: registro de parámetros, métricas, artefactos.
+            \item \textbf{Projects}: empaquetado de código.
+            \item \textbf{Models}: formato estándar para modelos.
+            \item \textbf{Model Registry}: almacén centralizado con versionado y transiciones (staging, production).
+        \end{itemize}
+    \end{block}
+    % Basado en Pregunta 3
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplo con MLflow}
+    \begin{lstlisting}
+import mlflow
+
+with mlflow.start_run():
+    mlflow.log_param("n_estimators", 100)
+    mlflow.log_metric("auc", 0.85)
+    mlflow.sklearn.log_model(model, "model")
+
+# Cargar una versión específica
+model = mlflow.pyfunc.load_model("models:/credit_model/1")
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{DVC (Data Version Control)}
+    \begin{itemize}
+        \item Versiona datasets y modelos (archivos grandes).
+        \item Integrado con Git: Git guarda metadatos, DVC maneja el almacenamiento remoto.
+        \item Flujo: \texttt{dvc add data.csv} → \texttt{git add data.csv.dvc} → \texttt{git commit} → \texttt{dvc push}
+    \end{itemize}
+    % Basado en Pregunta 4
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 6: MONITOREO DE MODELOS EN PRODUCCIÓN
+% ============================================================================
+\section{Monitoreo de Modelos en Producción}
+
+\begin{frame}{Data drift y concept drift}
+    \begin{itemize}
+        \item \textbf{Data drift}: cambio en la distribución de las variables de entrada.
+        \item \textbf{Concept drift}: cambio en la relación entrada-salida.
+        \item Causas: cambios en el mercado, nuevos hábitos, crisis económicas.
+    \end{itemize}
+    % Basado en Pregunta 8
+\end{frame}
+
+\begin{frame}{Population Stability Index (PSI)}
+    \[
+    PSI = \sum_{i=1}^{B} (p_i - q_i) \cdot \ln\left(\frac{p_i}{q_i}\right)
+    \]
+    donde $p_i$ = proporción en producción, $q_i$ = proporción en entrenamiento.
+    \begin{itemize}
+        \item $PSI < 0.1$: cambio pequeño.
+        \item $0.1 \le PSI < 0.25$: cambio moderado.
+        \item $PSI \ge 0.25$: cambio significativo (reentrenar).
+    \end{itemize}
+    % Basado en Pregunta 9
+\end{frame}
+
+\begin{frame}[fragile]{Cálculo de PSI en Python}
+    \begin{lstlisting}
+import numpy as np
+
+def psi(expected, actual, bins=10):
+    expected = np.clip(expected, 0.001, 0.999)  # evitar log(0)
+    actual = np.clip(actual, 0.001, 0.999)
+    return np.sum((actual - expected) * np.log(actual / expected))
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Test de Kolmogorov-Smirnov (KS)}
+    \begin{itemize}
+        \item Compara dos distribuciones continuas sin discretizar.
+        \item Estadístico: máxima diferencia entre las funciones de distribución acumulada.
+        \item p-valor bajo $\Rightarrow$ distribuciones diferentes.
+        \item Útil para variables continuas.
+    \end{itemize}
+    % Basado en Pregunta 10
+\end{frame}
+
+\begin{frame}{Herramientas de monitoreo}
+    \begin{itemize}
+        \item \textbf{Evidently AI}: reportes de drift, calidad de datos, rendimiento.
+        \item \textbf{WhyLabs / Whylogs}: perfilado de datos y detección de drift.
+        \item \textbf{Great Expectations}: validación de datos (expectativas).
+        \item \textbf{Prometheus + Grafana}: métricas del sistema.
+    \end{itemize}
+    % Basado en Pregunta 11
+\end{frame}
+
+
+
+
+
+
+% ============================================================================
+% ESTRATEGIAS DE DESPLIEGUE Y EXPERIMENTACIÓN: A/B TESTING
+% ============================================================================
+\section{Estrategias de Despliegue y A/B Testing}
+
+\begin{frame}{A/B Testing para modelos en producción}
+    \begin{block}{¿Qué es un A/B test?}
+        Experimento controlado donde se comparan dos versiones de un modelo (A = control, B = tratamiento) asignando usuarios aleatoriamente.
+    \end{block}
+    \begin{itemize}
+        \item \textbf{Objetivo}: determinar si el nuevo modelo (B) mejora métricas de negocio respecto al actual (A).
+        \item \textbf{Asignación aleatoria}: asegura que los grupos sean comparables.
+        \item \textbf{Métrica primaria}: una única métrica clave (ej. tasa de conversión, ingresos por usuario).
+    \end{itemize}
+    % Basado en Pregunta 13 del solucionario
+\end{frame}
+
+\begin{frame}{Diseño de un A/B test para modelos}
+    \begin{enumerate}
+        \item \textbf{Definir la hipótesis}: ej. "el nuevo modelo de recomendación aumenta el tiempo de visualización en un 5\%".
+        \item \textbf{Elegir métricas}: primaria (tiempo de visualización) y secundarias (clic, retención).
+        \item \textbf{Calcular tamaño de muestra} necesario para significancia estadística (poder, nivel de confianza).
+        \item \textbf{Asignar usuarios aleatoriamente} (por ejemplo, mediante hash de usuario).
+        \item \textbf{Ejecutar el experimento} durante un período representativo (evitar estacionalidades).
+        \item \textbf{Analizar resultados}: test estadístico (t-test, bootstrap) y significancia práctica (no solo p-valor).
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Métricas de negocio vs técnicas}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Métricas técnicas}
+        \begin{itemize}
+            \item Precisión, recall, AUC
+            \item RMSE, MAE
+            \item Latencia, throughput
+        \end{itemize}
+        \column{0.5\textwidth}
+        \textbf{Métricas de negocio}
+        \begin{itemize}
+            \item Tasa de conversión
+            \item Ingresos por usuario
+            \item Retención / churn
+            \item Tiempo de sesión
+        \end{itemize}
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{alertblock}{Importante}
+        Una mejora técnica no siempre se traduce en mejora de negocio. El A/B test valida el impacto real.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Ejemplo: comparar dos modelos de recomendación}
+    \begin{block}{Contexto}
+        Plataforma de streaming quiere probar un nuevo algoritmo de recomendación.
+    \end{block}
+    \begin{itemize}
+        \item Grupo A (control): modelo actual (basado en popularidad).
+        \item Grupo B (tratamiento): nuevo modelo (filtrado colaborativo).
+        \item Duración: 2 semanas, 100,000 usuarios por grupo.
+        \item Métrica primaria: tiempo medio de visualización por usuario.
+        \item Resultado: B muestra un aumento del 3\% con p-valor < 0.01.
+        \item Decisión: desplegar B gradualmente (canary).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Precauciones estadísticas}
+    \begin{itemize}
+        \item \textbf{Significancia estadística}: usar p-valor (ej. < 0.05) y considerar corrección por múltiples comparaciones si hay varias métricas.
+        \item \textbf{Tamaño de muestra}: calcular previamente para evitar falsos negativos (poder estadístico).
+        \item \textbf{Efecto mínimo detectable}: definir qué mejora es relevante para el negocio.
+        \item \textbf{Duración}: suficiente para capturar variabilidad (evitar sesgos por día de la semana).
+        \item \textbf{Interferencia entre grupos}: asegurar que los grupos no interactúen (ej. red social).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Integración con despliegue canario}
+    \begin{itemize}
+        \item El A/B test puede ser la primera fase de un despliegue canario.
+        \item \textbf{Canario}: enrutar un pequeño % de tráfico al nuevo modelo.
+        \item \textbf{Medir} las mismas métricas de negocio durante el canario.
+        \item Si los resultados son positivos, aumentar gradualmente el porcentaje.
+        \item Si no, revertir automáticamente (rollback).
+    \end{itemize}
+    % Basado en Pregunta 12
+\end{frame}
+
+
+
+
+
+% ============================================================================
+% SECCIÓN 7: CASO INTEGRADO - MODELO DE RIESGO CREDITICIO
+% ============================================================================
+\section{Caso Integrado: Modelo de Riesgo Crediticio}
+
+\begin{frame}{Paso 1: Entrenar y guardar el modelo}
+    \begin{lstlisting}
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+import joblib
+
+df = pd.read_csv('credito.csv')
+X = df.drop('incumple', axis=1)
+y = df['incumple']
+model = RandomForestClassifier(n_estimators=100)
+model.fit(X, y)
+joblib.dump(model, 'credit_model.joblib')
+    \end{lstlisting}
+    % Basado en teoría
+\end{frame}
+
+\begin{frame}[fragile]{Paso 2: Crear API con FastAPI}
+    \begin{lstlisting}
+from fastapi import FastAPI
+from pydantic import BaseModel
+import joblib
+import numpy as np
+
+app = FastAPI()
+model = joblib.load('credit_model.joblib')
+
+class Applicant(BaseModel):
+    edad: int
+    ingresos: float
+    deuda: float
+    antiguedad_laboral: int
+
+@app.post('/predict')
+def predict(applicant: Applicant):
+    features = np.array([[applicant.edad, applicant.ingresos,
+                          applicant.deuda, applicant.antiguedad_laboral]])
+    proba = model.predict_proba(features)[0, 1]
+    return {'probabilidad_incumplimiento': proba}
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Pasos 3-5: Docker, MLflow y monitoreo}
+    \begin{itemize}
+        \item \textbf{Docker}: contenerizar la API con el Dockerfile visto.
+        \item \textbf{MLflow}: registrar el modelo y versionarlo.
+        \item \textbf{Monitoreo}: calcular PSI semanal de las características y predicciones; alertar si PSI > 0.25.
+    \end{itemize}
+    % Basado en teoría
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 8: REVISIÓN GENERAL DEL CURSO
+% ============================================================================
+\section{Revisión General del Curso}
+
+\begin{frame}{Mapa conceptual del curso}
+    % IMAGEN: Diagrama de integración de todas las sesiones
+    \begin{center}
+        \begin{tikzpicture}[node distance=0.8cm, font=\tiny]
+            \node[draw, fill=blue!20, rectangle] (s1) {S1-2: Matemáticas};
+            \node[draw, fill=blue!20, below of=s1] (s3) {S3: EDA y Feature Eng};
+            \node[draw, fill=green!20, right of=s3, xshift=1.5cm] (s4) {S4: Regresión Lineal};
+            \node[draw, fill=green!20, below of=s4] (s5) {S5: Clasif I (Logística)};
+            \node[draw, fill=green!20, below of=s5] (s6) {S6: Clasif II (KNN, NB, SVM)};
+            \node[draw, fill=orange!20, right of=s5, xshift=1.5cm] (s7) {S7: Árboles y RF};
+            \node[draw, fill=orange!20, below of=s7] (s8) {S8: Gradient Boosting};
+            \node[draw, fill=red!20, right of=s8, xshift=1.5cm] (s9) {S9: Validación};
+            \node[draw, fill=red!20, below of=s9] (s10) {S10: No Supervisado};
+            \node[draw, fill=red!20, below of=s10] (s11) {S11: Series Temporales};
+            \node[draw, fill=purple!20, right of=s10, xshift=1.5cm] (s12) {S12: Complementarios};
+            \node[draw, fill=purple!20, below of=s12] (s13) {S13: Recomendación};
+            \node[draw, fill=purple!20, below of=s13] (s14) {S14: Interpretabilidad};
+            \node[draw, fill=brown!20, right of=s13, xshift=1.5cm] (s15) {S15: MLOps};
+            \draw[->] (s1) -- (s3);
+            \draw[->] (s3) -- (s4);
+            \draw[->] (s4) -- (s5);
+            \draw[->] (s5) -- (s6);
+            \draw[->] (s5) -- (s7);
+            \draw[->] (s7) -- (s8);
+            \draw[->] (s6) -- (s9);
+            \draw[->] (s8) -- (s9);
+            \draw[->] (s9) -- (s10);
+            \draw[->] (s10) -- (s11);
+            \draw[->] (s10) -- (s12);
+            \draw[->] (s12) -- (s13);
+            \draw[->] (s13) -- (s14);
+            \draw[->] (s14) -- (s15);
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 9: CONEXIÓN CON EL FUTURO PROFESIONAL
+% ============================================================================
+\section{Conexión con el Futuro Profesional}
+
+\begin{frame}{Más allá del curso}
+    \begin{itemize}
+        \item Dominar MLOps diferencia a un junior de un senior.
+        \item Habilidades valoradas: despliegue, monitoreo, CI/CD, escalabilidad.
+        \item Herramientas a explorar: Kubeflow, Airflow, MLflow, DVC, Kubernetes.
+        \item Práctica continua, lectura de papers, competencias (Kaggle).
+        \item Mantenerse actualizado con nuevas técnicas.
+    \end{itemize}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 10: RESUMEN Y CONCLUSIÓN
+% ============================================================================
+\section{Resumen y Conclusión}
+
+\begin{frame}{Lo que hemos aprendido}
+    \begin{exampleblock}{Conceptos clave}
+        \begin{itemize}
+            \item MLOps: integración de ML con operaciones.
+            \item Serialización: pickle, joblib, ONNX, MLflow.
+            \item APIs: Flask, FastAPI (recomendado).
+            \item Contenerización: Docker.
+            \item Versionado: MLflow (modelos), DVC (datos).
+            \item Monitoreo: PSI, KS, herramientas (Evidently, Prometheus).
+            \item Estrategias de despliegue: canary, blue-green.
+            \item A/B testing y seguridad.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Conclusión del curso}
+    \begin{itemize}
+        \item Recorrido completo: de matemáticas a producción.
+        \item Modelos supervisados, no supervisados, series temporales, recomendación.
+        \item Interpretabilidad y MLOps como cierre.
+        \item El aprendizaje continúa: práctica, actualización, comunidad.
+    \end{itemize}
+    \vspace{1cm}
+    \centering
+    \Large{¡Enhorabuena por llegar hasta el final!}
+\end{frame}
+
+% --- Diapositiva final ---
+\begin{frame}
+    \centering
+    \Huge \textbf{¡Gracias!}
+
+\end{frame}
+
+\end{document}

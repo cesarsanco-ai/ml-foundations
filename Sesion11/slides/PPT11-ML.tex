@@ -1,0 +1,515 @@
+% --- CORRECCIÓN IMPORTANTE EN LA PRIMERA LÍNEA ---
+% Agregamos "xcolor=table" para que funcione \rowcolor sin errores
+\documentclass[aspectratio=169, 10pt, xcolor=table]{beamer}
+
+% --- Configuración del Tema (estilo profesional como el ejemplo) ---
+\usetheme{Madrid}
+\usecolortheme{dolphin}
+
+% --- Paquetes necesarios ---
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+
+% --- Ruta de Imágenes (crea la carpeta "imagenes" y coloca ahí tus archivos) ---
+\graphicspath{{./imagenes/}}
+
+% --- Estilo para código Python ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false
+}
+
+% --- Pie de página personalizado ---
+\makeatletter
+
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}Sesión 11
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}Machine Learning \hfill \insertframenumber/\inserttotalframenumber \hspace*{0.3cm}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\makeatother
+
+% --- Datos de la portada ---
+\title[SESIÓN 11]{\textbf{Sesión 11}}
+\subtitle{Modelos Complementarios: \\ Técnicas especializadas para problemas específicos}
+\author[Prof. C. Sánchez]{Carlos César Sánchez Coronel}
+\institute{\textbf{MACHINE LEARNING}}
+\date{}
+
+% Logo opcional (descomentar si tienes la imagen)
+% \titlegraphic{\includegraphics[height=1.5cm]{logo.png}}
+
+% --- Eliminar la barra de navegación (opcional) ---
+\setbeamertemplate{navigation symbols}{}
+
+% --- Índice al inicio de cada sección ---
+\AtBeginSection[]{
+  \begin{frame}
+    \frametitle{Contenido}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+% ============================================================================
+% INICIO DEL DOCUMENTO
+% ============================================================================
+\begin{document}
+
+% --- Portada ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Índice general ---
+\begin{frame}{Contenido}
+    \tableofcontents
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 1: REGRESIÓN POLINÓMICA
+% ============================================================================
+\section{Regresión Polinómica}
+
+\begin{frame}{Regresión polinómica}
+    \begin{block}{Idea}
+        Añadir términos polinómicos de las variables originales como nuevas características para capturar relaciones no lineales.
+    \end{block}
+    Para una variable $x$, grado $d$:
+    \[
+    y = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^d + \varepsilon
+    \]
+    Sigue siendo un modelo \textbf{lineal en los parámetros} $\beta$ → se estima por mínimos cuadrados.
+    % Basado en Pregunta 1
+    % IMAGEN: Ajuste polinómico de diferentes grados
+\end{frame}
+
+\begin{frame}{Riesgo de sobreajuste}
+    \begin{itemize}
+        \item A mayor grado $d$, mayor flexibilidad.
+        \item Riesgo de \textbf{overfitting}, especialmente en los extremos.
+        \item Se elige el grado mediante validación cruzada.
+    \end{itemize}
+    \begin{exampleblock}{Ejemplo (Pregunta 2)}
+        RMSE en validación: grado1=4.2, grado2=3.1, grado3=2.8, grado4=2.7, grado5=3.5.\\
+        Se elige grado 3 o 4 (trade-off sesgo-varianza).
+    \end{exampleblock}
+    \begin{itemize}
+        \item Regularización (Ridge, Lasso) permite grados altos sin sobreajuste.
+    \end{itemize}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 2: REGRESIÓN ROBUSTA (HUBER, RANSAC)
+% ============================================================================
+\section{Regresión Robusta}
+
+\begin{frame}{Regresión de Huber}
+    \begin{block}{Función de pérdida}
+        \[
+        L_{\delta}(r) = 
+        \begin{cases}
+            \frac{1}{2}r^2 & \text{si } |r| \le \delta \\
+            \delta(|r| - \frac{1}{2}\delta) & \text{en otro caso}
+        \end{cases}
+        \]
+        donde $r = y - \hat{y}$.
+    \end{block}
+    \begin{itemize}
+        \item Combina MSE (para errores pequeños) y MAE (para errores grandes).
+        \item Menos sensible a outliers que MSE, más eficiente que MAE.
+        \item Parámetro $\delta$ controla la transición (típico $\delta = 1.35$ da 95\% eficiencia si los errores son normales).
+    \end{itemize}
+    % Basado en Pregunta 3
+\end{frame}
+
+\begin{frame}{RANSAC (RANdom SAmple Consensus)}
+    \begin{block}{Algoritmo}
+        \begin{enumerate}
+            \item Seleccionar aleatoriamente una muestra mínima para ajustar un modelo.
+            \item Calcular cuántos puntos están dentro de un umbral de distancia (inliers).
+            \item Repetir $N$ iteraciones, guardar el modelo con más inliers.
+            \item Reajustar el modelo final con todos los inliers.
+        \end{enumerate}
+    \end{block}
+    \begin{itemize}
+        \item Extremadamente robusto (tolera hasta >50\% de outliers).
+        \item Parámetros: tamaño de muestra mínimo, umbral de distancia, número de iteraciones.
+    \end{itemize}
+    % Basado en Pregunta 4
+\end{frame}
+
+\begin{frame}{Comparación de pérdidas}
+    \begin{table}
+        \centering
+        \begin{tabular}{l|c|c}
+            \toprule
+            \textbf{Función} & \textbf{Ecuación} & \textbf{Sensibilidad a outliers} \\
+            \midrule
+            MSE & $r^2$ & Alta \\
+            MAE & $|r|$ & Moderada \\
+            Huber & $L_{\delta}(r)$ & Baja (con $\delta$ adecuado) \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    % Basado en Pregunta 5
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 3: SUPPORT VECTOR REGRESSION (SVR)
+% ============================================================================
+\section{Support Vector Regression (SVR)}
+
+\begin{frame}{SVR: formulación}
+    \begin{block}{Objetivo}
+        Encontrar una función $f(x) = w^T x + b$ que tenga una desviación máxima $\varepsilon$ respecto a los valores reales, y sea lo más plana posible.
+    \end{block}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Primal}
+        \[
+        \min \frac{1}{2}\|w\|^2 + C\sum (\xi_i + \xi_i^*)
+        \]
+        \column{0.5\textwidth}
+        \textbf{Sujeto a}
+        \begin{align*}
+            y_i - f(x_i) &\le \varepsilon + \xi_i \\
+            f(x_i) - y_i &\le \varepsilon + \xi_i^* \\
+            \xi_i, \xi_i^* &\ge 0
+        \end{align*}
+    \end{columns}
+    % Basado en Pregunta 6
+\end{frame}
+
+\begin{frame}{Interpretación de parámetros}
+    \begin{itemize}
+        \item $\varepsilon$: ancho de la banda de tolerancia (errores menores no penalizan).
+        \item $C$: regularización; controla penalización por puntos fuera de la banda.
+        \item Kernel: permite relaciones no lineales (RBF, polinomial, etc.).
+    \end{itemize}
+    \begin{exampleblock}{SVR con kernel RBF}
+        \begin{itemize}
+            \item $\gamma$ (gamma) controla la influencia de cada punto.
+            \item Valores grandes de $\gamma$ pueden causar sobreajuste.
+            \item Se ajustan con validación cruzada.
+        \end{itemize}
+    \end{exampleblock}
+    % Basado en Pregunta 7
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 4: DBSCAN A FONDO
+% ============================================================================
+\section{DBSCAN a fondo}
+
+\begin{frame}{DBSCAN: elección de parámetros}
+    \begin{itemize}
+        \item \textbf{minPts}: regla heurística $\ge$ dimensionalidad + 1 (típico 3-10).
+        \item \textbf{eps ($\varepsilon$)}: se elige mediante el gráfico de distancia al k-ésimo vecino (k = minPts).
+        \begin{enumerate}
+            \item Calcular distancia al k-ésimo vecino para cada punto.
+            \item Ordenar y graficar.
+            \item Elegir eps en el ``codo'' de la curva.
+        \end{enumerate}
+    \end{itemize}
+    % Basado en Pregunta 9
+    % IMAGEN: Gráfico de distancias al k-ésimo vecino
+\end{frame}
+
+\begin{frame}{Variantes de DBSCAN}
+    \begin{description}
+        \item[OPTICS] No requiere un valor fijo de $\varepsilon$; produce un diagrama de alcanzabilidad que revela estructuras de densidad variable.
+        \item[HDBSCAN] Extensión jerárquica que encuentra clusters de diferentes densidades y es más robusta a los parámetros.
+    \end{description}
+    % Basado en Pregunta 10
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 5: CLUSTERING JERÁRQUICO A FONDO
+% ============================================================================
+\section{Clustering Jerárquico a fondo}
+
+\begin{frame}{Tipos de enlace}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Single linkage}
+        \begin{itemize}
+            \item Distancia mínima entre clusters.
+            \item Tiende a formar cadenas (efecto ``encadenamiento'').
+        \end{itemize}
+        \textbf{Complete linkage}
+        \begin{itemize}
+            \item Distancia máxima.
+            \item Clusters compactos y esféricos.
+        \end{itemize}
+        \column{0.5\textwidth}
+        \textbf{Average linkage}
+        \begin{itemize}
+            \item Distancia promedio.
+            \item Compromiso.
+        \end{itemize}
+        \textbf{Ward linkage}
+        \begin{itemize}
+            \item Minimiza incremento de varianza intra-cluster.
+            \item Clusters de tamaño similar.
+        \end{itemize}
+    \end{columns}
+    % Basado en Pregunta 11
+    % IMAGEN: Dendrograma con diferentes enlaces
+\end{frame}
+
+\begin{frame}{Corte del dendrograma}
+    \begin{itemize}
+        \item Se corta a una altura donde las distancias de fusión son grandes.
+        \item La elección puede basarse en:
+        \begin{itemize}
+            \item Criterio visual (saltos grandes).
+            \item Silueta promedio para diferentes cortes.
+        \end{itemize}
+        \item Complejidad computacional: $O(n^3)$ (ingenuo) o $O(n^2 \log n)$ con optimizaciones.
+    \end{itemize}
+    % Basado en Pregunta 12
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 6: MÉTRICAS ADICIONALES PARA CLUSTERING
+% ============================================================================
+\section{Métricas adicionales para clustering}
+
+\begin{frame}{Índice de Rand y ARI}
+    \begin{itemize}
+        \item \textbf{Rand Index (RI)}: mide concordancia entre dos particiones.
+        \[
+        RI = \frac{a+b}{\binom{n}{2}}
+        \]
+        donde $a$ = pares en mismo cluster en ambas, $b$ = pares en diferentes clusters en ambas.
+        \item \textbf{Adjusted Rand Index (ARI)}: corrige por el azar, dando 0 para particiones aleatorias, 1 para coincidencia perfecta.
+    \end{itemize}
+    % Basado en Pregunta 13
+\end{frame}
+
+\begin{frame}{Información Mutua (MI) y NMI}
+    \begin{itemize}
+        \item \textbf{MI}: mide la información compartida entre dos particiones.
+        \[
+        MI(U,V) = \sum_{i,j} P(i,j) \log \frac{P(i,j)}{P(i)P(j)}
+        \]
+        \item \textbf{NMI (Normalized MI)}: escala a $[0,1]$ dividiendo por la media de las entropías.
+    \end{itemize}
+    % Basado en Pregunta 14
+\end{frame}
+
+\begin{frame}{Comparación de métricas de clustering}
+    \begin{table}
+        \centering
+        \begin{tabular}{l|c|c|c}
+            \toprule
+            \textbf{Métrica} & \textbf{Rango} & \textbf{Corrige azar} & \textbf{Requiere etiquetas} \\
+            \midrule
+            Silueta & $[-1,1]$ & No & No \\
+            Davies-Bouldin & $[0,\infty)$ (menor mejor) & No & No \\
+            Rand Index & $[0,1]$ & No & Sí \\
+            ARI & $[-1,1]$ & Sí & Sí \\
+            NMI & $[0,1]$ & Aproximadamente & Sí \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    % Basado en Pregunta 15
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 7: GUÍA DE SELECCIÓN
+% ============================================================================
+\section{Guía de selección de técnicas}
+
+\begin{frame}{Cuándo usar cada técnica}
+    \begin{table}
+        \centering
+        \begin{tabular}{p{4cm}|p{6cm}}
+            \toprule
+            \textbf{Técnica} & \textbf{Cuándo usarla} \\
+            \midrule
+            Regresión polinómica & Relación no lineal suave, pocas variables, interpretabilidad. \\
+            Regresión robusta (Huber) & Outliers moderados, se desea eficiencia. \\
+            RANSAC & Gran cantidad de outliers (hasta >50\%), modelo de inliers. \\
+            SVR & Relaciones no lineales, robustez a outliers, control sobre banda de error. \\
+            DBSCAN & Clusters de forma arbitraria, presencia de ruido, no se conoce $k$. \\
+            Clustering jerárquico & Se necesita jerarquía interpretable, pocos datos. \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    % Basado en teoría
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 8: CASO INTEGRADO - SENSORES INDUSTRIALES
+% ============================================================================
+\section{Caso integrado: Sensores industriales}
+
+\begin{frame}{Problema}
+    \begin{itemize}
+        \item Planta industrial con sensores de temperatura, presión, vibración (10,000 lecturas, sin etiquetas).
+        \item Objetivos:
+        \begin{enumerate}
+            \item Identificar modos de operación normal (clusters).
+            \item Detectar anomalías (posibles fallos incipientes).
+            \item Modelar relaciones esperadas entre sensores.
+        \end{enumerate}
+    \end{itemize}
+    % Basado en Pregunta 20
+\end{frame}
+
+\begin{frame}{Pipeline propuesto}
+    \begin{enumerate}
+        \item \textbf{DBSCAN} para encontrar clusters de operación normal (puntos densos). El ruido son anomalías candidatas.
+        \item Para cada cluster, ajustar una \textbf{regresión robusta} (Huber o RANSAC) modelando, ej., temperatura vs presión.
+        \item En tiempo real:
+        \begin{itemize}
+            \item Si un punto no pertenece a ningún cluster normal $\rightarrow$ alerta.
+            \item Si el residuo de la regresión supera un umbral $\rightarrow$ alerta.
+        \end{itemize}
+    \end{enumerate}
+    % Basado en Pregunta 16
+\end{frame}
+
+\begin{frame}{Elección de parámetros y validación}
+    \begin{itemize}
+        \item DBSCAN: elegir minPts (ej. 5) y eps con gráfico de distancia al 5-vecino.
+        \item Para clusters normales, regresión robusta (Huber) o polinómica si la relación es no lineal.
+        \item Si se tienen pocos eventos de fallo conocidos, usar \textbf{ARI/NMI} para validar que los clusters capturan estados pre-falla.
+    \end{itemize}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 9: IMPLEMENTACIÓN EN PYTHON
+% ============================================================================
+\section{Implementación en Python}
+
+\begin{frame}[fragile]{Regresión polinómica y robusta}
+    \begin{lstlisting}
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression, HuberRegressor, RANSACRegressor
+from sklearn.pipeline import Pipeline
+
+# Polinómica
+model = Pipeline([
+    ('poly', PolynomialFeatures(degree=3)),
+    ('linear', LinearRegression())
+])
+model.fit(X, y)
+
+# Huber
+huber = HuberRegressor(epsilon=1.35)
+huber.fit(X, y)
+
+# RANSAC
+ransac = RANSACRegressor(min_samples=50, residual_threshold=5.0, max_trials=100)
+ransac.fit(X, y)
+inlier_mask = ransac.inlier_mask_
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{SVR y DBSCAN}
+    \begin{lstlisting}
+from sklearn.svm import SVR
+from sklearn.cluster import DBSCAN
+from sklearn.neighbors import NearestNeighbors
+
+# SVR
+svr = SVR(kernel='rbf', C=1.0, epsilon=0.1)
+svr.fit(X_train, y_train)
+
+# Gráfico de distancias para DBSCAN
+neigh = NearestNeighbors(n_neighbors=5)
+neigh.fit(X)
+distances, _ = neigh.kneighbors(X)
+k_dist = np.sort(distances[:, -1])
+plt.plot(k_dist); plt.show()
+
+# DBSCAN
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels = dbscan.fit_predict(X)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Clustering jerárquico y métricas externas}
+    \begin{lstlisting}
+from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
+
+# Jerárquico
+Z = linkage(X, method='ward')
+plt.figure(figsize=(10,5))
+dendrogram(Z)
+plt.show()
+
+clusters = fcluster(Z, t=3, criterion='maxclust')
+
+# Métricas externas (con etiquetas verdaderas y_true)
+ari = adjusted_rand_score(y_true, clusters)
+nmi = normalized_mutual_info_score(y_true, clusters)
+    \end{lstlisting}
+\end{frame}
+
+% ============================================================================
+% SECCIÓN 10: CONEXIÓN Y RESUMEN
+% ============================================================================
+\section{Conexión y Resumen}
+
+\begin{frame}{Conexión con el resto del curso}
+    \begin{itemize}
+        \item Regresión robusta y SVR complementan los modelos de regresión.
+        \item DBSCAN y clustering jerárquico amplían opciones de clustering (K-Means).
+        \item Métricas externas (ARI, NMI) permiten evaluar clustering con ground truth.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Lo que hemos aprendido}
+    \begin{exampleblock}{Conceptos clave}
+        \begin{itemize}
+            \item Regresión polinómica: no linealidades, sobreajuste, regularización.
+            \item Regresión robusta: Huber, RANSAC, comparación de pérdidas.
+            \item SVR: banda $\varepsilon$, parámetros $C$, $\gamma$, kernel.
+            \item DBSCAN: elección de $\varepsilon$ y minPts, variantes OPTICS/HDBSCAN.
+            \item Clustering jerárquico: tipos de enlace, dendrograma, corte.
+            \item Métricas externas: ARI, NMI.
+            \item Caso práctico: detección de anomalías en sensores industriales.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% --- Diapositiva final ---
+\begin{frame}
+    \centering
+    \Huge \textbf{¡Gracias!}
+
+\end{frame}
+
+\end{document}
