@@ -8,4 +8,5 @@ __pycache__/
 
 # Ignorar recursos por sesión
 Sesion*/recursos/
+
 docs/material/Sesion*/recursos/
