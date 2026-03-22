@@ -5,6 +5,8 @@ layout: default
 # Cheatsheet: Regresión Lineal y Regularización
 **Autor:** Carlos César Sánchez Coronel  
 
+[⬅️ Volver a la Sesión-03](../../../sesiones/sesion-03.md)
+
 ---
 
 ## Modelo

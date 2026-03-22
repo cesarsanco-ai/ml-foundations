@@ -5,6 +5,8 @@ layout: default
 # Cheatsheet: Árboles de Decisión y Random Forest
 **Autor:** Carlos César Sánchez Coronel  
 
+[⬅️ Volver a la Sesión-06](../../../sesiones/sesion-06.md)
+
 ---
 
 ## Árbol de decisión

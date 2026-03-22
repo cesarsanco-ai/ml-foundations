@@ -5,6 +5,8 @@ layout: default
 # Cheatsheet: Gradient Boosting (XGBoost, LightGBM)
 **Autor:** Carlos César Sánchez Coronel  
 
+[⬅️ Volver a la Sesión-07](../../../sesiones/sesion-07.md)
+
 ---
 
 ## Idea central

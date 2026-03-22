@@ -44,12 +44,3 @@ Todo el código fuente, notebooks y materiales adicionales están disponibles en
 [https://github.com/cesarsanco-ai/ml-foundations](https://github.com/cesarsanco-ai/ml-foundations)
 
 
----
-
-### 👤 Autor
-
-**Carlos César Sánchez Coronel** | *Data Scientist & AI Engineer*
-
-*Lima, Perú*
-
-🔗 [LinkedIn](https://www.linkedin.com/in/cesar-sanchez-c/) | 📁 [GitHub](https://github.com/cesarsanco-ai)

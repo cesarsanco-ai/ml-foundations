@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional de Modelos Complementarios (Regresión robusta, SVR, clustering avanzado)
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-11](../../../sesiones/sesion-11.md)
+
 *(Alineado con la Semana 11: polinomios, Huber, RANSAC, SVR, DBSCAN en profundidad, jerárquico.)*
 
 ---

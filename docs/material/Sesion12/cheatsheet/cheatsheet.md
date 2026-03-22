@@ -5,6 +5,8 @@ layout: default
 # Cheatsheet: Sistemas de Recomendación
 **Autor:** Carlos César Sánchez Coronel  
 
+[⬅️ Volver a la Sesión-12](../../../sesiones/sesion-12.md)
+
 ---
 
 ## Paradigmas

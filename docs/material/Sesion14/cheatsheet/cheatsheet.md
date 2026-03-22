@@ -5,6 +5,8 @@ layout: default
 # Cheatsheet: MLOps y Despliegue
 **Autor:** Carlos César Sánchez Coronel  
 
+[⬅️ Volver a la Sesión-14](../../../sesiones/sesion-14.md)
+
 ---
 
 ## Ciclo de vida

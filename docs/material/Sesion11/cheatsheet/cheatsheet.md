@@ -5,6 +5,8 @@ layout: default
 # Cheatsheet: Modelos Complementarios
 **Autor:** Carlos César Sánchez Coronel  
 
+[⬅️ Volver a la Sesión-11](../../../sesiones/sesion-11.md)
+
 ---
 
 ## Regresión polinómica

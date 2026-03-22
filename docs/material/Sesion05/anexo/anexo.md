@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional de k-NN, Naive Bayes y SVM
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-05](../../../sesiones/sesion-05.md)
+
 *(Alineado con la Semana 5: clasificación con algoritmos clásicos.)*
 
 ---

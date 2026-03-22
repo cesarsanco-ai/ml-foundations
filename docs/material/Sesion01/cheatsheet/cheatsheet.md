@@ -5,6 +5,8 @@ layout: default
 # Cheatsheet: Introducción al Machine Learning
 **Autor:** Carlos César Sánchez Coronel  
 
+[⬅️ Volver a la Sesión-01](../../../sesiones/sesion-01.md)
+
 ---
 
 ## Tipos de aprendizaje

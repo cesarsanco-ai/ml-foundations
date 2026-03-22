@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional del Aprendizaje No Supervisado (PCA y Clustering)
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-09](../../../sesiones/sesion-09.md)
+
 *(Alineado con la Sesión 9: PCA, k-means, DBSCAN, clustering jerárquico y métricas.)*
 
 ---

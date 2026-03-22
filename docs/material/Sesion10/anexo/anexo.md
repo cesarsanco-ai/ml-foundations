@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional de Series Temporales para ML
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-10](../../../sesiones/sesion-10.md)
+
 *(Alineado con la Semana 10: descomposición, lags, ARIMA/SARIMA, validación temporal, Prophet.)*
 
 ---

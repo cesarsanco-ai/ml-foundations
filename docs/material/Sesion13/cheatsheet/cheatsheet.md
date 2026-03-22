@@ -5,6 +5,8 @@ layout: default
 # Cheatsheet: Interpretabilidad de Modelos
 **Autor:** Carlos César Sánchez Coronel  
 
+[⬅️ Volver a la Sesión-13](../../../sesiones/sesion-13.md)
+
 ---
 
 ## Tipos de explicación

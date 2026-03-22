@@ -5,6 +5,8 @@ layout: default
 # Cheatsheet: Series de Tiempo
 **Autor:** Carlos César Sánchez Coronel  
 
+[⬅️ Volver a la Sesión-10](../../../sesiones/sesion-10.md)
+
 ---
 
 ## Componentes

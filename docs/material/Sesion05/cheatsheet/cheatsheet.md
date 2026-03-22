@@ -5,6 +5,7 @@ layout: default
 # Cheatsheet: Clasificación II - Algoritmos Clásicos
 **Autor:** Carlos César Sánchez Coronel  
 
+[⬅️ Volver a la Sesión-05](../../../sesiones/sesion-05.md)
 
 ---
 

@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional de Árboles de Decisión y Random Forest
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-06](../../../sesiones/sesion-06.md)
+
 *(Alineado con la Semana 6: impureza, poda, bagging, OOB y complejidad.)*
 
 ---

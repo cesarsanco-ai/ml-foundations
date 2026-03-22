@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional de la Regresión Logística y el Balanceo de Clases
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-04](../../../sesiones/sesion-04.md)
+
 *(Alineado con la Semana 4: clasificación binaria/multiclase, log-loss, regularización, técnicas de balanceo y métricas.)*
 
 ---

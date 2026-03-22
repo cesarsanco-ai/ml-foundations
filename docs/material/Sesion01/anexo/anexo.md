@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional de la Visión General del Machine Learning
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-01](../../../sesiones/sesion-01.md)
+
 *(Alineado con la teoría de la Semana 1: introducción al ML, tipos de aprendizaje y ciclo de vida.)*
 
 ---

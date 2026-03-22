@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional del Gradient Boosting (XGBoost / LightGBM)
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-07](../../../sesiones/sesion-07.md)
+
 *(Alineado con la Semana 7: boosting aditivo, pseudo-residuos, shrinkage, regularización de árbol.)*
 
 ---

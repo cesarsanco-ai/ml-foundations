@@ -5,6 +5,8 @@ layout: default
 # Cheatsheet: Evaluación y Validación de Modelos
 **Autor:** Carlos César Sánchez Coronel  
 
+[⬅️ Volver a la Sesión-08](../../../sesiones/sesion-08.md)
+
 ---
 
 ## Bias vs varianza

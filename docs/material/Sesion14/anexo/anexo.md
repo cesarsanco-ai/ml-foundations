@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional del Despliegue de Modelos (MLOps)
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-14](../../../sesiones/sesion-14.md)
+
 *(Alineado con la Semana 14: serialización, inferencia, contenedores, monitoreo y deriva.)*
 
 ---

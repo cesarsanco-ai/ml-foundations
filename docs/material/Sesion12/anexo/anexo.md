@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional de Sistemas de Recomendación
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-12](../../../sesiones/sesion-12.md)
+
 *(Alineado con la Semana 12: colaborativo, factorización matricial, Funk SVD, métricas de ranking.)*
 
 ---

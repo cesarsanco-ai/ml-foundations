@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional del EDA y Feature Engineering
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-02](../../../sesiones/sesion-02.md)
+
 *(Alineado con la Semana 2: limpieza, análisis uni/bi/multivariado, ingeniería de características y escalado.)*
 
 ---

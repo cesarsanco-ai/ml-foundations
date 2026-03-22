@@ -5,6 +5,8 @@ layout: default
 # Cheatsheet: EDA y Feature Engineering
 **Autor:** Carlos César Sánchez Coronel  
 
+[⬅️ Volver a la Sesión-02](../../../sesiones/sesion-02.md)
+
 ---
 
 ## Pipeline de EDA (resumen)

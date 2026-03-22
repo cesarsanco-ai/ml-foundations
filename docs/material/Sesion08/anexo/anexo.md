@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional de la Evaluación y Validación de Modelos
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-08](../../../sesiones/sesion-08.md)
+
 *(Alineado con la Semana 8: sesgo-varianza, splits, validación cruzada, tuning y leakage.)*
 
 ---

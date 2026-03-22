@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional de la Interpretabilidad de Modelos (SHAP, LIME, PDP)
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-13](../../../sesiones/sesion-13.md)
+
 *(Alineado con la Semana 13: importancia, valores de Shapley, explicaciones locales.)*
 
 ---
