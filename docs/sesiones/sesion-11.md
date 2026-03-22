@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# Sesion 11: Clustering
+# Sesion 11: Modelos complementarios
 [⬅️ Volver al Índice](../index.md)
 
 ## 🎯 Objetivo de la Sesión
@@ -15,9 +15,9 @@ Conocer y aplicar algoritmos adicionales de regresión y clustering que son úti
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar slides11.pdf](../material/Sesion11/slides/slides11-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Slide11](../material/Sesion11/slides/slides11-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion11/cheatsheet/cheatsheet.md)
+* 📝 **Quick Reference:** [CheatSheet](../material/Sesion11/cheatsheet/cheatsheet.md)
 
 * 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion11/anexo/anexo.md)
 
@@ -39,5 +39,4 @@ Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi G
 
 * 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
-
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.

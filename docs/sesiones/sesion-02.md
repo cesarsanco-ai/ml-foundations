@@ -1,24 +1,27 @@
+---
+layout: default
+---
 
-
+# Sesion 2: Análisis Exploratorio y Feature Engineering
 [⬅️ Volver al Índice](../index.md)
 
 ## 🎯 Objetivo de la Sesión
 
 Realizar un análisis exploratorio (EDA) y aplicar técnicas de feature engineering para preparar datos de calidad, identificando patrones, limpiando valores atípicos y construyendo características relevantes para los modelos.
 
----
+***
 
 ## 📘 Contenido Teórico
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Descargar slides2.pdf](../material/Sesion02/slides/slides2-ML.pdf)
+* 🖼️ **Slides de Clase (PDF):** [Slide2](../material/Sesion02/slides/slides2-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion02/cheatsheet/cheatsheet.md)
+* 📝 **Quick Reference:** [CheatSheet](../material/Sesion02/cheatsheet/cheatsheet.md)
 
 * 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion02/anexo/anexo.md)
 
----
+***
 
 ### 💻 Laboratorio
 
@@ -27,7 +30,7 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 * 📓 **Notebook Fundamentos:** [Notebook 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion02/practica/SESION2_NTB1_ML.ipynb)
 * 📓 **Notebook Aplicaciones:** [Notebook 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion02/practica/SESION2_NTB2_ML.ipynb)
 
----
+***
 
 ## 🚀 Proyectos End-to-End
 
@@ -35,12 +38,4 @@ Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi G
 
 * 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
-
----
-
-### 👤 Autor
-
-**Carlos César Sánchez Coronel** | *Data Scientist & AI Engineer*
-
-🔗 [LinkedIn](https://www.linkedin.com/in/cesar-sanchez-c/) | 📁 [GitHub](https://github.com/cesarsanco-ai)
+* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.
