@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo
 # Fundamento Matemático y Computacional de la Visión General del Machine Learning
 #### Autor: Carlos César Sánchez Coronel
 

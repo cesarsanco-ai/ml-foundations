@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 
 # Cheatsheet: Gradient Boosting (XGBoost, LightGBM)
 **Autor:** Carlos César Sánchez Coronel  

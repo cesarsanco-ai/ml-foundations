@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 
 # Cheatsheet: Aprendizaje No Supervisado (PCA y Clustering)
 **Autor:** Carlos César Sánchez Coronel  

@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo
 # Fundamento Matemático y Computacional del EDA y Feature Engineering
 #### Autor: Carlos César Sánchez Coronel
 

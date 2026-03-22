@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo
 # Fundamento Matemático y Computacional de Sistemas de Recomendación
 #### Autor: Carlos César Sánchez Coronel
 

@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 
 # Cheatsheet: Regresión Lineal y Regularización
 **Autor:** Carlos César Sánchez Coronel  

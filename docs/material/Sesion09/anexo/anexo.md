@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo
 # Fundamento Matemático y Computacional del Aprendizaje No Supervisado (PCA y Clustering)
 #### Autor: Carlos César Sánchez Coronel
 

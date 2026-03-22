@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo
 # Fundamento Matemático y Computacional de la Interpretabilidad de Modelos (SHAP, LIME, PDP)
 #### Autor: Carlos César Sánchez Coronel
 

@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 
 # Cheatsheet: Interpretabilidad de Modelos
 **Autor:** Carlos César Sánchez Coronel  

@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo
 # Fundamento Matemático y Computacional de Series Temporales para ML
 #### Autor: Carlos César Sánchez Coronel
 

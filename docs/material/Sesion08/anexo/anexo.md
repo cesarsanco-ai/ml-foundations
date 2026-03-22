@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo
 # Fundamento Matemático y Computacional de la Evaluación y Validación de Modelos
 #### Autor: Carlos César Sánchez Coronel
 

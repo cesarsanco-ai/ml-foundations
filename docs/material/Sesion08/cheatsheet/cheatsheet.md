@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 
 # Cheatsheet: Evaluación y Validación de Modelos
 **Autor:** Carlos César Sánchez Coronel  

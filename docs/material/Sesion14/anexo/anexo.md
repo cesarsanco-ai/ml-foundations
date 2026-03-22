@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo
 # Fundamento Matemático y Computacional del Despliegue de Modelos (MLOps)
 #### Autor: Carlos César Sánchez Coronel
 

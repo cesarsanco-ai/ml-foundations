@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 
 # Cheatsheet: Introducción al Machine Learning
 **Autor:** Carlos César Sánchez Coronel  

@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 
 # Cheatsheet: Árboles de Decisión y Random Forest
 **Autor:** Carlos César Sánchez Coronel  

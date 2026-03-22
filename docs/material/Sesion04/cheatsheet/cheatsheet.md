@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 
 # Cheatsheet: Clasificación I — Regresión Logística y Desbalance
 **Autor:** Carlos César Sánchez Coronel  

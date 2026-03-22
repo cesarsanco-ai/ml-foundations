@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo: 
 # Fundamento Matemático y Computacional de la Regresión Lineal y Regularización
 #### Autor: Carlos César Sánchez Coronel
 
@@ -548,4 +550,3 @@ def ridge_fit_svd(X, y, lambda_):
 | $R^2$ | $1 - \frac{SS_{res}}{SS_{tot}}$ |
 
 ---
-

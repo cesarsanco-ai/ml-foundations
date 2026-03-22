@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo
 # Fundamento Matemático y Computacional del Gradient Boosting (XGBoost / LightGBM)
 #### Autor: Carlos César Sánchez Coronel
 

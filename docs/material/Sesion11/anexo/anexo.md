@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo
 # Fundamento Matemático y Computacional de Modelos Complementarios (Regresión robusta, SVR, clustering avanzado)
 #### Autor: Carlos César Sánchez Coronel
 

@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 
 # Cheatsheet: Clasificación II - Algoritmos Clásicos
 **Autor:** Carlos César Sánchez Coronel  

@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo
 # Fundamento Matemático y Computacional de Árboles de Decisión y Random Forest
 #### Autor: Carlos César Sánchez Coronel
 

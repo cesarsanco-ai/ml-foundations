@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 
 # Cheatsheet: MLOps y Despliegue
 **Autor:** Carlos César Sánchez Coronel  

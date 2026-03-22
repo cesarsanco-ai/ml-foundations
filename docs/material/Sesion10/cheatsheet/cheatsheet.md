@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 
 # Cheatsheet: Series de Tiempo
 **Autor:** Carlos César Sánchez Coronel  

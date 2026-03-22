@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 
 # Cheatsheet: EDA y Feature Engineering
 **Autor:** Carlos César Sánchez Coronel  

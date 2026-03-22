@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 
 # Cheatsheet: Modelos Complementarios
 **Autor:** Carlos César Sánchez Coronel  

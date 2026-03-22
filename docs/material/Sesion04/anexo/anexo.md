@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo
 # Fundamento Matemático y Computacional de la Regresión Logística y el Balanceo de Clases
 #### Autor: Carlos César Sánchez Coronel
 

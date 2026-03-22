@@ -1,5 +1,7 @@
+---
+layout: default
+---
 
-## Anexo
 # Fundamento Matemático y Computacional de k-NN, Naive Bayes y SVM
 #### Autor: Carlos César Sánchez Coronel
 
