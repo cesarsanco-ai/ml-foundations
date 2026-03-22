@@ -5,6 +5,8 @@ layout: default
 # Fundamento Matemático y Computacional de la Regresión Lineal y Regularización
 #### Autor: Carlos César Sánchez Coronel
 
+[⬅️ Volver a la Sesión-03](../../../sesiones/sesion-03.md)
+
 ## 1. Planteamiento General del Problema de Regresión
 
 ### 1.1 Definición del problema
