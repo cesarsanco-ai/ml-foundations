@@ -1,13 +1,22 @@
-# GitHub Pages (carpeta /docs en el repo ml-foundations)
-# https://pages.github.com/versions/
+# --- Información del Sitio ---
+title: "Machine Learning Foundations"
+author: "Carlos César Sánchez Coronel"
+description: "Data Scientist & AI Engineer | [LinkedIn](https://www.linkedin.com/in/cesar-sanchez-c/) | [GitHub](https://github.com/cesarsanco-ai)"
 
-title: Machine Learning Foundations
-theme: minima
-
-# Sitio de proyecto: https://cesarsanco-ai.github.io/ml-foundations/
-baseurl: "/ml-foundations"
+# --- Configuración de URLs ---
 url: "https://cesarsanco-ai.github.io"
+baseurl: "/ml-foundations"
 
+# --- Limpieza de Cabecera (Header) ---
+header_pages: []
+
+# --- Estética y Motores ---
+theme: minima
 markdown: kramdown
 kramdown:
   math_engine: mathjax
+
+# --- Limpieza de Redes Sociales---
+email: 
+twitter_username: 
+github_username:
