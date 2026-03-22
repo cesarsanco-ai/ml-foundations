@@ -17,6 +17,7 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 * 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion11/anexo/anexo.md)
 
+***
 ---
 
 ### 💻 Laboratorio
