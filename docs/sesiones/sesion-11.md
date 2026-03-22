@@ -1,5 +1,8 @@
+---
+layout: default
+---
 
-## Sesion 11: Clustering
+# Sesion 11: Clustering
 [⬅️ Volver al Índice](../index.md)
 
 ## 🎯 Objetivo de la Sesión
@@ -38,10 +41,3 @@ Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi G
 
 * 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.  
 
-***
-
-### 👤 Autor
-
-**Carlos César Sánchez Coronel** | *Data Scientist & AI Engineer*
-
-🔗 [LinkedIn](https://www.linkedin.com/in/cesar-sanchez-c/) | 📁 [GitHub](https://github.com/cesarsanco-ai)
