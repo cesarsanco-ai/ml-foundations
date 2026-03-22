@@ -14,9 +14,9 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 * 🖼️ **Slides de Clase (PDF):** [Descargar slides8.pdf](../material/Sesion08/slides/slides8-ML.pdf)
 
-* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion08/cheatsheet/)
+* 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion08/cheatsheet/cheatsheet.md)
 
-* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion08/anexo/)
+* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion08/anexo/anexo.md)
 ---
 
 ### 💻 Laboratorio
