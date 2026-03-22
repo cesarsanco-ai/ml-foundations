@@ -1,0 +1,13 @@
+# GitHub Pages (carpeta /docs en el repo ml-foundations)
+# https://pages.github.com/versions/
+
+title: Machine Learning Foundations
+theme: minima
+
+# Sitio de proyecto: https://cesarsanco-ai.github.io/ml-foundations/
+baseurl: "/ml-foundations"
+url: "https://cesarsanco-ai.github.io"
+
+markdown: kramdown
+kramdown:
+  math_engine: mathjax
