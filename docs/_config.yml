@@ -1,14 +1,13 @@
 # --- Información del Sitio ---
 title: "Machine Learning Foundations"
 author: "Carlos César Sánchez Coronel"
-description: "Data Scientist & AI Engineer | [LinkedIn](https://www.linkedin.com/in/cesar-sanchez-c/) | [GitHub](https://github.com/cesarsanco-ai)"
-
 # --- Configuración de URLs ---
 url: "https://cesarsanco-ai.github.io"
 baseurl: "/ml-foundations"
 
 # --- Limpieza de Cabecera (Header) ---
-header_pages: []
+header_pages:
+  - index.md
 
 # --- Estética y Motores ---
 theme: minima
