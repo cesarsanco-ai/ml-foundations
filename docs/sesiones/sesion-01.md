@@ -1,4 +1,4 @@
-# Sesión 01: Introducción al Machine Learning
+
 
 [⬅️ Volver al Índice](../index.md)
 

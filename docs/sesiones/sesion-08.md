@@ -1,4 +1,4 @@
-# Sesión 08: Evaluación y Validación de Modelos
+
 
 [⬅️ Volver al Índice](../index.md)
 
@@ -17,6 +17,7 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 * 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion08/cheatsheet/cheatsheet.md)
 
 * 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion08/anexo/anexo.md)
+
 ---
 
 ### 💻 Laboratorio

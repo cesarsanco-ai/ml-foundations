@@ -1,4 +1,4 @@
-# Sesión 02: Análisis Exploratorio y Feature Engineering
+
 
 [⬅️ Volver al Índice](../index.md)
 
@@ -17,6 +17,7 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 * 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion02/cheatsheet/cheatsheet.md)
 
 * 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion02/anexo/anexo.md)
+
 ---
 
 ### 💻 Laboratorio

@@ -1,4 +1,4 @@
-# Sesión 04: Clasificación I - Regresión Logística y Balance de Datos
+
 
 [⬅️ Volver al Índice](../index.md)
 
@@ -17,6 +17,7 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 * 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion04/cheatsheet/cheatsheet.md)
 
 * 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion04/anexo/anexo.md)
+
 ---
 
 ### 💻 Laboratorio

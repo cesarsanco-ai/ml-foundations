@@ -1,4 +1,4 @@
-# Sesión 03: Regresión Lineal y Regularización
+
 
 [⬅️ Volver al Índice](../index.md)
 
@@ -17,6 +17,7 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 * 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion03/cheatsheet/cheatsheet.md)
 
 * 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion03/anexo/anexo.md)
+
 ---
 
 ### 💻 Laboratorio

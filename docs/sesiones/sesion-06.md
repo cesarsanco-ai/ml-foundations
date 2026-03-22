@@ -1,4 +1,4 @@
-# Sesión 06: Árboles de Decisión y Random Forest
+
 
 [⬅️ Volver al Índice](../index.md)
 
@@ -17,6 +17,7 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 * 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion06/cheatsheet/cheatsheet.md)
 
 * 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion06/anexo/anexo.md)
+
 ---
 
 ### 💻 Laboratorio

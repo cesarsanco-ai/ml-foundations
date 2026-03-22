@@ -1,4 +1,4 @@
-# Sesión 07: Gradient Boosting (XGBoost, LightGBM)
+
 
 [⬅️ Volver al Índice](../index.md)
 
@@ -17,6 +17,7 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 * 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion07/cheatsheet/cheatsheet.md)
 
 * 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion07/anexo/anexo.md)
+
 ---
 
 ### 💻 Laboratorio

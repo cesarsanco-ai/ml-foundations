@@ -1,4 +1,4 @@
-# Sesión 14: Despliegue de Modelos (MLOps)
+
 
 [⬅️ Volver al Índice](../index.md)
 
@@ -17,6 +17,7 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 * 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion14/cheatsheet/cheatsheet.md)
 
 * 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion14/anexo/anexo.md)
+
 ---
 
 ### 💻 Laboratorio

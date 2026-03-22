@@ -1,4 +1,4 @@
-# Sesión 09: Aprendizaje No Supervisado - Clustering y PCA
+
 
 [⬅️ Volver al Índice](../index.md)
 
@@ -17,6 +17,7 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 * 📝 **Quick Reference:** [Descargar CheatSheet](../material/Sesion09/cheatsheet/cheatsheet.md)
 
 * 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion09/anexo/anexo.md)
+
 ---
 
 ### 💻 Laboratorio
