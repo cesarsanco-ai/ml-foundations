@@ -18,9 +18,8 @@ layout: default
 - Para predecir, calcula distancia a todos los puntos, selecciona los \(k\) más cercanos y vota la clase mayoritaria.
 
 **Fórmula distancia euclidiana**:  
-\[
-d(p,q) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}
-\]
+
+$$ d(p,q) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2} $$
 
 ### Contexto de negocio – ¿Cuándo usarlo?
 | Categoría | Ejemplo | Por qué encaja |
@@ -51,7 +50,7 @@ d(p,q) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}
 ### Ventajas vs Desventajas
 | ✅ Ventajas | ❌ Desventajas |
 |-------------|---------------|
-| Fácil de entender e implementar | Coste de predicción alto \(O(n \cdot d)\) |
+| Fácil de entender e implementar | Coste de predicción alto  ($O(n \cdot d)$) |
 | No asume distribución subyacente | Sensible a escala, outliers y alta dimensionalidad |
 | Altamente interpretable (explicación por vecinos) | Almacena todo el dataset en memoria |
 | No requiere entrenamiento | Muy sensible a clases desbalanceadas |
@@ -79,9 +78,9 @@ y_pred = knn.predict(X_test_scaled)
 - Variantes según tipo de datos: **GaussianNB** (continuas), **MultinomialNB** (conteos), **BernoulliNB** (binarias).
 
 **Fórmula**:  
-\[
+$$
 P(C_k \mid \mathbf{x}) \propto P(C_k) \prod_{i=1}^{n} P(x_i \mid C_k)
-\]
+$$
 
 ### Contexto de negocio – ¿Cuándo usarlo?
 | Categoría | Ejemplo | Por qué encaja |
@@ -100,7 +99,7 @@ P(C_k \mid \mathbf{x}) \propto P(C_k) \prod_{i=1}^{n} P(x_i \mid C_k)
 | **Dimensionalidad** | **Muy robusto**. Excelente con miles de características (texto). |
 | **Desbalance** | Moderadamente sensible. Ajustar `fit_prior` o usar `class_weight`. |
 | **Outliers** | Poco sensible (especialmente en Multinomial/Bernoulli). |
-| **Volumen** | Entrenamiento e inferencia extremadamente rápidos (\(O(n \cdot d)\) y \(O(d \cdot k)\)). |
+| **Volumen** | Entrenamiento e inferencia extremadamente rápidos ($(O(n \cdot d)$) y $(O(d \cdot k)$)). |
 
 ### Hiperparámetros críticos
 | Parámetro | Variante | Impacto |
@@ -136,9 +135,9 @@ y_pred = nb.predict(X_test)
 - Usa **kernel trick** para mapear datos a espacio de mayor dimensión y lograr separabilidad lineal.
 
 **Fórmula básica (caso separable)**:  
-\[
+$$
 \min_{\mathbf{w}, b} \frac{1}{2} \|\mathbf{w}\|^2 \quad \text{s.a.} \quad y_i(\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1
-\]
+$$
 
 ### Contexto de negocio – ¿Cuándo usarlo?
 | Categoría | Ejemplo | Por qué encaja |
@@ -157,7 +156,7 @@ y_pred = nb.predict(X_test)
 | **Dimensionalidad** | Robusto gracias a regularización; puede manejar miles de variables. |
 | **Desbalance** | Sensible. Usar `class_weight='balanced'` o balancear datos. |
 | **Outliers** | Moderadamente sensible. Limpiar datos o usar kernel robusto. |
-| **Volumen** | Entrenamiento \(O(n^2)\) a \(O(n^3)\); no escala bien >50k muestras. |
+| **Volumen** | Entrenamiento $(O(n^2)$) a $(O(n^3)$); no escala bien >50k muestras. |
 
 ### Hiperparámetros críticos
 | Parámetro | Valores típicos | Impacto |
