@@ -32,6 +32,7 @@ $$ d(p,q) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2} $$
 | **Diagnóstico médico** | Clasificar tumor benigno/maligno con pocas variables | Relación no lineal, interpretabilidad total. |
 
 ### Requisitos y características
+
 | Característica | Condición / Impacto |
 |----------------|---------------------|
 | **Escalado** | **Obligatorio**. Sin escalado, variables con mayor rango dominan la distancia. |
@@ -42,6 +43,7 @@ $$ d(p,q) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2} $$
 | **Volumen** | Inferencia lenta: \(O(n \cdot d)\). No apto para >100k muestras en producción. |
 
 ### Hiperparámetros críticos
+
 | Parámetro | Valores típicos | Impacto |
 |-----------|-----------------|---------|
 | `n_neighbors` (k) | 3, 5, 7, 9, √n | Pequeño → alta varianza (sobreajuste). Grande → alto sesgo. |
@@ -49,6 +51,7 @@ $$ d(p,q) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2} $$
 | `metric` | 'euclidean', 'manhattan' | Manhattan más robusta a outliers. |
 
 ### Ventajas vs Desventajas
+
 | ✅ Ventajas | ❌ Desventajas |
 |-------------|---------------|
 | Fácil de entender e implementar | Coste de predicción alto  ($O(n \cdot d)$) |
@@ -57,6 +60,7 @@ $$ d(p,q) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2} $$
 | No requiere entrenamiento | Muy sensible a clases desbalanceadas |
 
 ### Código mínimo (scikit‑learn)
+
 ```python
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
@@ -84,6 +88,7 @@ P(C_k \mid \mathbf{x}) \propto P(C_k) \prod_{i=1}^{n} P(x_i \mid C_k)
 $$
 
 ### Contexto de negocio – ¿Cuándo usarlo?
+
 | Categoría | Ejemplo | Por qué encaja |
 |-----------|--------|----------------|
 | **Clasificación de texto / NLP** | Spam vs. no spam, análisis de sentimiento | Multinomial/Bernoulli muy eficaces con bolsas de palabras y alta dimensionalidad. |
@@ -93,6 +98,7 @@ $$
 | **Segmentación rápida** | Churn prediction en telecom | Incorpora fácilmente nuevas variables. |
 
 ### Requisitos y características
+
 | Característica | Condición / Impacto |
 |----------------|---------------------|
 | **Escalado** | **No necesario**. Las estimaciones no dependen de la escala. |
@@ -103,6 +109,7 @@ $$
 | **Volumen** | Entrenamiento e inferencia extremadamente rápidos ($(O(n \cdot d)$) y $(O(d \cdot k)$)). |
 
 ### Hiperparámetros críticos
+
 | Parámetro | Variante | Impacto |
 |-----------|----------|---------|
 | `alpha` | Multinomial/Bernoulli | Suavizado Laplace (evita probabilidades cero). Alto → más sesgo. |
@@ -110,6 +117,7 @@ $$
 | `fit_prior` | Todas | Aprende probabilidades a priori de las clases. |
 
 ### Ventajas vs Desventajas
+
 | ✅ Ventajas | ❌ Desventajas |
 |-------------|---------------|
 | Extremadamente rápido (entrenamiento e inferencia) | Supuesto de independencia muy fuerte (rara vez real) |
@@ -118,6 +126,7 @@ $$
 | Muy interpretable (probabilidades condicionales) | |
 
 ### Código mínimo (scikit‑learn)
+
 ```python
 from sklearn.naive_bayes import GaussianNB
 
@@ -132,6 +141,7 @@ y_pred = nb.predict(X_test)
 ## 3. Support Vector Machines (SVM)
 
 ### Concepto
+
 - **Paramétrico** que busca el **hiperplano de margen máximo** que separa las clases.  
 - Usa **kernel trick** para mapear datos a espacio de mayor dimensión y lograr separabilidad lineal.
 
@@ -141,6 +151,7 @@ $$
 $$
 
 ### Contexto de negocio – ¿Cuándo usarlo?
+
 | Categoría | Ejemplo | Por qué encaja |
 |-----------|--------|----------------|
 | **Clasificación de imágenes / visión** | Detección de objetos, clasificación de radiografías | Kernel RBF captura patrones complejos. |
@@ -150,6 +161,7 @@ $$
 | **Análisis de texto** (kernel lineal) | Clasificación de documentos con TF‑IDF | Alta precisión y rapidez. |
 
 ### Requisitos y características
+
 | Característica | Condición / Impacto |
 |----------------|---------------------|
 | **Escalado** | **Obligatorio e indispensable**. Sin escalado, las variables con mayor rango dominan. |
@@ -160,6 +172,7 @@ $$
 | **Volumen** | Entrenamiento $(O(n^2)$) a $(O(n^3)$); no escala bien >50k muestras. |
 
 ### Hiperparámetros críticos
+
 | Parámetro | Valores típicos | Impacto |
 |-----------|-----------------|---------|
 | `C` | 0.1, 1, 10, 100 | Pequeño → margen amplio (sesgo), grande → margen estrecho (varianza). |
@@ -167,6 +180,7 @@ $$
 | `kernel` | 'linear', 'rbf' | Lineal para alta dimensión o linealidad; RBF para no linealidad. |
 
 ### Ventajas vs Desventajas
+
 | ✅ Ventajas | ❌ Desventajas |
 |-------------|---------------|
 | Efectivo en alta dimensión con pocas muestras | No escala bien a grandes datasets (>50k muestras) |
@@ -175,6 +189,7 @@ $$
 | Solución única (optimización convexa) | |
 
 ### Código mínimo (scikit‑learn)
+
 ```python
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
@@ -220,6 +235,7 @@ y_pred = svm.predict(X_test_scaled)
 | **Costes asimétricos** (FP vs FN) | Cualquiera, evaluando con métrica adecuada | Elegir modelo que optimice la métrica que refleja el coste de negocio. |
 
 ### Flujo práctico de selección
+
 1. **Define objetivo de negocio** → ¿prioridad: explicabilidad, velocidad, precisión? ¿coste de FP vs FN?
 2. **Analiza los datos** → ¿dimensionalidad? ¿volumen? ¿linealidad?
 3. **Evalúa restricciones** → ¿latencia máxima? ¿recursos computacionales?
