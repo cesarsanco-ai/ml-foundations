@@ -22,6 +22,7 @@ layout: default
 $$ d(p,q) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2} $$
 
 ### Contexto de negocio – ¿Cuándo usarlo?
+
 | Categoría | Ejemplo | Por qué encaja |
 |-----------|--------|----------------|
 | **Recomendación / Personalización** | “Clientes similares a ti también compraron…” | La similitud entre usuarios es el núcleo del problema. |
