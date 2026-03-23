@@ -149,7 +149,8 @@ y_pred = nb.predict(X_test)
 - **Paramétrico** que busca el **hiperplano de margen máximo** que separa las clases.  
 - Usa **kernel trick** para mapear datos a espacio de mayor dimensión y lograr separabilidad lineal.
 
-**Fórmula básica (caso separable)**:  
+**Fórmula básica (caso separable)**: 
+ 
 $$
 \min_{\mathbf{w}, b} \frac{1}{2} \|\mathbf{w}\|^2 \quad \text{s.a.} \quad y_i(\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1
 $$
