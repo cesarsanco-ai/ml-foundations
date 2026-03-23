@@ -83,6 +83,7 @@ y_pred = knn.predict(X_test_scaled)
 - Variantes según tipo de datos: **GaussianNB** (continuas), **MultinomialNB** (conteos), **BernoulliNB** (binarias).
 
 **Fórmula**:  
+
 $$
 P(C_k \mid \mathbf{x}) \propto P(C_k) \prod_{i=1}^{n} P(x_i \mid C_k)
 $$
