@@ -16,7 +16,11 @@ layout: default
 
 ## 1. Planteamiento del Problema
 
-Tenemos un conjunto de entrenamiento $\mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^n$, donde  
+Tenemos un conjunto de entrenamiento
+
+$\mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^n$
+
+donde  
 - $\mathbf{x}_i \in \mathbb{R}^d$ es el vector de características (atributos) de la $i$-ésima muestra,  
 - $y_i \in \{1,2,\dots,K\}$ es la clase a la que pertenece.
 

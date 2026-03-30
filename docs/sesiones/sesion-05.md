@@ -32,10 +32,14 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 ***
 
-## 🚀 Proyectos End-to-End
+## 🚀 Proyecto End-to-End
 
-Algunos proyectos avanzados end-to-end ⭐⭐⭐ , puedes encontrar más en mi Github.
+Proyectos con arquitectura completa: desde la experimentación hasta el despliegue en producción. ⭐⭐⭐
 
-* 🛠️ **[ML-Pipeline-Template](https://github.com/cesarsanco-ai):** Estructura base para proyectos de ML con validación y modularización.  
+### 📨 Smart Inbox AI: Clasificador de Intenciones
+Comparativa de modelos de Machine Learning (**Naive Bayes vs SVM**) para la clasificación automática de mensajes en NLP.
 
-* 📈 **[Predictive-Analysis-Case](https://github.com/cesarsanco-ai):** Aplicación práctica de modelos supervisados en entornos de negocio.
+* 🌐 **Demo en vivo:** [https://intent-classifier-frontend.onrender.com/](https://intent-classifier-frontend.onrender.com/)
+* 💻 **Código Fuente:** [https://github.com/cesarsanco-ai/intent-classifier-project](https://github.com/cesarsanco-ai/intent-classifier-project)
+
+---

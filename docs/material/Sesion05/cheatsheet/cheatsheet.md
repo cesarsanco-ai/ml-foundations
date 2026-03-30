@@ -150,7 +150,7 @@ y_pred = nb.predict(X_test)
 - Usa **kernel trick** para mapear datos a espacio de mayor dimensión y lograr separabilidad lineal.
 
 **Fórmula básica (caso separable)**: 
- 
+
 $$
 \min_{\mathbf{w}, b} \frac{1}{2} \|\mathbf{w}\|^2 \quad \text{s.a.} \quad y_i(\mathbf{w} \cdot \mathbf{x}_i + b) \geq 1
 $$
@@ -275,3 +275,36 @@ y_pred = svm.predict(X_test_scaled)
 ```
 
 **Pro tip:** Siempre comienza con un modelo simple (Naive Bayes o KNN) como baseline. Si supera expectativas de negocio, mantén la simplicidad. Si no, avanza a SVM u otros, documentando claramente el trade-off entre ganancia predictiva y coste de implementación/mantenimiento.
+
+
+
+
+
+
+***
+### Extra
+
+### ¿Algoritmos de Clasificación adaptados a Regresión?
+
+| Algoritmo | Nombre Técnico | Nivel de Uso | Casos de Uso (Si aplica) | Nota Técnica Clave |
+| :--- | :--- | :--- | :--- | :--- |
+| **KNN** | `KNeighborsRegressor` | **Bajo** | Sistemas de recomendación simples, imputación de valores faltantes (KNN Imputer). | Predice el **promedio** de los $K$ vecinos. Muy sensible a la escala y outliers. |
+| **SVM** | `SVR` | **Medio** | Series de tiempo financieras, biometría, sensores con datos de alta dimensionalidad. | Busca que los puntos caigan dentro de un **"tubo" de error ($\epsilon$)**. Usa Kernels para no linealidad. |
+| **Naive Bayes** | N/A | **Nulo** | No aplica para regresión estándar. | Es puramente **probabilístico para categorías** (clases discretas). |
+
+
+
+---
+
+### Consideraciones:
+
+1.  **¿Por qué el nivel de uso de KNN es bajo?**
+    * Porque es un "estudiante de memoria": si el valor real está fuera del rango que vio en el entrenamiento, el KNN jamás podrá predecirlo (no extrapola). Además, en banca o empresas grandes, calcular distancias contra millones de filas es demasiado lento.
+
+2.  **¿Cuándo brilla el SVR?**
+    * Cuando tienes **pocos datos pero muchas columnas** (pocas muestras, alta dimensionalidad). Es muy robusto en esos casos donde los modelos de árboles (como Random Forest) podrían sobreajustar.
+
+
+
+
+
