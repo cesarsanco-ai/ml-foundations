@@ -15,7 +15,7 @@ Cada sesión incluye material teórico, notebooks de laboratorio, ejercicios y r
 | 01 | [Introducción al ML](sesiones/sesion-01.md) |
 | 02 | [Análisis Exploratorio y Feature Engineering](sesiones/sesion-02.md) |
 | 03 | [Regresión Lineal y Regularización](sesiones/sesion-03.md) |
-| 04 | [Regresión Logística y Balance de Datos](sesiones/sesion-04.md) |
+| 04 | [Regresión Logística y Balanceo de Datos](sesiones/sesion-04.md) |
 | 05 | [kNN, Naive Bayes, Máquinas de Soporte Vectorial](sesiones/sesion-05.md) |
 | 06 | [Árboles de Decisión, Random Forest y Tipos de Ensamble](sesiones/sesion-06.md) |
 | 07 | [Gradient Boosting](sesiones/sesion-07.md) |
