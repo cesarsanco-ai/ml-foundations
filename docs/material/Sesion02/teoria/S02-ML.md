@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Semana 2: Análisis Exploratorio y Feature Engineering
 
 ## Logro de la sesión  

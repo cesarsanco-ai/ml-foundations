@@ -1,6 +1,7 @@
+---
+layout: default
+---
 # Semana 12: Sistemas de Recomendación
-
-**Autor:** Carlos César Sánchez Coronel
 
 Los sistemas de recomendación son centrales en plataformas digitales (streaming, e-commerce, redes sociales). Esta sesión cubre fundamentos, filtrado colaborativo, factorización matricial (Funk SVD), métricas y desafíos (cold start, escalabilidad).
 

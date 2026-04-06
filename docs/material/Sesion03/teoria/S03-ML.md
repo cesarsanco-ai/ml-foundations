@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Semana 3: Regresión Lineal y Regularización
 
 ## Logro de la sesión

@@ -1,6 +1,7 @@
+---
+layout: default
+---
 # Semana 10: Series de Tiempo
-
-**Autor:** Carlos César Sánchez Coronel
 
 Los datos temporales aparecen en innumerables contextos: ventas diarias, tráfico web, indicadores económicos, sensores IoT, etc. Modelar correctamente la dependencia temporal es esencial para pronósticos precisos. Esta sesión aborda modelos estadísticos clásicos (ARIMA, SARIMA) y enfoques modernos (XGBoost, Prophet), con feature engineering temporal, métricas y ejemplos prácticos.
 

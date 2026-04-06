@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Gradient Boosting Machines (XGBoost, LightGBM, CatBoost)
 
 ## 1. Introducción y Contextualización

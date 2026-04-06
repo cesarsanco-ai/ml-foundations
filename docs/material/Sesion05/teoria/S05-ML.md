@@ -1,5 +1,7 @@
-
-# Semana 5: Clasificación II - Algoritmos Clásicos
+---
+layout: default
+---
+# Semana 5: kNN, Naive Bayes, SVM
 
 ## Logro de la sesión
 

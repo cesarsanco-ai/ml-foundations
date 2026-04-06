@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Semana 1: Introducción al Machine Learning
 
 ## Logro de la sesión

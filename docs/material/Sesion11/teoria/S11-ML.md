@@ -1,6 +1,7 @@
+---
+layout: default
+---
 # Semana 11: Modelos Complementarios
-
-**Autor:** Carlos César Sánchez Coronel
 
 En problemas reales surgen situaciones que requieren enfoques especializados: outliers severos, relaciones no lineales difíciles para árboles, clusters arbitrarios o interpretación jerárquica. Esta sesión presenta algoritmos complementarios frecuentes en entrevistas y en casos concretos.
 

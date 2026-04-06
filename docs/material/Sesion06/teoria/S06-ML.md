@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Semana 6: Árboles de Decisión y Random Forest
 
 ## Logro de la sesión

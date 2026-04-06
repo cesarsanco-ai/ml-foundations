@@ -1,9 +1,8 @@
+---
+layout: default
+---
+# Sesión 9: Clustering, Reducción de Dimensionalidad y Visualización
 
-# Sesión 9: APRENDIZAJE NO SUPERVISADO
-## Clustering, Reducción de Dimensionalidad y Visualización
-
-**Autor:** Carlos César Sánchez Coronel  
-**Fecha:** 2026
 
 ---
 

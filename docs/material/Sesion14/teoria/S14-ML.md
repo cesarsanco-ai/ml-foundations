@@ -1,6 +1,8 @@
+---
+layout: default
+---
 # Semana 14: Despliegue de Modelos (MLOps)
 
-**Autor:** Carlos César Sánchez Coronel
 
 El valor de un modelo se materializa en producción. **MLOps** integra ML, ingeniería de software y DevOps: serialización, APIs, contenedores, versionado y monitoreo frente a degradación (drift).
 

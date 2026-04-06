@@ -1,6 +1,8 @@
+---
+layout: default
+---
 # Semana 13: Interpretabilidad de Modelos
 
-**Autor:** Carlos César Sánchez Coronel
 
 Modelos complejos (Random Forest, XGBoost, redes) logran alta precisión pero son “cajas negras”. En salud, finanzas o cumplimiento normativo (p. ej. GDPR) se necesitan explicaciones. Esta sesión cubre interpretabilidad global y local, intrínseca y post-hoc.
 

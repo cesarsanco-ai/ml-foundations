@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # Semana 8: Evaluación y Validación de Modelos
 
 ## Logro de la sesión
