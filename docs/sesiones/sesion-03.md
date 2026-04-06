@@ -15,7 +15,7 @@ Construir e interpretar modelos de regresión lineal, aplicando regularización 
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Slide3](../material/Sesion03/slides/slides3-ML.pdf)
+* 🖼️ **Clase:** [Clase](../material/Sesion03/teoria/S03-ML.md)
 
 * 📝 **Quick Reference:** [CheatSheet](../material/Sesion03/cheatsheet/cheatsheet.md)
 

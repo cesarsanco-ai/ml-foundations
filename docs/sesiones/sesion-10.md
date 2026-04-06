@@ -15,7 +15,7 @@ Modelar y pronosticar datos temporales utilizando técnicas estadísticas clási
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Slide10](../material/Sesion10/slides/slides10-ML.pdf)
+* 🖼️ **Clase:** [Clase](../material/Sesion10/teoria/S10-ML.md)
 
 * 📝 **Quick Reference:** [CheatSheet](../material/Sesion10/cheatsheet/cheatsheet.md)
 

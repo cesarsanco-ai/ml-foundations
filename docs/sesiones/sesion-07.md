@@ -15,7 +15,7 @@ Construir, optimizar e interpretar modelos de Gradient Boosting (XGBoost y Light
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Slide7](../material/Sesion07/slides/slides7-ML.pdf)
+* 🖼️ **Clase:** [Clase](../material/Sesion07/teoria/S07-ML.md)
 
 * 📝 **Quick Reference:** [CheatSheet](../material/Sesion07/cheatsheet/cheatsheet.md)
 

@@ -15,7 +15,7 @@ Explorar y extraer valor de datos no etiquetados mediante técnicas de clusterin
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Slide9](../material/Sesion09/slides/slides9-ML.pdf)
+* 🖼️ **Clase:** [Clase](../material/Sesion09/teoria/S09-ML.md)
 
 * 📝 **Quick Reference:** [CheatSheet](../material/Sesion09/cheatsheet/cheatsheet.md)
 

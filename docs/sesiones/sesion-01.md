@@ -15,7 +15,7 @@ Comprender la taxonomía del aprendizaje automático (Supervisado, No Supervisad
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Slide1](../material/Sesion01/slides/slides1-ML.pdf)
+* 🖼️ **Clase:** [Clase](../material/Sesion01/teoria/S01-ML.md)
 
 * 📝 **Quick Reference:** [CheatSheet](../material/Sesion01/cheatsheet/cheatsheet.md)
 

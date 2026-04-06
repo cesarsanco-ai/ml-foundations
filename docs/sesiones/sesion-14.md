@@ -15,7 +15,7 @@ Llevar un modelo a producción, comprender los conceptos clave de MLOps, monitor
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Slide14](../material/Sesion14/slides/slides14-ML.pdf)
+* 🖼️ **Clase:** [Clase](../material/Sesion14/teoria/S14-ML.md)
 
 * 📝 **Quick Reference:** [CheatSheet](../material/Sesion14/cheatsheet/cheatsheet.md)
 

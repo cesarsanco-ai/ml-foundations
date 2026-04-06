@@ -15,7 +15,7 @@ Conocer y aplicar algoritmos adicionales de regresión y clustering que son úti
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Slide11](../material/Sesion11/slides/slides11-ML.pdf)
+* 🖼️ **Clase:** [Clase](../material/Sesion11/teoria/S11-ML.md)
 
 * 📝 **Quick Reference:** [CheatSheet](../material/Sesion11/cheatsheet/cheatsheet.md)
 

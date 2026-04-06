@@ -15,7 +15,7 @@ Construir, comparar e interpretar modelos de clasificación utilizando algoritmo
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Slide5](../material/Sesion05/slides/slides5-ML.pdf)
+* 🖼️ **Clase:** [Clase](../material/Sesion05/teoria/S05-ML.md)
 
 * 📝 **Quick Reference:** [CheatSheet](../material/Sesion05/cheatsheet/cheatsheet.md)
 

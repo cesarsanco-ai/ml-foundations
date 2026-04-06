@@ -15,7 +15,7 @@ Construir, interpretar y evaluar modelos de clasificación binaria y multiclase 
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Slide4](../material/Sesion04/slides/slides4-ML.pdf)
+* 🖼️ **Clase:** [Clase](../material/Sesion04/teoria/S04-ML.md)
 
 * 📝 **Quick Reference:** [CheatSheet](../material/Sesion04/cheatsheet/cheatsheet.md)
 

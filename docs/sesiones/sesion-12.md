@@ -15,7 +15,7 @@ Diseñar e implementar sistemas de recomendación basados en filtrado colaborati
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Slide12](../material/Sesion12/slides/slides12-ML.pdf)
+* 🖼️ **Clase:** [Clase](../material/Sesion12/teoria/S12-ML.md)
 
 * 📝 **Quick Reference:** [CheatSheet](../material/Sesion12/cheatsheet/cheatsheet.md)
 

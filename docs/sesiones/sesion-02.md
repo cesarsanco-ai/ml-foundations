@@ -15,7 +15,7 @@ Realizar un análisis exploratorio (EDA) y aplicar técnicas de feature engineer
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Slide2](../material/Sesion02/slides/slides2-ML.pdf)
+* 🖼️ **Clase:** [Clase](../material/Sesion02/teoria/S02-ML.md)
 
 * 📝 **Quick Reference:** [CheatSheet](../material/Sesion02/cheatsheet/cheatsheet.md)
 

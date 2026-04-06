@@ -15,7 +15,7 @@ Evaluar, validar y seleccionar modelos de machine learning de forma robusta, ase
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Slide8](../material/Sesion08/slides/slides8-ML.pdf)
+* 🖼️ **Clase:** [Clase](../material/Sesion08/teoria/S08-ML.md)
 
 * 📝 **Quick Reference:** [CheatSheet](../material/Sesion08/cheatsheet/cheatsheet.md)
 

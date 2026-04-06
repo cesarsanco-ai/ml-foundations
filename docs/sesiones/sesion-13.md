@@ -15,7 +15,7 @@ Explicar las predicciones de modelos complejos mediante técnicas de interpretab
 
 Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
-* 🖼️ **Slides de Clase (PDF):** [Slide13](../material/Sesion13/slides/slides13-ML.pdf)
+* 🖼️ **Clase:** [Clase](../material/Sesion13/teoria/S13-ML.md)
 
 * 📝 **Quick Reference:** [CheatSheet](../material/Sesion13/cheatsheet/cheatsheet.md)
 
