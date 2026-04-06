@@ -52,13 +52,6 @@ donde $\beta_0$ es el intercepto y $\beta_j$ los coeficientes de cada variable.
 
 Evita **overfitting** y mejora generalización al penalizar magnitudes de coeficientes:
 
-| Método | Penalización | Fórmula |
-|--------|--------------|---------|
-| **Ridge (L2)** | Suma de cuadrados de coeficientes | $$\min_{\beta} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} \beta_j^2$$ |
-| **Lasso (L1)** | Suma de valores absolutos | $$\min_{\beta} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} |\beta_j|$$ |
-| **Elastic Net** | Combinación L1 y L2 | $$\min_{\beta} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda_1 \sum_{j=1}^{p} |\beta_j| + \lambda_2 \sum_{j=1}^{p} \beta_j^2$$ |
-
-- **Interpretación:**
   - Ridge reduce coeficientes grandes pero no los anula.
   - Lasso puede eliminar variables irrelevantes.
   - Elastic Net combina beneficios de ambos.
