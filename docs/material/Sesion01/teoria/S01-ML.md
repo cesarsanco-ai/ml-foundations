@@ -110,32 +110,25 @@ Los modelos de **Machine Learning** se fundamentan en conceptos matemáticos só
 
 ---
 
+
 ### 1. Funciones de coste
 
-Las funciones de coste cuantifican la discrepancia entre las predicciones (\hat{y}) y los valores reales (y):
+Las funciones de coste cuantifican la discrepancia entre las predicciones $\hat{y}$ y los valores reales $y$:
 
 * **Error cuadrático medio (MSE, para regresión lineal):**
-  [
-  J(\theta) = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
-  ]
-  donde (\hat{y}_i = \theta_0 + \theta_1 x_i + \dots + \theta_p x_i^{(p)}).
+  $$ J(\theta) = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 $$
+  donde $\hat{y}_i = \theta_0 + \theta_1 x_i + \dots + \theta_p x_i^{(p)}$.
 
 * **Entropía cruzada (cross-entropy, para regresión logística y clasificación):**
-  [
-  J(\theta) = - \frac{1}{n} \sum_{i=1}^{n} \left[y_i \log \hat{y}_i + (1-y_i) \log (1-\hat{y}_i)\right]
-  ]
-  donde (\hat{y}_i = \sigma(\theta^T x_i)) y (\sigma(z) = \frac{1}{1+e^{-z}}) es la función sigmoide.
+  $$ J(\theta) = - \frac{1}{n} \sum_{i=1}^{n} \left[y_i \log \hat{y}_i + (1-y_i) \log (1-\hat{y}_i)\right] $$
+  donde $\hat{y}_i = \sigma(\theta^T x_i)$ y $\sigma(z) = \frac{1}{1+e^{-z}}$ es la función sigmoide.
 
 * **Función de coste para SVM (hinge loss):**
-  [
-  J(\mathbf{w}, b) = \frac{1}{2} |\mathbf{w}|^2 + C \sum_{i=1}^{n} \max(0, 1 - y_i (\mathbf{w}^T x_i + b))
-  ]
+  $$ J(\mathbf{w}, b) = \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^{n} \max(0, 1 - y_i (\mathbf{w}^T x_i + b)) $$
 
 * **Clustering (k-means, suma de distancias al cuadrado):**
-  [
-  J = \sum_{k=1}^{K} \sum_{x_i \in C_k} | x_i - \mu_k |^2
-  ]
-  donde (\mu_k) es el centroide del cluster (C_k).
+  $$ J = \sum_{k=1}^{K} \sum_{x_i \in C_k} \| x_i - \mu_k \|^2 $$
+  donde $\mu_k$ es el centroide del cluster $C_k$.
 
 ---
 
@@ -144,17 +137,13 @@ Las funciones de coste cuantifican la discrepancia entre las predicciones (\hat{
 Para minimizar la función de coste se usan distintos métodos:
 
 * **Gradiente descendente (Gradient Descent):**
-  [
-  \theta := \theta - \alpha \nabla_\theta J(\theta)
-  ]
-  donde (\alpha) es la tasa de aprendizaje.
+  $$ \theta := \theta - \alpha \nabla_\theta J(\theta) $$
+  donde $\alpha$ es la tasa de aprendizaje.
 
 * **Gradiente descendente estocástico (SGD):** Ajusta parámetros por cada muestra o minibatch, más rápido en datasets grandes.
 
 * **Métodos cerrados (Closed-form solution):** Para **regresión lineal**, la solución óptima puede encontrarse sin iteraciones:
-  [
-  \hat{\theta} = (X^T X)^{-1} X^T y
-  ]
+  $$ \hat{\theta} = (X^T X)^{-1} X^T y $$
 
 * **Métodos de optimización convexa:** Usados en **regresión logística** y SVM, aprovechando que la función de coste es convexa.
 
@@ -165,14 +154,10 @@ Para minimizar la función de coste se usan distintos métodos:
 Para evitar **overfitting**, se introducen penalizaciones:
 
 * **Ridge (L2):**
-  [
-  J(\theta) = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}*i)^2 + \lambda \sum*{j=1}^{p} \theta_j^2
-  ]
+  $$ J(\theta) = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} \theta_j^2 $$
 
 * **Lasso (L1):**
-  [
-  J(\theta) = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}*i)^2 + \lambda \sum*{j=1}^{p} |\theta_j|
-  ]
+  $$ J(\theta) = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} |\theta_j| $$
 
 * **Elastic Net (combinación L1 + L2)** también es común.
 
@@ -182,12 +167,12 @@ Para evitar **overfitting**, se introducen penalizaciones:
 
 | Modelo                      | Conceptos matemáticos clave                   | Función de coste / ecuación                                                                      |
 | --------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| **Regresión Lineal**        | Álgebra lineal, MSE                           | (J(\theta) = \frac{1}{n} \sum (y_i - \theta^T x_i)^2)                                            |
-| **Regresión Logística**     | Probabilidad, optimización convexa            | (J(\theta) = -\frac{1}{n} \sum [y_i \log \hat{y}_i + (1-y_i) \log(1-\hat{y}_i)])                 |
-| **SVM**                     | Optimización convexa, geometría de margen     | (J(\mathbf{w}, b) = \frac{1}{2} |\mathbf{w}|^2 + C \sum \max(0, 1 - y_i (\mathbf{w}^T x_i + b))) |
-| **k-NN**                    | Distancia euclidiana                          | (d(x_i, x_j) = |x_i - x_j|)                                                                      |
-| **k-means**                 | Distancias, centroides                        | (J = \sum_{k} \sum_{x_i \in C_k} | x_i - \mu_k |^2)                                              |
-| **DBSCAN**                  | Distancias y densidad                         | (N_\epsilon(x) = {y \in D \mid |x - y| \le \epsilon })                                           |
+| **Regresión Lineal**        | Álgebra lineal, MSE                           | $J(\theta) = \frac{1}{n} \sum (y_i - \theta^T x_i)^2$                                            |
+| **Regresión Logística**     | Probabilidad, optimización convexa            | $J(\theta) = -\frac{1}{n} \sum [y_i \log \hat{y}_i + (1-y_i) \log(1-\hat{y}_i)]$                 |
+| **SVM**                     | Optimización convexa, geometría de margen     | $J(\mathbf{w}, b) = \frac{1}{2} \|\mathbf{w}\|^2 + C \sum \max(0, 1 - y_i (\mathbf{w}^T x_i + b))$ |
+| **k-NN**                    | Distancia euclidiana                          | $d(x_i, x_j) = \|x_i - x_j\|$                                                                      |
+| **k-means**                 | Distancias, centroides                        | $J = \sum_{k} \sum_{x_i \in C_k} \| x_i - \mu_k \|^2$                                              |
+| **DBSCAN**                  | Distancias y densidad                         | $N_\epsilon(x) = \{ y \in D \mid \|x - y\| \le \epsilon \}$                                       |
 | **Random Forest / XGBoost** | Árboles, splits, reducción de entropía / Gini | Funciones de coste según impurity (Gini/Entropy) y suma de errores de predicción                 |
 
 ---
@@ -271,16 +256,3 @@ Seleccionar la métrica adecuada es fundamental para evaluar el rendimiento del 
 
 La métrica debe reflejar el coste real de los errores en el contexto de la aplicación (por ejemplo, en detección de fraudes es más crítico minimizar falsos negativos).
 
-
-## Reto (1 punto)
-Se propone el siguiente ejercicio de investigación y pensamiento crítico:
-> **Instrucciones:** Escoge una empresa tecnológica famosa (por ejemplo, Uber, Netflix, Spotify, TikTok, Amazon, etc.) y detecta la mayor cantidad posible de modelos de machine learning que probablemente utilice en sus operaciones. Para cada modelo identificado, indica brevemente el tipo de aprendizaje (supervisado, no supervisado, refuerzo) y el objetivo de negocio que satisface.
-
-*Formato de entrega:* Un documento PDF de máximo dos páginas, con una lista clara y justificación breve. Se valorará la variedad y la precisión técnica.
-
-## Laboratorio: Ver Colab
-En esta sesión práctica se proporciona un cuaderno de Google Colab que incluye un repaso de las bibliotecas fundamentales para el análisis de datos en Python:
-- **Numpy:** Operaciones con arrays, álgebra lineal básica, generación de datos sintéticos.
-- **Pandas:** Carga, limpieza, transformación y agregación de datos tabulares.
-- **Matplotlib:** Creación de gráficos lineales, dispersión, histogramas.
-- **Seaborn:** Visualizaciones estadísticas avanzadas (mapas de calor, pairplots, boxplots).

@@ -17,9 +17,6 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 * 🖼️ **Clase:** [Clase](../material/Sesion03/teoria/S03-ML.md)
 
-* 📝 **Quick Reference:** [CheatSheet](../material/Sesion03/cheatsheet/cheatsheet.md)
-
-* 📎 **Anexo Técnico:** [Material Complementario](../material/Sesion03/anexo/anexo.md)
 
 ***
 
