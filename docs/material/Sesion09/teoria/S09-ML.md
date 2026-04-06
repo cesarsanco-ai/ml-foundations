@@ -3,11 +3,6 @@ layout: default
 ---
 # Sesión 9: Clustering, Reducción de Dimensionalidad y Visualización
 
-
----
-
-# Aprendizaje No Supervisado: Clustering, PCA y t-SNE
-
 En sesiones anteriores se trabajó con datos etiquetados, donde la variable objetivo guiaba el aprendizaje. Sin embargo, en muchos escenarios prácticos no se dispone de etiquetas. El **aprendizaje no supervisado** busca descubrir estructuras ocultas en los datos: agrupaciones naturales (clustering), representaciones de menor dimensionalidad que retengan información esencial (PCA) o visualizaciones que preserven la estructura de vecindad (t-SNE).
 
 Esta sesión aborda:

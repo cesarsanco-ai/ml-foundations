@@ -14,21 +14,23 @@ Construir un **conjunto (ensemble) de árboles de decisión** de forma secuencia
 ## 2. Antecedentes (Estado del Arte)
 
 ### a) Evolución histórica
-| Año       | Hito                                 | Descripción                                                                                                                                                             |
-| --------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1988-1990 | El Origen Teórico                    | Michael Kearns, Leslie Valiant y Robert Schapire demostraron matemáticamente que un conjunto de "aprendices débiles" podía combinarse para formar un "aprendiz fuerte". |
-| 1999      | AdaBoost (Freund & Schapire)         | Primer boosting con pesos adaptativos, árboles como débiles.                                                                                                            |
-| 2001      | Gradient Boosting Machine (Friedman) | Generalización a cualquier pérdida diferenciable usando gradientes.                                                                                                     |
+
+| Año | Hito | Descripción |
+|-----|------|-------------|
+| 1988-1990 | El Origen Teórico | Michael Kearns, Leslie Valiant y Robert Schapire demostraron matemáticamente que un conjunto de "aprendices débiles" podía combinarse para formar un "aprendiz fuerte". |
+| 1999 | AdaBoost (Freund & Schapire) | Primer boosting con pesos adaptativos, árboles como débiles. |
+| 2001 | Gradient Boosting Machine (Friedman) | Generalización a cualquier pérdida diferenciable usando gradientes. |
 | 2014 | XGBoost (Chen & Guestrin) | Optimización con regularización, manejo de nulos, paralelización. |
-| 2016 | LightGBM (Microsoft) | Basado en histogramas y crecimiento *leaf-wise*; enorme velocidad. |
-| 2017 | CatBoost (Yandex) | Manejo nativo de categóricas con *ordered boosting* y simetría. |
+| 2016 | LightGBM (Microsoft) | Basado en histogramas y crecimiento leaf-wise; enorme velocidad. |
+| 2017 | CatBoost (Yandex) | Manejo nativo de categóricas con ordered boosting y simetría. |
 
 ### b) Comparativa de paradigmas
+
 | Paradigma | Ventaja clave | Desventaja | Relevancia actual |
 |-----------|---------------|------------|-------------------|
 | Random Forest | Paralelizable, robusto a overfitting | Menor precisión en tabulares densos | Baja en alta dimensionalidad |
 | Redes Neuronales | Alta capacidad en no estructurados (imagen, texto) | Requiere mucho dato y tuning | Media en tabulares |
-| **GBM modernos** | Precisión SOTA en tabulares + velocidad | Sensible a hiperparámetros | **Muy alta** (Kaggle, industria) |
+| GBM modernos | Precisión SOTA en tabulares + velocidad | Sensible a hiperparámetros | Muy alta (Kaggle, industria) |
 
 ## 3. Fundamentos Técnicos (El Algoritmo)
 

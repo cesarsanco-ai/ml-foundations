@@ -59,9 +59,6 @@ $$ \hat{p} = P(y=1|X) = \sigma(z) = \frac{1}{1 + e^{-z}}, \quad z = \beta_0 + \s
   $$ \beta \leftarrow \beta - \eta \nabla_\beta L(\beta) $$
 
 - **Regularización:**
-  - **L2 (Ridge):** $L_{reg} = L(\beta) + \lambda \sum \beta_i^2$
-  - **L1 (Lasso):** $L_{reg} = L(\beta) + \lambda \sum |\beta_i|$
-  - **Elastic Net:** $L_{reg} = L(\beta) + \lambda_1 \sum |\beta_i| + \lambda_2 \sum \beta_i^2$
 
   La regularización controla overfitting y selecciona variables relevantes.
 
