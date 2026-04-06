@@ -2,12 +2,12 @@
 layout: default
 ---
 
-# Sesion 11: Modelos complementarios
+# Sesion 11: Optimización de algoritmos con C++
 [⬅️ Volver al Índice](../index.md)
 
 ## 🎯 Objetivo de la Sesión
 
-Conocer y aplicar algoritmos adicionales de regresión y clustering que son útiles para problemas específicos o entrevistas técnicas, comprendiendo cuándo y por qué utilizarlos.
+Analizar cuando es necesario combinar nuestra logica con C++ para optimizar el rendimiento de nuestros modelos.
 
 ***
 

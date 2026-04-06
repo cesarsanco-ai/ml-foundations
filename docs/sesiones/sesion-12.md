@@ -2,12 +2,12 @@
 layout: default
 ---
 
-# Sesion 12: Sistemas de Recomendación
+# Sesion 12: ML Cloud y Edge AI
 [⬅️ Volver al Índice](../index.md)
 
 ## 🎯 Objetivo de la Sesión
 
-Diseñar e implementar sistemas de recomendación basados en filtrado colaborativo y factorización matricial, evaluando su desempeño y entendiendo limitaciones como cold start y sparsity.
+Analizar el uso de ML en diversas nubes y dispositivos de Edge AI.
 
 ***
 

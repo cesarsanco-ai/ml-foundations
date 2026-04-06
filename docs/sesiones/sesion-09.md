@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# Sesion 9: Aprendizaje No Supervisado - Clustering y PCA
+# Sesion 9: Clustering, PCA y t-SNE
 [⬅️ Volver al Índice](../index.md)
 
 ## 🎯 Objetivo de la Sesión

@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# Sesion 1: Introducción al ML
+# Sesion 1: Introducción
 [⬅️ Volver al Índice](../index.md)
 
 ## 🎯 Objetivo de la Sesión

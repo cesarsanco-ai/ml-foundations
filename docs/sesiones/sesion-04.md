@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# Sesion 4: Clasificación I - Regresión Logística y Balance de Datos
+# Sesion 4: Regresión Logística y Balanceo de Datos
 [⬅️ Volver al Índice](../index.md)
 
 ## 🎯 Objetivo de la Sesión

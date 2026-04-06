@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# Sesion 5: Clasificación II - Algoritmos Clásicos
+# Sesion 5: kNN, Naive Bayes y SVM
 [⬅️ Volver al Índice](../index.md)
 
 ## 🎯 Objetivo de la Sesión

@@ -17,13 +17,13 @@ Cada sesión incluye material teórico, notebooks de laboratorio, ejercicios y r
 | 03 | [Regresión Lineal y Regularización](sesiones/sesion-03.md) |
 | 04 | [Regresión Logística y Balanceo de Datos](sesiones/sesion-04.md) |
 | 05 | [kNN, Naive Bayes, Máquinas de Soporte Vectorial](sesiones/sesion-05.md) |
-| 06 | [Árboles de Decisión, Random Forest y Tipos de Ensamble](sesiones/sesion-06.md) |
+| 06 | [Árboles de Decisión y Random Forest](sesiones/sesion-06.md) |
 | 07 | [Gradient Boosting](sesiones/sesion-07.md) |
 | 08 | [Evaluación y Validación de Modelos](sesiones/sesion-08.md) |
-| 09 | [Clustering y PCA](sesiones/sesion-09.md) |
+| 09 | [Clustering, PCA y t-SNE](sesiones/sesion-09.md) |
 | 10 | [Series de Tiempo](sesiones/sesion-10.md) |
 | 11 | [Optimizacion de Algoritmos con C++](sesiones/sesion-11.md) |
-| 12 | [ML Cloud y en Edge Computing](sesiones/sesion-12.md) |
+| 12 | [ML Cloud y en Edge AI](sesiones/sesion-12.md) |
 | 13 | [Interpretabilidad de Modelos](sesiones/sesion-13.md) |
 | 14 | [Despliegue y Observabilidad](sesiones/sesion-14.md) |
 

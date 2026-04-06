@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# Sesion 7: Gradient Boosting (XGBoost, LightGBM)
+# Sesion 7: Gradient Boosting
 [⬅️ Volver al Índice](../index.md)
 
 ## 🎯 Objetivo de la Sesión
