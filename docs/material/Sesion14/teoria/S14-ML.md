@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-# Semana 14: Despliegue de Modelos (MLOps)
+# Semana 14: Despliegue, Observabilidad y FinOps en ML
 
 
 El valor de un modelo se materializa en producción. **MLOps** integra ML, ingeniería de software y DevOps: serialización, APIs, contenedores, versionado y monitoreo frente a degradación (drift).

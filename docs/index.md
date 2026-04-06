@@ -23,9 +23,9 @@ Cada sesión incluye material teórico, notebooks de laboratorio, ejercicios y r
 | 09 | [Clustering, PCA y t-SNE](sesiones/sesion-09.md) |
 | 10 | [Series de Tiempo](sesiones/sesion-10.md) |
 | 11 | [Optimizacion de Algoritmos con C++](sesiones/sesion-11.md) |
-| 12 | [ML Cloud y en Edge AI](sesiones/sesion-12.md) |
+| 12 | [Sistemas de Recomendacion](sesiones/sesion-12.md) |
 | 13 | [Interpretabilidad de Modelos](sesiones/sesion-13.md) |
-| 14 | [Despliegue y Observabilidad](sesiones/sesion-14.md) |
+| 14 | [Despliegue, Observabilidad y FinOps en ML](sesiones/sesion-14.md) |
 
 > **Nota:** Es necesario contar con conocimiento básicos de Python y el uso de librerias como Numpy, Pandas, Matplotlib y Seaborn.
 
