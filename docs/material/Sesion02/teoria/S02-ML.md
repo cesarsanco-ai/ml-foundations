@@ -30,48 +30,41 @@ Te propongo una **versión mejorada y más técnica**, incorporando fundamentos 
 
 # Pipeline de Análisis Exploratorio de Datos (EDA)
 
-El **Exploratory Data Analysis (EDA)** es el proceso mediante el cual el científico de datos investiga, resume y visualiza un conjunto de datos para comprender su estructura, calidad y patrones antes del modelado. John Tukey lo describió como un enfoque para **“escuchar a los datos”** mediante estadísticas y visualizaciones. 
+El **Exploratory Data Analysis (EDA)** es el proceso mediante el cual el científico de datos investiga, resume y visualiza un conjunto de datos para comprender su estructura, calidad y patrones antes del modelado. John Tukey lo describió como un enfoque para **"escuchar a los datos"** mediante estadísticas y visualizaciones. 
 
 Un flujo típico de trabajo incluye:
 
 1. **Comprensión del problema y de los datos**
-
-   * Identificación de fuentes de datos.
-   * Revisión del diccionario de datos.
-   * Determinación del tipo de variables (numéricas, categóricas, temporales).
-   * Evaluación de tamaño del dataset y granularidad.
+   - Identificación de fuentes de datos.
+   - Revisión del diccionario de datos.
+   - Determinación del tipo de variables (numéricas, categóricas, temporales).
+   - Evaluación de tamaño del dataset y granularidad.
 
 2. **Evaluación de calidad de datos**
-
-   * Detección de valores faltantes.
-   * Identificación de duplicados.
-   * Verificación de consistencia lógica.
+   - Detección de valores faltantes.
+   - Identificación de duplicados.
+   - Verificación de consistencia lógica.
 
 3. **Limpieza y preprocesamiento**
-
-   * Corrección de tipos de datos.
-   * Manejo de valores faltantes.
-   * Tratamiento de outliers.
+   - Corrección de tipos de datos.
+   - Manejo de valores faltantes.
+   - Tratamiento de outliers.
 
 4. **Análisis univariado**
-
-   * Análisis estadístico de cada variable individualmente.
-   * Estudio de distribuciones y dispersión.
+   - Análisis estadístico de cada variable individualmente.
+   - Estudio de distribuciones y dispersión.
 
 5. **Análisis bivariado**
-
-   * Estudio de relaciones entre pares de variables.
-   * Identificación de correlaciones y dependencias.
+   - Estudio de relaciones entre pares de variables.
+   - Identificación de correlaciones y dependencias.
 
 6. **Análisis multivariado**
-
-   * Identificación de patrones complejos entre múltiples variables.
-   * Detección de redundancias o estructuras latentes.
+   - Identificación de patrones complejos entre múltiples variables.
+   - Detección de redundancias o estructuras latentes.
 
 7. **Documentación de hallazgos**
-
-   * Visualizaciones.
-   * Conclusiones que orienten el feature engineering o modelado.
+   - Visualizaciones.
+   - Conclusiones que orienten el feature engineering o modelado.
 
 ---
 
@@ -83,14 +76,9 @@ La limpieza de datos busca mejorar la **calidad y confiabilidad del dataset**, e
 
 Primero se debe identificar el **mecanismo de ausencia**:
 
-* **MCAR (Missing Completely At Random):**
-  La ausencia es completamente aleatoria.
-
-* **MAR (Missing At Random):**
-  Depende de otras variables observadas.
-
-* **MNAR (Missing Not At Random):**
-  Depende del valor faltante mismo.
+- **MCAR (Missing Completely At Random):** La ausencia es completamente aleatoria.
+- **MAR (Missing At Random):** Depende de otras variables observadas.
+- **MNAR (Missing Not At Random):** Depende del valor faltante mismo.
 
 ### Estrategias de imputación
 
@@ -98,25 +86,17 @@ Primero se debe identificar el **mecanismo de ausencia**:
 
 Media o mediana:
 
-[
-x_{imp} =
-\begin{cases}
-\bar{x} & \text{media} \
-\text{mediana}(x) & \text{mediana}
-\end{cases}
-]
+$$ x_{imp} = \begin{cases} \bar{x} & \text{media} \\ \text{mediana}(x) & \text{mediana} \end{cases} $$
 
 Problema: subestima la varianza.
 
 **Imputación por regresión**
 
-[
-x_{faltante} = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots
-]
+$$ x_{faltante} = \beta_0 + \beta_1x_1 + \beta_2x_2 + \dots $$
 
 **k-Nearest Neighbors**
 
-Se calcula la media de los (k) vecinos más cercanos en el espacio de variables.
+Se calcula la media de los $k$ vecinos más cercanos en el espacio de variables.
 
 **Imputación múltiple (MICE)**
 
@@ -127,9 +107,8 @@ Genera múltiples datasets imputados y combina resultados para incorporar incert
 ## 2. Duplicados
 
 Se detectan mediante:
-
-* coincidencia exacta de filas
-* coincidencia parcial de claves
+- coincidencia exacta de filas
+- coincidencia parcial de claves
 
 La eliminación se justifica cuando el duplicado **no representa observaciones distintas**.
 
@@ -151,19 +130,13 @@ Ejemplos comunes:
 
 ### Método del rango intercuartílico (IQR)
 
-[
-IQR = Q3 - Q1
-]
+$$ IQR = Q3 - Q1 $$
 
 Límites:
 
-[
-\text{Inferior} = Q1 - 1.5 \cdot IQR
-]
+$$ \text{Inferior} = Q1 - 1.5 \cdot IQR $$
 
-[
-\text{Superior} = Q3 + 1.5 \cdot IQR
-]
+$$ \text{Superior} = Q3 + 1.5 \cdot IQR $$
 
 Los valores fuera de estos límites se consideran **outliers potenciales**.
 
@@ -171,29 +144,21 @@ Los valores fuera de estos límites se consideran **outliers potenciales**.
 
 ### Z-score clásico
 
-[
-z = \frac{x - \mu}{\sigma}
-]
+$$ z = \frac{x - \mu}{\sigma} $$
 
 Umbral típico:
 
-[
-|z| > 3
-]
+$$ |z| > 3 $$
 
 ---
 
 ### Z-score robusto (basado en MAD)
 
-[
-M_i = \frac{0.6745(x_i - \text{mediana}(x))}{MAD}
-]
+$$ M_i = \frac{0.6745(x_i - \text{mediana}(x))}{MAD} $$
 
 donde
 
-[
-MAD = \text{mediana}(|x_i - \text{mediana}(x)|)
-]
+$$ MAD = \text{mediana}(|x_i - \text{mediana}(x)|) $$
 
 Es más robusto ante valores extremos. 
 
@@ -211,9 +176,7 @@ Analiza **cada variable individualmente**.
 
 Media:
 
-[
-\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
-]
+$$ \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i $$
 
 Mediana: valor central de la distribución.
 
@@ -225,27 +188,19 @@ Moda: valor más frecuente.
 
 Rango:
 
-[
-R = x_{max} - x_{min}
-]
+$$ R = x_{max} - x_{min} $$
 
 Varianza:
 
-[
-\sigma^2 = \frac{1}{n-1} \sum (x_i - \bar{x})^2
-]
+$$ \sigma^2 = \frac{1}{n-1} \sum (x_i - \bar{x})^2 $$
 
 Desviación estándar:
 
-[
-\sigma = \sqrt{\sigma^2}
-]
+$$ \sigma = \sqrt{\sigma^2} $$
 
 IQR:
 
-[
-IQR = Q3 - Q1
-]
+$$ IQR = Q3 - Q1 $$
 
 ---
 
@@ -263,61 +218,50 @@ Mide la concentración en las colas.
 
 ### Visualizaciones
 
-* Histogramas
-* Kernel Density Estimation (KDE)
+- Histogramas
+- Kernel Density Estimation (KDE)
 
 Estimación de densidad:
 
-[
-\hat f(x)=\frac{1}{nh}\sum_{i=1}^{n}K\left(\frac{x-x_i}{h}\right)
-]
+$$ \hat f(x)=\frac{1}{nh}\sum_{i=1}^{n}K\left(\frac{x-x_i}{h}\right) $$
 
-donde (K) es el kernel (normalmente gaussiano). 
+donde $K$ es el kernel (normalmente gaussiano). 
 
-* Boxplots
-* ECDF (Empirical CDF)
+- Boxplots
+- ECDF (Empirical CDF)
 
-[
-F_n(x)=\frac{1}{n}\sum_{i=1}^{n} I(x_i \le x)
-]
+$$ F_n(x)=\frac{1}{n}\sum_{i=1}^{n} I(x_i \le x) $$
 
 ---
 
 ## Variables categóricas
 
 Análisis típico:
-
-* frecuencia absoluta
-* frecuencia relativa
-* moda
+- frecuencia absoluta
+- frecuencia relativa
+- moda
 
 Herramientas:
-
-* bar plots
-* diagramas de Pareto
-* tablas de contingencia
+- bar plots
+- diagramas de Pareto
+- tablas de contingencia
 
 ---
 
 ## Variables temporales
 
 Se analizan mediante:
-
-* tendencia
-* estacionalidad
-* ruido
+- tendencia
+- estacionalidad
+- ruido
 
 Modelo aditivo:
 
-[
-Y_t = T_t + S_t + R_t
-]
+$$ Y_t = T_t + S_t + R_t $$
 
 Modelo multiplicativo:
 
-[
-Y_t = T_t \cdot S_t \cdot R_t
-]
+$$ Y_t = T_t \cdot S_t \cdot R_t $$
 
 ---
 
@@ -331,18 +275,16 @@ Estudia **relaciones entre dos variables**.
 
 ### Correlación de Pearson
 
-[
-r = \frac{\sum (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum (x_i-\bar{x})^2 \sum (y_i-\bar{y})^2}}
-]
+$$ r = \frac{\sum (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum (x_i-\bar{x})^2 \sum (y_i-\bar{y})^2}} $$
 
 Interpretación:
 
-| r     | relación |
+| $r$     | relación |
 | ----- | -------- |
 | 0     | ninguna  |
-| ±0.3  | débil    |
-| ±0.5  | moderada |
-| ±0.7+ | fuerte   |
+| $\pm 0.3$  | débil    |
+| $\pm 0.5$  | moderada |
+| $\pm 0.7+$ | fuerte   |
 
 ---
 
@@ -354,22 +296,19 @@ Basada en **rangos**, útil para relaciones monotónicas.
 
 ### Visualizaciones
 
-* scatter plots
-* pairplots
-* heatmaps de correlación
+- scatter plots
+- pairplots
+- heatmaps de correlación
 
 ---
 
 ## Categórica vs Categórica
 
 Herramientas:
+- tablas de contingencia
+- prueba **Chi-cuadrado**
 
-* tablas de contingencia
-* prueba **Chi-cuadrado**
-
-[
-\chi^2 = \sum \frac{(O - E)^2}{E}
-]
+$$ \chi^2 = \sum \frac{(O - E)^2}{E} $$
 
 ---
 
@@ -378,16 +317,13 @@ Herramientas:
 Se analizan diferencias entre grupos.
 
 Métodos:
-
-* boxplots por categoría
-* t-test
-* ANOVA
+- boxplots por categoría
+- t-test
+- ANOVA
 
 Estadístico ANOVA:
 
-[
-F = \frac{\text{varianza entre grupos}}{\text{varianza dentro de grupos}}
-]
+$$ F = \frac{\text{varianza entre grupos}}{\text{varianza dentro de grupos}} $$
 
 ---
 
@@ -400,15 +336,12 @@ Busca **relaciones complejas entre múltiples variables**.
 ## Matriz de correlación
 
 Permite detectar:
-
-* multicolinealidad
-* redundancia de variables
+- multicolinealidad
+- redundancia de variables
 
 Regla común:
 
-[
-|r| > 0.9
-]
+$$ |r| > 0.9 $$
 
 → posible eliminación de una variable.
 
@@ -419,10 +352,9 @@ Regla común:
 Exploran todas las combinaciones entre variables numéricas.
 
 Muy útil para:
-
-* detectar clusters
-* detectar no linealidad
-* identificar outliers multivariados.
+- detectar clusters
+- detectar no linealidad
+- identificar outliers multivariados.
 
 ---
 
@@ -430,9 +362,7 @@ Muy útil para:
 
 ### Distancia de Mahalanobis
 
-[
-D_M(x) = \sqrt{(x-\mu)^T \Sigma^{-1} (x-\mu)}
-]
+$$ D_M(x) = \sqrt{(x-\mu)^T \Sigma^{-1} (x-\mu)} $$
 
 Considera **correlación entre variables**. 
 
@@ -446,11 +376,9 @@ Transforma variables correlacionadas en componentes ortogonales.
 
 Primera componente:
 
-[
-z_1 = w_1^T x
-]
+$$ z_1 = w_1^T x $$
 
-donde (w_1) maximiza la varianza.
+donde $w_1$ maximiza la varianza.
 
 ---
 
@@ -476,23 +404,17 @@ El **Feature Engineering** es el proceso de transformar datos crudos en represen
 
 Formalmente, si el conjunto de datos original es
 
-[
-X \in \mathbb{R}^{n \times p}
-]
+$$ X \in \mathbb{R}^{n \times p} $$
 
-donde (n) es el número de observaciones y (p) el número de variables, el feature engineering busca una transformación
+donde $n$ es el número de observaciones y $p$ el número de variables, el feature engineering busca una transformación
 
-[
-\phi(X) \rightarrow Z
-]
+$$ \phi(X) \rightarrow Z $$
 
 donde
 
-[
-Z \in \mathbb{R}^{n \times k}
-]
+$$ Z \in \mathbb{R}^{n \times k} $$
 
-y (k) puede ser mayor o menor que (p), pero las nuevas variables (Z) representan mejor la estructura relevante del problema.
+y $k$ puede ser mayor o menor que $p$, pero las nuevas variables $Z$ representan mejor la estructura relevante del problema.
 
 En muchos casos, el rendimiento de un modelo depende más de **la calidad de las características que del algoritmo utilizado**. De hecho, modelos simples como regresión logística o árboles de decisión pueden superar a modelos complejos si se utilizan **features bien diseñadas**. 
 
@@ -523,9 +445,7 @@ La creación de nuevas características consiste en generar variables derivadas 
 
 Útil para variables con **distribuciones altamente asimétricas**:
 
-[
-x' = \log(x)
-]
+$$ x' = \log(x) $$
 
 Reduce la asimetría y estabiliza la varianza.
 
@@ -535,15 +455,9 @@ Reduce la asimetría y estabiliza la varianza.
 
 Generalización de la transformación logarítmica:
 
-[
-x' =
-\begin{cases}
-\frac{x^\lambda -1}{\lambda} & \lambda \neq 0 \
-\log(x) & \lambda = 0
-\end{cases}
-]
+$$ x' = \begin{cases} \frac{x^\lambda -1}{\lambda} & \lambda \neq 0 \\ \log(x) & \lambda = 0 \end{cases} $$
 
-El parámetro (\lambda) se estima maximizando la verosimilitud.
+El parámetro $\lambda$ se estima maximizando la verosimilitud.
 
 ---
 
@@ -557,21 +471,13 @@ Extensión de Box-Cox que permite valores negativos.
 
 Las interacciones capturan efectos combinados entre variables:
 
-[
-x_{ij}^{(int)} = x_i \cdot x_j
-]
+$$ x_{ij}^{(int)} = x_i \cdot x_j $$
 
-Ejemplo:
-
-[
-\text{habitaciones} \times \text{metros}^2
-]
+Ejemplo: $\text{habitaciones} \times \text{metros}^2$
 
 Los términos polinomiales permiten modelar relaciones no lineales:
 
-[
-x^2, x^3, \dots
-]
+$$ x^2, x^3, \dots $$
 
 Ejemplo: relación entre edad y riesgo médico.
 
@@ -583,9 +489,7 @@ Consiste en dividir una variable continua en intervalos.
 
 **Igual ancho**
 
-[
-bin_k = [a + k\Delta, a + (k+1)\Delta]
-]
+$$ bin_k = [a + k\Delta, a + (k+1)\Delta] $$
 
 **Igual frecuencia**
 
@@ -601,9 +505,7 @@ En datos de series temporales se generan nuevas características como:
 
 ### Rezagos (lags)
 
-[
-y_{t-1}, y_{t-2}, \dots
-]
+$$ y_{t-1}, y_{t-2}, \dots $$
 
 Permiten utilizar valores pasados como predictores.
 
@@ -613,15 +515,11 @@ Permiten utilizar valores pasados como predictores.
 
 Media móvil:
 
-[
-MA_t = \frac{1}{k} \sum_{i=0}^{k-1} y_{t-i}
-]
+$$ MA_t = \frac{1}{k} \sum_{i=0}^{k-1} y_{t-i} $$
 
 Desviación móvil:
 
-[
-SD_t = \sqrt{\frac{1}{k-1}\sum_{i=0}^{k-1}(y_{t-i}-MA_t)^2}
-]
+$$ SD_t = \sqrt{\frac{1}{k-1}\sum_{i=0}^{k-1}(y_{t-i}-MA_t)^2} $$
 
 Capturan tendencias y volatilidad.
 
@@ -631,9 +529,7 @@ Capturan tendencias y volatilidad.
 
 Variables como hora o día de la semana son **cíclicas**, por lo que se representan como:
 
-[
-\sin\left(\frac{2\pi t}{T}\right), \quad \cos\left(\frac{2\pi t}{T}\right)
-]
+$$ \sin\left(\frac{2\pi t}{T}\right), \quad \cos\left(\frac{2\pi t}{T}\right) $$
 
 Esto evita discontinuidades artificiales (por ejemplo entre 23h y 0h). 
 
@@ -644,11 +540,10 @@ Esto evita discontinuidades artificiales (por ejemplo entre 23h y 0h).
 En datos jerárquicos se calculan estadísticas por entidad:
 
 Ejemplo para clientes:
-
-* gasto promedio
-* número de transacciones
-* desviación de gasto
-* máximo o mínimo histórico
+- gasto promedio
+- número de transacciones
+- desviación de gasto
+- máximo o mínimo histórico
 
 Esto resume el comportamiento histórico de cada entidad.
 
@@ -666,13 +561,9 @@ Representación basada en conteos de palabras.
 
 ### TF-IDF
 
-[
-TFIDF(t,d) = TF(t,d) \times \log\left(\frac{N}{DF(t)}\right)
-]
+$$ TFIDF(t,d) = TF(t,d) \times \log\left(\frac{N}{DF(t)}\right) $$
 
-donde
-(TF) = frecuencia de término
-(DF) = número de documentos que contienen el término.
+donde $TF$ = frecuencia de término, $DF$ = número de documentos que contienen el término.
 
 ---
 
@@ -680,10 +571,7 @@ donde
 
 Representaciones densas aprendidas mediante redes neuronales.
 
-Ejemplos:
-
-* Word2Vec
-* BERT embeddings
+Ejemplos: Word2Vec, BERT embeddings.
 
 ---
 
@@ -697,9 +585,7 @@ Los algoritmos de machine learning requieren variables numéricas, por lo que la
 
 Se crean variables binarias para cada categoría:
 
-[
-x_{cat} \rightarrow (x_1, x_2, ..., x_k)
-]
+$$ x_{cat} \rightarrow (x_1, x_2, ..., x_k) $$
 
 Problema: alta dimensionalidad cuando hay muchas categorías.
 
@@ -709,9 +595,7 @@ Problema: alta dimensionalidad cuando hay muchas categorías.
 
 Se asigna un número entero a cada categoría:
 
-[
-{A,B,C} \rightarrow {0,1,2}
-]
+$$ \{A,B,C\} \rightarrow \{0,1,2\} $$
 
 Adecuado para **variables ordinales**.
 
@@ -721,11 +605,7 @@ Adecuado para **variables ordinales**.
 
 Cada categoría se reemplaza por la media del target:
 
-[
-x_{cat} =
-\frac{1}{n_{cat}}
-\sum_{i \in cat} y_i
-]
+$$ x_{cat} = \frac{1}{n_{cat}} \sum_{i \in cat} y_i $$
 
 Debe aplicarse con **validación cruzada** para evitar *data leakage*. 
 
@@ -735,9 +615,7 @@ Debe aplicarse con **validación cruzada** para evitar *data leakage*.
 
 Se reemplaza la categoría por su frecuencia de aparición:
 
-[
-x_{cat} = \frac{n_{cat}}{n}
-]
+$$ x_{cat} = \frac{n_{cat}}{n} $$
 
 ---
 
@@ -751,9 +629,7 @@ Las categorías se transforman en representación binaria para reducir dimension
 
 Aplica una función hash:
 
-[
-h(x) \rightarrow [0, k-1]
-]
+$$ h(x) \rightarrow [0, k-1] $$
 
 Útil en variables de **alta cardinalidad**.
 
@@ -767,35 +643,25 @@ Algunos algoritmos dependen de la escala de las variables.
 
 ## Estandarización (Z-score)
 
-[
-x' = \frac{x-\mu}{\sigma}
-]
+$$ x' = \frac{x-\mu}{\sigma} $$
 
 Media 0 y desviación estándar 1.
 
-Necesaria para:
-
-* regresión lineal
-* SVM
-* PCA
+Necesaria para: regresión lineal, SVM, PCA.
 
 ---
 
 ## Normalización Min-Max
 
-[
-x' = \frac{x-x_{min}}{x_{max}-x_{min}}
-]
+$$ x' = \frac{x-x_{min}}{x_{max}-x_{min}} $$
 
-Escala al rango ([0,1]).
+Escala al rango $[0,1]$.
 
 ---
 
 ## Escalado robusto
 
-[
-x' = \frac{x - \text{mediana}(x)}{IQR}
-]
+$$ x' = \frac{x - \text{mediana}(x)}{IQR} $$
 
 Menos sensible a outliers. 
 
@@ -815,11 +681,9 @@ Se aumentan ejemplos de la clase minoritaria.
 
 Genera ejemplos sintéticos:
 
-[
-x_{new} = x_i + \lambda (x_{NN} - x_i)
-]
+$$ x_{new} = x_i + \lambda (x_{NN} - x_i) $$
 
-donde (x_{NN}) es un vecino cercano.
+donde $x_{NN}$ es un vecino cercano.
 
 ---
 
@@ -835,15 +699,13 @@ Problema: pérdida de información.
 
 En datasets desbalanceados se prefieren métricas como:
 
-* **Precision**
-* **Recall**
-* **F1-score**
+- **Precision**
+- **Recall**
+- **F1-score**
 
-[
-F1 = 2 \frac{precision \cdot recall}{precision + recall}
-]
+$$ F1 = 2 \cdot \frac{precision \cdot recall}{precision + recall} $$
 
-* **ROC-AUC**
+- **ROC-AUC**
 
 ---
 
@@ -865,9 +727,7 @@ Se imputan valores usando los vecinos más cercanos.
 
 Modela cada variable faltante como función de las demás:
 
-[
-x_j = f(x_{-j})
-]
+$$ x_j = f(x_{-j}) $$
 
 El proceso se repite iterativamente hasta converger.
 
@@ -881,13 +741,7 @@ Estrategias:
 
 ### Variable indicadora
 
-[
-outlier_i =
-\begin{cases}
-1 & \text{si } x_i \text{ es extremo} \
-0 & \text{caso contrario}
-\end{cases}
-]
+$$ outlier_i = \begin{cases} 1 & \text{si } x_i \text{ es extremo} \\ 0 & \text{caso contrario} \end{cases} $$
 
 ---
 
@@ -895,21 +749,15 @@ outlier_i =
 
 Limitar valores extremos:
 
-[
-x =
-\begin{cases}
-P_{1%} & x < P_{1%} \
-P_{99%} & x > P_{99%}
-\end{cases}
-]
+$$ x = \begin{cases} P_{1\%} & x < P_{1\%} \\ P_{99\%} & x > P_{99\%} \end{cases} $$
 
 ---
 
 ### Transformaciones
 
-* log
-* raíz cuadrada
-* Box-Cox
+- log
+- raíz cuadrada
+- Box-Cox
 
 ---
 
@@ -931,9 +779,7 @@ Eliminar variables altamente correlacionadas.
 
 ### Información mutua
 
-[
-I(X;Y) = \sum p(x,y) \log \frac{p(x,y)}{p(x)p(y)}
-]
+$$ I(X;Y) = \sum p(x,y) \log \frac{p(x,y)}{p(x)p(y)} $$
 
 Mide dependencia general entre variables.
 
@@ -943,9 +789,7 @@ Mide dependencia general entre variables.
 
 Evalúan subconjuntos de variables mediante el rendimiento del modelo.
 
-Ejemplo:
-
-**Recursive Feature Elimination (RFE)**
+Ejemplo: **Recursive Feature Elimination (RFE)**
 
 ---
 
@@ -955,10 +799,7 @@ La selección ocurre durante el entrenamiento.
 
 ### Lasso
 
-[
-\min_{\beta}
-\sum (y - X\beta)^2 + \lambda \sum |\beta_j|
-]
+$$ \min_{\beta} \sum (y - X\beta)^2 + \lambda \sum |\beta_j| $$
 
 Fuerza coeficientes irrelevantes a cero. 
 
@@ -971,35 +812,25 @@ Uno de los aspectos más importantes del feature engineering es incorporar **con
 Ejemplos:
 
 ### Ratios financieros
-
-* liquidez
-* endeudamiento
-* margen de beneficio
+- liquidez
+- endeudamiento
+- margen de beneficio
 
 ---
 
 ### Variables temporales agregadas
-
-* ventas últimos 7 días
-* promedio móvil
-* crecimiento mensual
+- ventas últimos 7 días
+- promedio móvil
+- crecimiento mensual
 
 ---
 
 ### Variables de comportamiento
+- recencia (tiempo desde última interacción)
+- frecuencia de compra
+- valor monetario total
 
-* recencia (tiempo desde última interacción)
-* frecuencia de compra
-* valor monetario total
-
-Estas variables suelen ser extremadamente predictivas en problemas como:
-
-* **churn**
-* **fraude**
-* **recomendación**
-* **scoring crediticio**
-
-
+Estas variables suelen ser extremadamente predictivas en problemas como: **churn**, **fraude**, **recomendación**, **scoring crediticio**.
 
 ---
 
@@ -1013,20 +844,10 @@ Aquí tienes una versión **mejorada y más práctica**, incluyendo técnicas re
 
 La capacidad de comunicar hallazgos es **tan importante como el análisis en sí**. Los objetivos incluyen:
 
-* **Destacar patrones relevantes:** Usar gráficas comparativas, heatmaps de correlación o scatter plots con color según categoría para resaltar relaciones importantes.
-  *Ejemplo:* Mostrar cómo el ingreso promedio por región impacta en la probabilidad de compra usando un gráfico de barras con anotaciones.
-
-* **Explicar el impacto de variables en el negocio:** Aplicar técnicas como **feature importance** de Random Forest o **SHAP values** para cuantificar contribuciones.
-  *Ejemplo:* Indicar que el número de visitas al sitio web aumenta en un 25% la probabilidad de conversión, visualizado con un gráfico de barras de importancia.
-
-* **Presentar visualizaciones claras y atractivas:** Preferir gráficos simples y legibles; combinar colores y anotaciones estratégicas.
-  *Técnica recomendada:* Tableau, Seaborn o Plotly para dashboards interactivos.
-
-* **Adaptar el mensaje según la audiencia:**
-
-  * Para técnicos: enfatizar metodología y métricas.
-  * Para no técnicos: enfocarse en impacto y decisiones accionables.
-    *Ejemplo:* Mostrar un gráfico de tendencias de ventas y explicar cómo ciertas promociones generaron un aumento, sin necesidad de detallar el modelo predictivo detrás.
+- **Destacar patrones relevantes:** Usar gráficas comparativas, heatmaps de correlación o scatter plots con color según categoría para resaltar relaciones importantes.
+- **Explicar el impacto de variables en el negocio:** Aplicar técnicas como **feature importance** de Random Forest o **SHAP values** para cuantificar contribuciones.
+- **Presentar visualizaciones claras y atractivas:** Preferir gráficos simples y legibles; combinar colores y anotaciones estratégicas.
+- **Adaptar el mensaje según la audiencia:** Para técnicos: enfatizar metodología y métricas. Para no técnicos: enfocarse en impacto y decisiones accionables.
 
 ---
 
@@ -1034,195 +855,8 @@ La capacidad de comunicar hallazgos es **tan importante como el análisis en sí
 
 El **elevator pitch** permite transmitir hallazgos en 2-3 minutos, adaptando el contenido según el interlocutor:
 
-* **Equipo técnico:**
-
-  * Detallar **metodologías utilizadas**, métricas de rendimiento (R², AUC, F1, etc.), hipótesis validadas y retos de implementación.
-  * **Ejemplo:** “Aplicamos Random Forest con validación cruzada; la métrica F1 alcanzó 0.82, mostrando buena capacidad de detección de fraudes sin overfitting.”
-
-* **Equipo de negocio / no técnico:**
-
-  * Resumir **impacto y valor del análisis**, recomendaciones claras y lenguaje sencillo.
-  * **Ejemplo:** “Al priorizar clientes con mayor probabilidad de compra según nuestro modelo, se proyecta un incremento del 15% en ventas mensuales. Recomendamos enfocar la campaña en estos segmentos.”
-
-* **Ejercicio práctico:**
-
-  * Realizar presentaciones simuladas con **data dummy**, alternando audiencia técnica y no técnica.
-  * Incluir gráficos, anotaciones y conclusiones accionables.
+- **Equipo técnico:** Detallar **metodologías utilizadas**, métricas de rendimiento ($R^2$, AUC, $F1$, etc.), hipótesis validadas y retos de implementación.
+- **Equipo de negocio / no técnico:** Resumir **impacto y valor del análisis**, recomendaciones claras y lenguaje sencillo.
 
 **Tip recomendado:** Utilizar **estructura narrativa en tres pasos**: Contexto → Hallazgos → Acción. Esto asegura claridad y conexión con la audiencia.
 
-
----
-
-
-
----
-
-## Reto: 1 punto  
-**Investigar y documentar 3 casos de éxito del uso de EDA y/o feature engineering en empresas big tech.**  
-Se espera que el estudiante presente un breve informe (máx. 2 páginas) con:  
-- Nombre de la empresa y contexto del problema.  
-- Técnicas específicas de EDA o feature engineering aplicadas.  
-- Impacto medible en el negocio (ej. mejora de precisión, incremento de ingresos, reducción de costos).  
-Ejemplos sugeridos:  
-1. **Airbnb:** Uso de EDA para identificar patrones de reserva y crear features como “distancia al centro” o “ratio de reseñas”.  
-2. **Uber:** Feature engineering con variables temporales y geoespaciales para predicción de demanda.  
-3. **Netflix:** EDA masivo de visualizaciones para generar descriptores de contenido y personalización.  
-
----
-
-## Laboratorio: Ver Colab  
-En esta sesión práctica, se utilizará Google Colab para desarrollar un notebook que incluya:
-- **EDA completo** sobre un dataset de ejemplo (ej. Titanic, ventas, marketing).  
-  - Carga y limpieza.  
-  - Visualizaciones univariadas y bivariadas.  
-  - Detección de patrones y outliers.  
-- **Introducción a scikit-learn:**  
-  - Uso de transformadores (SimpleImputer, OneHotEncoder, StandardScaler).  
-  - Creación de pipelines para automatizar el flujo.  
-- **Feature engineering aplicado:**  
-  - Creación de nuevas variables.  
-  - Codificación y escalado.  
-  - Evaluación de impacto mediante modelos simples (regresión logística, árbol de decisión).  
-El notebook quedará documentado con celdas de texto explicativas y conclusiones.
-
----
-
-## Anexo: Fundamentos matemáticos y computacionales  
-
-### 1. Estadística descriptiva
-
-Proporciona las bases para analizar, resumir y visualizar datos antes de modelar. Es esencial para la **detección de outliers, transformaciones y creación de nuevas variables**.
-
-* **Medidas de tendencia central:**
-
-  * Media: (\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i)
-  * Mediana: valor central (x_{(n/2)})
-  * Moda: valor más frecuente
-  * *Aplicación:* detectar sesgos en variables numéricas (ej. ingresos o ventas)
-
-* **Medidas de dispersión:**
-
-  * Desviación estándar: (s = \sqrt{\frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2})
-  * Varianza: (s^2)
-  * MAD (desviación absoluta mediana): (MAD = mediana(|x_i - mediana(x)|))
-  * Rango intercuartílico (IQR): (Q3 - Q1)
-  * *Aplicación:* identificar outliers y decidir transformaciones robustas
-
-* **Medidas de forma:**
-
-  * Asimetría (Skewness):
-    [
-    \text{Skew} = \frac{\frac{1}{n}\sum (x_i - \bar{x})^3}{\left(\frac{1}{n}\sum (x_i - \bar{x})^2\right)^{3/2}}
-    ]
-  * Curtosis (Kurtosis):
-    [
-    \text{Kurt} = \frac{\frac{1}{n}\sum (x_i - \bar{x})^4}{\left(\frac{1}{n}\sum (x_i - \bar{x})^2\right)^2} - 3
-    ]
-  * *Aplicación:* decidir transformaciones logarítmicas o Box-Cox para normalizar distribuciones y mejorar linealidad de modelos.
-
-* **Tablas y gráficos:** histogramas, boxplots, ECDF, heatmaps, scatterplots, pairplots.
-
----
-
-### 2. Probabilidad
-
-Proporciona el marco para modelar incertidumbre y relaciones entre variables. Es clave en **imputación, codificación de variables categóricas, y modelos supervisados probabilísticos**.
-
-* **Distribuciones de probabilidad:**
-
-  * Discreta: Bernoulli, Binomial, Poisson
-  * Continua: Normal, Exponencial, Uniforme
-  * *Aplicación:* seleccionar métodos de imputación basados en la distribución de la variable
-
-* **Independencia y condicionalidad:**
-
-  * Dos eventos (A, B) son independientes si (P(A \cap B) = P(A)P(B))
-  * Condicional: (P(A|B) = \frac{P(A \cap B)}{P(B)})
-  * *Aplicación:* target encoding y Naive Bayes
-
-* **Teorema de Bayes:**
-  [
-  P(A|B) = \frac{P(B|A)P(A)}{P(B)}
-  ]
-
-  * *Aplicación:* clasificación probabilística, cálculo de likelihood en imputación o modelos Naive Bayes
-
----
-
-### 3. Estadística inferencial
-
-Permite **validar relaciones observadas y generalizar conclusiones** más allá de la muestra. Fundamental para feature selection, validación de hipótesis y tests de significancia.
-
-* **Pruebas de hipótesis:**
-
-  * t-test para comparar medias entre dos grupos
-  * ANOVA para más de dos grupos
-  * Chi-cuadrado para independencia entre variables categóricas
-  * *Aplicación:* decidir si eliminar o combinar categorías, validar correlaciones observadas
-
-* **Intervalos de confianza:**
-  [
-  IC = \bar{x} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}}
-  ]
-
-  * *Aplicación:* estimar rango de valores esperados para métricas de negocio
-
-* **Regresión e inferencia:**
-
-  * Modelos lineales: (\hat{y} = \beta_0 + \beta_1 x_1 + \dots + \beta_p x_p)
-  * Intervalos y tests sobre coeficientes para seleccionar variables relevantes
-
----
-
-### 4. Optimización computacional
-
-Permite procesar **grandes volúmenes de datos y entrenar modelos eficientes**, considerando complejidad algorítmica y buenas prácticas de programación.
-
-* **Complejidad algorítmica:**
-
-  * Operaciones básicas: O(1)
-  * Iteraciones simples: O(n)
-  * Bucles anidados: O(n²)
-  * *Aplicación:* elegir algoritmos escalables para Random Forest, k-means o XGBoost en datasets grandes
-
-* **Estructuras de datos eficientes:**
-
-  * DataFrames y arrays vectorizados (NumPy, Pandas)
-  * Diccionarios y sets para búsquedas rápidas
-  * *Aplicación:* calcular estadísticas, aggregations y transformaciones sin loops explícitos
-
-* **Programación vectorizada:**
-
-  * Ejemplo:
-
-    ```python
-    import numpy as np
-    x = np.array([1,2,3,4])
-    y = (x - x.mean()) / x.std()  # Z-score vectorizado
-    ```
-  * Evita bucles for y mejora rendimiento en datasets grandes
-
-* **Optimización de funciones de coste:**
-
-  * Gradiente descendente: (\theta_{t+1} = \theta_t - \eta \nabla_\theta J(\theta))
-  * Descenso estocástico (SGD) para datasets grandes
-  * *Aplicación:* ajuste de parámetros en regresión lineal/logística y Gradient Boosting
-
-* **Paralelización y hardware:**
-
-  * Uso de CPU multicore para Random Forest, Gradient Boosting
-  * GPU para XGBoost, LightGBM con grandes volúmenes de datos
-
----
-
-### 5. Conexión con ML clásico y feature engineering
-
-* Estadística descriptiva → selección de outliers, transformación de variables, agregaciones.
-* Probabilidad → codificación de variables categóricas, Naive Bayes, imputación probabilística.
-* Inferencia → validación de relaciones, tests para feature selection.
-* Optimización → entrenamiento eficiente de modelos, escalabilidad y reproducibilidad.
-
-
-
----
