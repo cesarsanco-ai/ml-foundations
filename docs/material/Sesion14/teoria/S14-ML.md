@@ -223,3 +223,183 @@ Evidently AI, WhyLabs/Whylogs, Great Expectations.
 - Docker y MLflow/DVC ayudan a reproducibilidad y versionado.
 - Monitorear drift con PSI, KS y herramientas de perfilado.
 - MLOps es competencia clave para llevar modelos del notebook al valor de negocio sostenible.
+
+
+***
+
+
+
+
+> **“Optimización costo–valor en Machine Learning (ML FinOps / Cost-Aware ML)”**
+
+Esto permite cubrir:
+
+* cloud ✅
+* on-premise ✅
+* serverless (Fabric, Databricks) ✅
+* modelos clásicos (tu foco) ✅
+
+---
+
+
+| Enfoque       | Qué optimiza                                      |
+| ------------- | ------------------------------------------------- |
+| FinOps        | Infraestructura (CPU, GPU, storage)               |
+| MLOps         | Ciclo de vida del modelo                          |
+| Hibrido | **Decisión de modelo + costo + valor de negocio** |
+
+---
+
+* Empresas grandes → serverless (ej: Fabric)
+* Empresas medianas → cloud con instancias
+* Empresas pequeñas → on-premise / PCs
+
+
+---
+
+## 🎓 Módulo FinOps: **ML Cost & Value Optimization (FinOps aplicado a ML)**
+
+---
+
+## 🔹 1. Introducción: el costo en ML (realidad industrial)
+
+* Por qué accuracy ≠ valor
+* Casos reales:
+
+  * modelo simple vs complejo
+* Concepto:
+
+  * **ROI en modelos ML**
+
+---
+
+## 🔹 2. Fundamentos de costo en computación
+
+* CPU vs GPU vs RAM
+* Tiempo de cómputo
+* Batch vs real-time
+* On-premise vs cloud vs serverless
+
+---
+
+## 🔹 3. Cost-Performance Tradeoff
+
+* Curva de costo vs performance
+* Ley de rendimientos decrecientes
+* Cómo encontrar el “sweet spot”
+
+---
+
+## 🔹 4. Estimación de costos en ML (práctico)
+
+* Complejidad de modelos:
+
+  * regresión
+  * árboles
+  * boosting
+* Aproximación de tiempo:
+
+  * n_samples × n_features
+* Benchmarking:
+
+  * cómo extrapolar
+
+👉 Mini práctica:
+
+* medir tiempo en dataset pequeño
+* escalar estimación
+
+---
+
+## 🔹 5. Total Cost of Ownership (TCO) en ML
+
+* Entrenamiento
+* Inferencia
+* Retraining
+* Monitoreo
+* Personas (tiempo equipo)
+
+👉 Caso:
+
+* XGBoost vs logística (costo real)
+
+---
+
+## 🔹 6. Drift y costo oculto
+
+* Concept drift vs data drift
+* Frecuencia de retraining
+* Impacto en costos
+
+👉 Insight:
+
+> modelos complejos → más costo de mantenimiento
+
+---
+
+## 🔹 7. Estrategias de optimización
+
+* Reducir features
+* Sampling
+* Early stopping
+* Modelos más simples
+* Híbridos:
+
+  * simple + complejo
+
+---
+
+## 🔹 8. Arquitecturas según presupuesto
+
+* Small data → local / simple
+* Medium → cloud CPU
+* Large → distribuido
+
+---
+
+## 🔹 9. Métricas de negocio (clave)
+
+* $ por punto de AUC
+* $ por predicción
+* $ por cliente impactado
+
+👉 Esto es lo más poderoso del módulo
+
+---
+
+## 🔹 10. Toma de decisiones (nivel gerente)
+
+Cómo presentar:
+
+| Modelo | Accuracy | Tiempo | Costo | Recomendación |
+| ------ | -------- | ------ | ----- | ------------- |
+
+👉 storytelling con datos
+
+---
+
+## 🔹 11. Caso práctico final (muy importante)
+
+Escenario:
+
+> “Tienes 10M filas, presupuesto limitado”
+
+Evaluar:
+
+* regresión logística
+* random forest
+* XGBoost
+
+👉 entregar:
+
+* costo estimado
+* performance
+* recomendación
+
+
+---
+
+> **“Capstone: Cómo decidir modelos ML en contexto real (costo, drift, negocio)”**
+
+
+
