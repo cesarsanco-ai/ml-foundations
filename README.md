@@ -1,35 +1,22 @@
-# Curso de Machine Learning (ML)
+# Curso de Machine Learning
 
-Bienvenido(a) al repositorio del **Curso de Machine Learning**. Este espacio contiene el material teórico y los solucionarios de las prácticas del curso, junto con el código fuente en LaTeX, organizado por sesiones para facilitar su seguimiento y estudio.
+Bienvenido a mi curso de **Machine Learning**. 
 
 ## 📂 Estructura del Directorio
 
-El curso consta de 14 sesiones documentadas (de la `Sesion1` a la `Sesion14`) y una carpeta con los archivos fuente:
+El curso consta de 14 sesiones documentadas (de la `Sesion1` a la `Sesion14`) y una carpeta con los archivos fuente, de preferencia 1 sesión por semana, el cual podrás encontrar en la carpeta `SesionX`:
 
-- **`Sesion1` a `Sesion14`**: Contienen el material de presentación y las soluciones a las prácticas de cada clase.
-- **`FUENTE/TEORIA`**: Código fuente en LaTeX utilizado en el desarrollo del material teórico del curso.
+- Teoría
+- Ejercicios
+- Proyectos
 
-### 📄 Contenido por Sesión
-
-Dentro de la carpeta de cada sesión, encontrarás únicamente los siguientes archivos clave que estructuran la clase:
-
-- **Material de Clase**:
-  - `PPT*-ML.pdf`: Diapositivas utilizadas durante la sesión.
-- **Práctica (Laboratorio)**:
-  - `SESION*-NTB*-ML.ipynb`: Jupyter Notebooks con los ejercicios prácticos y ejemplos en código.
-- **Evaluaciones**:
-  - `SOL-PC*-ML.pdf`: Solucionario de la Práctica Calificada de la sesión.
-
-*(Nota: El asterisco `*` representa el número de la sesión correspondiente).*
 
 ## 📚 Cómo empezar
 
 1. Dirígete a la carpeta de la sesión que deseas revisar, empezando por la `Sesion1`.
-2. Utiliza las presentaciones (`PPT*-ML.pdf`) para repasar la teoría de cada clase.
-3. Ejecuta los Jupyter Notebooks (`.ipynb`) para ver los ejemplos de código relativos a la clase.
-4. Evalúa tu conocimiento consultando los solucionarios de las prácticas (`SOL-PC*-ML.pdf`).
-5. Si te interesa el desarrollo del material, revisa el código LaTeX en la carpeta `FUENTE`.
+2. Revisa primero la teoría de la clase.
+3. Atrevete a revisar los ejercicios resueltos para complementar la teoría.
+4. Complementa con archivos extras si lo deseas.
+5. Finalmente, si quieres ver la aplicación real de los modelos, revisa los proyectos.
 
-¡Mucho éxito en tu proceso de revisión de Machine Learning!
-
-Carlos César Sánchez Coronel
+Por *Carlos César Sánchez Coronel*

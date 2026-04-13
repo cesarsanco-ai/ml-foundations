@@ -2,13 +2,13 @@
 [⬅️ Volver al Inicio](https://cesarsanco-ai.github.io/)
 
 
-# Machine Learning Foundations
+# Machine Learning
 
-Bienvenido a mi curso de **Machine Learning Foundations**.
+Bienvenido a mi curso de **Machine Learning**.
 
 ## 📖 Sesiones
 
-Cada sesión incluye material teórico, notebooks de laboratorio, ejercicios y recursos complementarios.
+Cada sesión incluye material teórico, ejercicios, recursos complementarios y proyectos.
 
 | Semana | Tema |
 |--------|--------|
@@ -19,27 +19,19 @@ Cada sesión incluye material teórico, notebooks de laboratorio, ejercicios y r
 | 05 | [kNN, Naive Bayes, Máquinas de Soporte Vectorial](sesiones/sesion-05.md) |
 | 06 | [Árboles de Decisión y Random Forest](sesiones/sesion-06.md) |
 | 07 | [Gradient Boosting](sesiones/sesion-07.md) |
-| 08 | [Evaluación y Validación de Modelos](sesiones/sesion-08.md) |
+| 08 | [Bias-Variance, Validación, Optimización y Selección de Modelos](sesiones/sesion-08.md) |
 | 09 | [Clustering, PCA y t-SNE](sesiones/sesion-09.md) |
 | 10 | [Series de Tiempo](sesiones/sesion-10.md) |
-| 11 | [Optimizacion de Algoritmos con C++](sesiones/sesion-11.md) |
-| 12 | [Sistemas de Recomendacion](sesiones/sesion-12.md) |
+| 11 | [Sistemas de Recomendacion](sesiones/sesion-11.md) |
+| 12 | [Graph ML y Geodata](sesiones/sesion-12.md) |
 | 13 | [Interpretabilidad de Modelos](sesiones/sesion-13.md) |
-| 14 | [Despliegue, Observabilidad y FinOps en ML](sesiones/sesion-14.md) |
+| 14 | [Evaluación en Producción y Ciclo de Vida del ML](sesiones/sesion-14.md) |
 
-> **Nota:** Es necesario contar con conocimiento básicos de Python y el uso de librerias como Numpy, Pandas, Matplotlib y Seaborn.
-
-## 📂 Recursos generales
-
-- **Cheatsheet**: Resumen de comandos, fórmulas y conceptos clave.  
-  [Descargar cheatsheet](cheatsheet/ML_Foundations_Cheatsheet.pdf)
-
-- **Proyecto Integrador**: Descripción y guía del proyecto final que integra todos los temas del curso.  
-  [Ver proyecto integrador](proyecto-integrador/README.md)
+> **Nota:** Es preferible que mantengas un orden secuencial para un mejor entendimiento de los temas.
 
 ## 🔗 Repositorio 
 
-Todo el código fuente, notebooks y materiales adicionales están disponibles en GitHub:
+Todo el código fuente está disponible en el repositorio de GitHub:
 
 [https://github.com/cesarsanco-ai/ml-foundations](https://github.com/cesarsanco-ai/ml-foundations)
 
