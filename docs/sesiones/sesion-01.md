@@ -2,12 +2,12 @@
 layout: default
 ---
 
-# Sesion 1: Introducción
+# Sesion 1: Introducción al ML
 [⬅️ Volver al Índice](../index.md)
 
 ## 🎯 Objetivo
 
-Comprender el flujo del aprendizaje automático (Supervisado y No Supervisado), en entornos de desarrollo y producción.
+Comprender el flujo completo de un proyecto de machine learning, identificar los tipos de aprendizaje y reconocer casos de uso en la industria.
 
 
 ## 📘 Contenido Teórico

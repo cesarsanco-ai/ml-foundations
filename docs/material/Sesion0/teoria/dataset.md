@@ -52,11 +52,3 @@
 | **6. Interpretabilidad** | 13 | Credit Scoring | Dashboard con SHAP + LIME + reglas |
 
 ---
-
-## 💡 Notas importantes
-
-1. **Semana 5 (Digits)**: Aunque son imágenes, se usan como tabla de 64 píxeles → perfecto para ML clásico.
-2. **Semana 10 (Series de Tiempo)**: Wine Quality no tiene fecha real; se puede simular un índice temporal o usar `fetch_openml(data_id=42712)` para dataset con fecha.
-3. **Semana 11 (C++)**: MNIST en formato numérico (784 columnas) es ideal para implementar kNN o PCA desde cero en C++.
-4. **Semana 12 (Edge)**: SUPERB (KS) es el único dataset de audio funcional actualmente sin scripts deprecados.
-

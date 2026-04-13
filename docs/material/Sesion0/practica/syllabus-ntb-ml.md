@@ -1,48 +1,35 @@
-# Curso de Machine Learning
-## Syllabus de Notebooks por Semana
+# Syllabus de Notebooks por Semana
 
-**Carlos César Sánchez Coronel**
-
-2026
-
----
-
-## Introducción
-
-Cada semana se trabajará con dos tipos de notebooks:
-
-- **Notebook Conceptual (NB1):** Enfocado en la comprensión profunda. Se utilizan datos *dummy* generados en el momento para operaciones matemáticas, visualización de ecuaciones, implementación de algoritmos desde cero (cuando sea pertinente) y experimentación con los parámetros de los modelos de scikit-learn. Aquí se exploran conceptos como complejidad computacional, efecto de hiperparámetros, representaciones gráficas de funciones de coste, etc.
-- **Notebook de Ejercicios (NB2):** Aplicación práctica sobre conjuntos de datos reales (de scikit-learn, Kaggle, UCI, etc.). Se plantean problemas concretos de regresión, clasificación, clustering, etc., donde el estudiante debe aplicar lo aprendido, evaluar métricas, comparar modelos y justificar decisiones.
-
----
+Todos los notebooks tiene objetivo principal:
+- Solo usar librerias que se ven en ese tema, no adelantando librerias ni funciones de temas posteriores
+- Los ejemplos deben ser aplicados al contexto de negocio, buscando soltura con el uso de la herramienta
+- Los notebooks deben estar ordenados a nivel de markdown y con explicaciones claras y concisas
+, asi como comentarios en las lineas de codigo
 
 ## Semana 1: Herramientas y Fundamentos Matemáticos
 
 ### Propósito
-Familiarizar al estudiante con el entorno de trabajo (NumPy, Pandas, Matplotlib, Seaborn) y con las funciones matemáticas que aparecerán a lo largo del curso. Se busca que el alumno gane soltura en la manipulación de arrays, operaciones vectoriales y visualización, y que reconozca gráficamente las funciones clave de machine learning.
+Familiarizar al estudiante con el entorno de trabajo (NumPy, Pandas, Matplotlib, Seaborn) usando data dummy y/o dataset online gratuito de Iris.
 
-### Notebook Único (NB1) – Herramientas y Ecuaciones
+### Notebook Único (NB1)
 
-- **Datos:** Datos sintéticos generados con NumPy (secuencias lineales, muestras aleatorias, etc.).
-- **Actividades:**
-  1. Repaso de NumPy: creación de arrays, indexado, operaciones elemento a elemento, broadcasting.
-  2. Cálculo de normas (L1, L2) y distancias (euclidiana, Manhattan) entre vectores.
-  3. Multiplicación de matrices y resolución de sistemas lineales sencillos.
-  4. Visualización con Matplotlib: curvas de funciones (lineal, cuadrática, exponencial, logarítmica, sigmoide, ReLU, tanh, etc.).
-  5. Representación de la función de pérdida MSE en 2D y 3D (variando coeficientes).
-  6. Gráficas de distribuciones (histogramas, boxplots) con Seaborn sobre datos simulados.
-  7. Ejemplo práctico: generar datos con ruido y ajustar una recta "a ojo" variando pendiente e intercepto.
-- **Conceptos matemáticos:** Álgebra lineal básica, cálculo de gradientes (nociones), funciones convexas.
-- **Herramientas:** NumPy, Matplotlib, Seaborn.
+- Repaso de Numpy
+- Repaso de Pandas
+
+### Notebook Único (NB2)
+
+- Repaso de Matplotlib
+- Repaso de Seaborn
+
 
 ---
 
 ## Semana 2: Análisis Exploratorio y Feature Engineering
 
 ### Propósito
-Aprender a explorar, limpiar y transformar datos reales. Se introduce el concepto de pipeline y transformadores de scikit-learn, sentando las bases para los modelos.
+Aprender el flujo completo a nivel detallado de EDA y Feature Engineering
 
-### Notebook Conceptual (NB1) – Manipulación de Datos Dummy
+### Notebook Conceptual (NB1) – EDA
 
 - **Datos:** DataFrames creados con Pandas a partir de diccionarios, incluyendo valores nulos, outliers y variables categóricas.
 - **Actividades:**
@@ -56,7 +43,7 @@ Aprender a explorar, limpiar y transformar datos reales. Se introduce el concept
 - **Conceptos:** Correlación de Pearson y Spearman, sesgo en variables, importancia de la escala.
 - **Herramientas:** Pandas, Seaborn, scikit-learn (preprocessing, pipeline).
 
-### Notebook de Ejercicios (NB2) – EDA sobre Dataset Real
+### Notebook de Ejercicios (NB2) – Feature engineering
 
 - **Dataset:** "House Prices" (Kaggle) o "Titanic" (Kaggle).
 - **Actividades:**
@@ -73,7 +60,7 @@ Aprender a explorar, limpiar y transformar datos reales. Se introduce el concept
 ### Propósito
 Comprender la regresión lineal desde sus fundamentos matemáticos, implementarla manualmente, y luego usar scikit-learn explorando el efecto de la regularización.
 
-### Notebook Conceptual (NB1) – Experimentación con Datos Dummy
+### Notebook Conceptual (NB1) – Comparación de metricas con regresion multiple como baseline, regulacion L1, L2, L1+L2
 
 - **Datos:** Datos sintéticos univariados y multivariados con relación lineal más ruido gaussiano.
 - **Actividades:**

@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-# Semana 1: Introducción al Machine Learning
+# Sesión 1: Introducción al Machine Learning
 
 ## Logro de la sesión
 Al finalizar la sesión, el estudiante será capaz de:

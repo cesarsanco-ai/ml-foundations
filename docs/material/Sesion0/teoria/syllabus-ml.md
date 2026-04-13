@@ -1,34 +1,8 @@
-# Sílabo del Curso
-
-# **MACHINE LEARNING**
-## *para Inteligencia Artificial*
-
-**Fundamentos, algoritmos y aplicaciones prácticas**
-
-*Por*
-
-**Carlos César Sánchez Coronel**
-
-2026
-
-
-
-
----
+# Sílabo del Curso de **MACHINE LEARNING**
 
 ## Presentación del Curso
 
-Este curso está diseñado para futuros ingenieros e científicos de datos que deseen dominar los fundamentos del machine learning desde una perspectiva práctica y orientada a la industria. A lo largo de 14 semanas, exploraremos los algoritmos más importantes, técnicas de preprocesamiento, evaluación, interpretabilidad y despliegue, con un enfoque en las preguntas y habilidades que se esperan en entrevistas técnicas y en el trabajo diario.
-
-Cada Modelo de ML contiene:
-- **Problematica de negocio**: Problematica de negocio.
-- **Modelado de ML**: Selección de modelo
-- **Fundamento matematico y computacional**: Matematica y computación que incluye el modelo.
-- **Pipeline de datos**: Obtención de datos, preprocesamiento, feature engineering, evaluación.
-- **Análisis de metricas**: Interpretacion de metricas del modelo.
-- **Comunicación**: Storytelling, elevator pitch a equipo tecnico y no tecnico.
-
----
+Este curso está diseñado para futuros ingenieros y científicos donde se muestra la teoria necesaria para acompañarlo con python y sus librerias, brindando teoria necesaria para comprender el funcionamiento de los algoritmos y sus aplicaciones en la industria con Python.
 
 ## Semana 1: Introducción al ML
 
@@ -41,31 +15,15 @@ Comprender el flujo completo de un proyecto de machine learning, identificar los
 - Metodos parametricos y no parametricos en ML.
 - Historia y auge de los Modelos de ML.
 - Ciclo de vida y metodologia CRISP-DM.
-- Diferencias: Data engineer, Data Scientist, ML Engineer, MLOps.
+- Diferencias: Data engineer, Data Scientist, ML Engineer, MLOps engineer.
+- Tipos de metricas en ML e interpretación de la métrica.
 
-#### Aplicaciones y casos típicos
+#### Aplicaciones de ejemplos
 - Sistemas de recomendación (Netflix, Amazon).
 - Detección de fraude en transacciones bancarias.
 - Mantenimiento predictivo en maquinaria industrial.
 - Clasificación de imágenes (diagnóstico médico, vehículos autónomos).
 - Predicción de series temporales (ventas, demanda energética).
-
-#### Fundamentos matematicos y computacionales
-- Matemáticas detrás de los ML clasico: Funciones de costos, optimización, generalizado y especifico por modelos de regresion, clasificacion y clustering.
-- Complejidad algoritmica que incluyen los modelos.
-- Hardware: CPU, GPU, TPU.
-
-#### Métricas
-- Tipos de metricas en ML e importancia de la métrica en el negocio.
-
-#### Laboratorio: Ver Colab
-- Repaso de Numpy
-- Repaso de Pandas
-- Repaso de Matplotlib
-- Repaso de Seaborn
-
-#### Reto: 1 punto
-- Escoger una empresa tech famosa, y detectar la mayor cantidad de modelos de ML que puede tener. Ejm. en Uber, Netflix, Spotify, TikTok, etc.
 
 ---
 
@@ -78,11 +36,10 @@ Realizar un análisis exploratorio y aplicar técnicas de feature engineering pa
 - Importancia del EDA
 - Casos famosos de exito y fracaso en negocios
 - Pipeline de EDA
-- Limpieza de datos (valores faltantes, valores duplicados, errores de tipo de dato, tratamiento basicode outliers, inconsistencias y errores logicos)
+- Limpieza de datos (valores faltantes, tipos de imputacion de faltantes, valores duplicados, errores de tipo de dato, tratamiento basicode outliers, inconsistencias y errores logicos)
 - Analisis univariado (Variables numericas: medidas de tendencia central, medidas de dispersion, medidas de forma, tipos de visualizaciones; Variables categoricas: frecuencias, moda, proporciones, tipos de visualizaciones; Variables de Fecha: Componentes de fechas, tipos de visualizaciones)
 - Analisis bivariado (Variables numericas vs numericas, categoricas vs categoricas, numericas vs categoricas)
 - Analisis multivariado (Matrices de correlacion, Pairplots, Heatmaps)
-
 - Importancia del Feature engineering
 - Pipeline de feature engineering
 - Creación de nuevas características (a partir de numericas, categoricas, fechas, agregaciones, texto,etc)
@@ -93,80 +50,51 @@ Realizar un análisis exploratorio y aplicar técnicas de feature engineering pa
 - Manejo de outliers (variable indicadora de outlier, winsorizacion, transformaciones para reducir impacto)
 - Selección de características (Filtros, Wrappers, Embebidos)
 - Variables derivadas del negocio (ratios, agregaciones temporales, interacciones)
+- Feature Store
 
-#### Comunicacion
-- Storytelling e insights con data dummy
-- Elevator pitch a equipo tecnico y no tecnico
 
-#### Laboratorio: Ver Colab
+#### Laboratorio
 - EDA
-- Introducción a scikit-learn
 - Feature engineering
 
-#### Reto: 1 punto
-- Buscar 3 casos de exito del EDA y/o feature engineering en empresas big tech.
-
-#### Anexo: Fundamentos matematicos y computacionales
-- Estadistica descriptiva
-- Probabilidad
-- Estadistica inferencial
-- Optimizacion computacional
 
 ---
 
 ## Semana 3: Regresión Lineal y Regularización
 
 ### Logro de la sesión
-Construir e interpretar modelos de regresión lineal, aplicando regularización y sus metricas.
-
-#### Problematica de negocio
-- Tipos y ejemplos de problemas de regresion
-- Solucion: regresión simple y multiple
+Construir e interpretar modelos de regresión lineal múltiple, aplicando regularización (L1,L2,L1+L2) y sus metricas.
 
 #### Modelado
+- Historia
 - Requisitos del modelo
 - Regresión lineal simple y múltiple: formulación, interpretación de coeficientes.
 - Supuestos del modelo: linealidad, independencia, homocedasticidad, normalidad de residuos.
 - Regularización: Ridge (L2), Lasso (L1) y Elastic Net.
-- Interpretación de la regularización y selección de hiperparámetros.
+- Interpretación de la regularización y sus hiperparámetros.
 - Plantilla base de Python: Imports, Split de datos, Modelo, Entrenamiento, Predicciones, Evaluacion
 
 #### Métricas
 - Error Cuadrático Medio (MSE), Raíz del Error Cuadrático Medio (RMSE), Error Absoluto Medio (MAE), Coeficiente de determinación \(R^2\).
 - Interpretacion y selección de metricas
 
-#### Comunicacion
-- Storytelling e insights con data dummy
-- Elevator pitch a equipo tecnico y no tecnico
-
-#### Reto: 1 punto
-- Investigar el computo necesario para entrenar un modelo de regresión lineal en un dataset de 10 millones de filas y 1000 columnas en Databricks.
 
 #### Laboratorio: Ver Colab
-- Scikit-learn: Regresión lineal, Regularización, Métricas
-- Pipeline datos: EDA + Feature engineering + Regresión multiple + Regularizacion + metricas
+- NTB1: Comparación de metricas con regresion multiple como baseline, regulacion L1, L2, L1+L2 (Dataset1)
+- NTB2: Comparación de metricas con regresion multiple como baseline, regulacion L1, L2, L1+L2 (Dataset2)
 
-#### Anexo: Fundamento matematico y computacional
-- Demostracion de la regresión lineal
-- Demostracion de la regularización
-- Optimizacion computacional
-- Complejidad algoritmica
 
 ---
 
-## Semana 4: Clasificación I - Regresión Logística y Balance de Datos
+## Semana 4: Regresión Logística y Balance de Datos
 
 ### Logro de la sesión
-Construir, interpretar y evaluar modelos de clasificación binaria y multiclase utilizando regresión logística, incorporando técnicas de balanceo de datos y selección adecuada de métricas.
-
-#### Problematica de negocio
-- Tipos de problemas de clasificación: binaria y multiclase
-- Impacto del desbalance de clases en problemas reales
-- Ejemplos clasicos: detección de fraude, churn de clientes, diagnóstico médico, clasificación de productos y clientes, score crediticio
-- Diferencias clave entre regresión y clasificación (output continuo vs categórico)
+Construir, interpretar y evaluar modelos de clasificación binaria y multiclase utilizando regresión logística, incorporando técnicas de balanceo de datos, regularización y selección adecuada de métricas.
 
 #### Modelado de clasificación
+- Historia
 - Requisitos del modelo
+- Ejemplos clasicos de aplicacion: detección de fraude, churn de clientes, diagnóstico médico, clasificación de productos y clientes, score crediticio
 - Regresión logística binaria: función sigmoide
 - Extensión a regresión logística multiclase (One-vs-Rest, Softmax)
 - Interpretación probabilística de las predicciones
@@ -192,40 +120,21 @@ Construir, interpretar y evaluar modelos de clasificación binaria y multiclase 
 - Métricas en escenarios desbalanceados
 - Selección de métricas según contexto de negocio (agua potable, phising, covid)
 
-#### Comunicacion
-- Storytelling e insights con data dummy
-- Interpretación de errores: costo de falsos positivos vs falsos negativos
-- Ajuste del threshold según objetivos de negocio
-- Elevator pitch a equipo tecnico y no tecnico
-
-#### Reto: 1 punto
-- Analizar un dataset desbalanceado, comparar métricas antes y después de aplicar técnicas de balanceo, y justificar cuál estrategia es más adecuada según el caso de negocio.
 
 #### Laboratorio: Ver Colab
-- Scikit-learn: regresión logística (binaria y multiclase)
-- Pipeline completo:
-    - EDA
-    - Feature engineering
-    - Balanceo de datos
-    - Entrenamiento de modelo
-    - Evaluación con métricas
-    - Ajuste de threshold
+- NTB 1 : Balanceo de datos
+- NTB 2 : Regresión logística
 
-#### Anexo: Fundamento matematico y computacional
-- Derivación de la regresión logística
-- Función de costo: log-loss (cross-entropy)
-- Optimización: gradiente descendente
-- Extensión a multiclase (softmax)
-- Complejidad algorítmica
 
 ---
 
-## Semana 5: Clasificación II - Algoritmos Clásicos
+## Semana 5: kNN, Naive Bayes y SVM
 
 ### Logro de la sesión
-Construir, comparar e interpretar modelos de clasificación utilizando algoritmos clásicos (KNN, Naive Bayes y SVM), comprendiendo sus supuestos, ventajas y limitaciones en distintos contextos de negocio.
+Construir, comparar e interpretar modelos de regresión y clasificación, usando los algoritmos kNN, Naive Bayes y SVM, comprendiendo sus supuestos, ventajas y limitaciones en distintos contextos de negocio.
 
 #### Problematica de negocio
+- Historia
 - Selección de algoritmos de clasificación según el tipo de datos
 - Comparación de desempeño entre modelos
 - Casos donde la regresión logística no es suficiente (no linealidad, alta dimensionalidad)
@@ -237,14 +146,16 @@ Construir, comparar e interpretar modelos de clasificación utilizando algoritmo
 #### Modelado
 - K-Nearest Neighbors (KNN):
     - Requisitos del modelo
-    - Concepto de distancia (euclidiana, manhattan)
-    - Elección de \(k\) y trade-off bias-varianza
+    - Explicacion del modelo en clasificacion
+    - Concepto de tipos de distancias
+    - Elección de \(k\)
     - Sensibilidad a la escala de variables
     - Plantilla base de Python: Imports, Split de datos, Modelo, Entrenamiento, Predicciones, Evaluacion
 
 - Naive Bayes:
     - Requisitos del modelo
     - Teorema de Bayes
+    - Explicacion del modelo en regresion y clasificacion
     - Supuesto de independencia condicional
     - Variantes: Gaussian, Multinomial, Bernoulli
     - Interpretación probabilística
@@ -252,45 +163,19 @@ Construir, comparar e interpretar modelos de clasificación utilizando algoritmo
 
 - Support Vector Machines (SVM):
     - Requisitos del modelo
-    - Margen máximo y vectores de soporte
-    - Kernel lineal vs no lineal (RBF)
+    - Explicacion del modelo en regresion y clasificacion
+    - Tipos de Kernel: lineal, polinomial, RBF
     - Hiperparámetros: \(C\) y \(\gamma\)
     - Manejo de no linealidad
     - Plantilla base de Python: Imports, Split de datos, Modelo, Entrenamiento, Predicciones, Evaluacion
 
-- Comparación conceptual entre algoritmos:
-    - Paramétricos vs no paramétricos
-    - Interpretabilidad vs performance
-    - Escalabilidad computacional
 
 #### Métricas
-- Matriz de confusión: TP, FP, TN, FN
-- Exactitud, Precisión, recall, F1-score
-- Curva ROC y AUC
-- Comparación de modelos usando métricas consistentes
-
-#### Comunicacion
-- Comparación de modelos para toma de decisiones
-- Explicación de trade-offs: interpretabilidad vs precisión
-- Justificación del modelo seleccionado según contexto de negocio
-
-#### Reto: 1 punto
-- Comparar KNN, Naive Bayes y SVM en un mismo dataset, evaluando métricas y tiempos de entrenamiento, y justificar cuál modelo es más adecuado según el caso.
+- Métricas en clasificacion / regresion
 
 #### Laboratorio
-- Implementación de KNN, Naive Bayes y SVM en Scikit-learn
-- Pipeline:
-    - Datos preprocesados (EDA + feature engineering ya realizado)
-    - Escalamiento de variables (clave para KNN y SVM)
-    - Entrenamiento de múltiples modelos
-    - Evaluación con métricas
-    - Comparación de resultados
-
-#### Anexo: Fundamento matematico y computacional
-- Distancias y espacios métricos (KNN)
-- Teorema de Bayes y probabilidades condicionales
-- Optimización en SVM (margen máximo)
-- Complejidad computacional de cada algoritmo
+- NTB1: Clasificacion con KNN, Naive Bayes y SVM
+- NTB2: Regresion con Naive Bayes y SVM
 
 ---
 
@@ -300,6 +185,7 @@ Construir, comparar e interpretar modelos de clasificación utilizando algoritmo
 Construir, interpretar y comparar modelos basados en árboles de decisión y ensambles tipo Random Forest, comprendiendo su capacidad para capturar relaciones no lineales y su aplicación en problemas reales de clasificación y regresión.
 
 #### Problematica de negocio
+- Historia
 - Modelos interpretables vs modelos de alto performance
 - Manejo de relaciones no lineales y variables categóricas
 - Reducción de overfitting en modelos complejos
@@ -320,7 +206,7 @@ Construir, interpretar y comparar modelos basados en árboles de decisión y ens
     - Interpretación de decisiones del modelo
     - Plantilla base de Python: Imports, Split de datos, Modelo, Entrenamiento, Predicciones, Evaluacion
 
-- Random Forest (Bagging):
+- Random Forest (Bagging en clasificación y regresión):
     - Concepto de ensamble: combinación de múltiples árboles
     - Bootstrap sampling (muestreo con reemplazo)
     - Selección aleatoria de variables (feature randomness)
@@ -341,39 +227,19 @@ Construir, interpretar y comparar modelos basados en árboles de decisión y ens
     - Permutation importance
 - Selección de métricas según objetivo de negocio
 
-#### Comunicacion
-- Explicación de decisiones del modelo mediante reglas del árbol
-- Uso de importancia de variables para generar insights
-- Comparación clara entre modelos simples y ensambles
-- Traducción de resultados a impacto de negocio
-
-#### Reto: 1 punto
-- Comparar un árbol de decisión y un Random Forest en el mismo dataset, analizando métricas, overfitting y la importancia de variables.
-
 #### Laboratorio
-- Experimentacion: Implementación de árboles y Random Forest en Scikit-learn
-- Pipeline:
-    - Datos preprocesados (EDA + feature engineering)
-    - Entrenamiento de árbol de decisión
-    - Control de overfitting (tuning de hiperparámetros)
-    - Entrenamiento de Random Forest
-    - Evaluación y comparación de modelos
-    - Análisis de importancia de variables
-
-#### Anexo: Fundamento matematico y computacional
-- Criterios de impureza: Gini, entropía, MSE
-- Reducción de varianza en bagging
-- Bias-variance trade-off
-- Complejidad computacional de árboles y ensambles
+- NTB1: Clasificacion con arboles y random forest
+- NTB2: Regresion con arboles y random forest
 
 ---
 
-## Semana 7: Gradient Boosting (XGBoost, LightGBM)
+## Semana 7: Gradient Boosting 
 
 ### Logro de la sesión
-Construir, optimizar e interpretar modelos de Gradient Boosting (XGBoost y LightGBM), comprendiendo su funcionamiento secuencial y ajustando hiperparámetros para maximizar el rendimiento en problemas de clasificación y regresión.
+Construir, optimizar e interpretar modelos de Gradient Boosting (XGBoost, LightGBM y Catboost), comprendiendo su funcionamiento secuencial y ajustando hiperparámetros para maximizar el rendimiento en problemas de clasificación y regresión.
 
 #### Problematica de negocio
+- Historia
 - Necesidad de modelos de alto rendimiento en datos tabulares
 - Mejora incremental de predicciones (reducción de error)
 - Manejo de relaciones no lineales y variables complejas
@@ -410,10 +276,13 @@ Construir, optimizar e interpretar modelos de Gradient Boosting (XGBoost y Light
     - Entrenamiento más rápido en grandes volúmenes
     - Plantilla base de Python: Imports, Split de datos, Modelo, Entrenamiento, Predicciones, Evaluacion
 
-- Comparación:
-    - Random Forest vs Gradient Boosting (bagging vs boosting)
-    - XGBoost vs LightGBM
-    - Interpretabilidad vs performance
+- Catboost:
+    - Requisitos del modelo
+    - Manejo automático de variables categóricas
+    - Ordered Boosting
+    - Plantilla base de Python: Imports, Split de datos, Modelo, Entrenamiento, Predicciones, Evaluacion
+
+- Comparativas
 
 #### Métricas
 - Clasificación: log-loss, AUC-ROC, F1-score
@@ -428,34 +297,13 @@ Construir, optimizar e interpretar modelos de Gradient Boosting (XGBoost y Light
 - `subsample`, `colsample_bytree`: control de overfitting
 - Regularización: `lambda`, `alpha` (XGBoost)
 
-#### Comunicacion
-- Explicación de mejoras de performance frente a modelos base
-- Interpretación de importancia de variables
-- Justificación del uso de modelos complejos
-- Balance entre precisión y explicabilidad
-
-#### Reto: 1 punto
-- Comparar Random Forest vs XGBoost vs LightGBM en un dataset de kaggle, optimizando hiperparámetros y evaluando diferencias en performance y tiempo de entrenamiento.
-
 #### Laboratorio
-- Implementación de XGBoost y LightGBM
-- Pipeline:
-    - Datos preprocesados (EDA + feature engineering)
-    - Entrenamiento de modelo base
-    - Ajuste de hiperparámetros
-    - Uso de early stopping
-    - Evaluación y comparación de modelos
-    - Análisis de importancia de variables
-
-#### Anexo: Fundamento matematico y computacional
-- Gradient Boosting como optimización de funciones
-- Expansión funcional (additive models)
-- Regularización en boosting
-- Complejidad computacional y escalabilidad
+- NTB1: Clasificacion con XGBoost, LightGBM y Catboost
+- NTB2: Regresion con XGBoost, LightGBM y Catboost
 
 ---
 
-## Semana 8: Evaluación y Validación de Modelos
+## Semana 8: Bias-Variance, Modelado y Validación, Optimización de hiperparámetros y Selección de Modelos
 
 ### Logro de la sesión
 Evaluar, validar y seleccionar modelos de machine learning de forma robusta, asegurando su capacidad de generalización mediante técnicas de validación cruzada y optimización de hiperparámetros.
@@ -471,13 +319,12 @@ Evaluar, validar y seleccionar modelos de machine learning de forma robusta, ase
 - Validación antes de despliegue en producción
 
 #### Modelado y validación
-- Underfitting y overfitting:
-    - Identificación y diagnóstico
-    - Estrategias de mitigación
-
 - Bias-Variance tradeoff:
-    - Interpretación práctica
+    - Que es Underfitting y overfitting
+    - Identificación, diagnóstico y Interpretación de curvas
+    - Estrategias de mitigación
     - Relación con complejidad del modelo
+    - Ejemplos de la vida real e interpretación
 
 - Validación de modelos:
     - Train / Validation / Test split
@@ -486,14 +333,10 @@ Evaluar, validar y seleccionar modelos de machine learning de forma robusta, ase
         - Stratified K-Fold (clasificación)
         - Leave-One-Out
 
-- Curvas de aprendizaje:
-    - Diagnóstico de underfitting vs overfitting
-    - Interpretación de curvas
-
 #### Optimización de modelos
 - Búsqueda de hiperparámetros:
     - Grid Search
-    - Randomized Search
+    - Random Search
     - Introducción a Bayesian Optimization
 
 - Buenas prácticas:
@@ -517,36 +360,17 @@ Evaluar, validar y seleccionar modelos de machine learning de forma robusta, ase
     - `GridSearchCV`
     - `RandomizedSearchCV`
 
-#### Comunicacion
-- Explicación de performance esperada en producción
-- Comparación clara entre modelos (baseline vs optimizado)
-- Justificación de selección de modelo
-- Comunicación de riesgos (overfitting, variabilidad)
-
-#### Reto: 1 punto
-- Implementar validación cruzada y búsqueda de hiperparámetros en un modelo (por ejemplo, Random Forest o XGBoost), comparando resultados antes y después del tuning.
 
 #### Laboratorio
-- Pipeline completo de validación:
-    - Train/test split
-    - Validación cruzada
-    - Entrenamiento de modelo base
-    - Búsqueda de hiperparámetros
-    - Evaluación final en test
-- Comparación de múltiples modelos (logística, árboles, boosting)
-
-#### Anexo: Fundamento matematico y computacional
-- Bias-variance decomposition
-- Fundamento de validación cruzada
-- Complejidad computacional del tuning
-- Riesgo de overfitting en selección de modelos
+- NTB1: Flujo completo de Clasificación
+- NTB2: Flujo completo de Regresión
 
 ---
 
-## Semana 9: Aprendizaje No Supervisado - Clustering y PCA
+## Semana 9: Tecnicas de Clustering, PCA y t-SNE
 
 ### Logro de la sesión
-Explorar y extraer valor de datos no etiquetados mediante técnicas de clustering y reducción de dimensionalidad (PCA), identificando patrones, segmentos y estructuras ocultas en los datos.
+Explorar y extraer valor de datos no etiquetados mediante técnicas de clustering y reducción de dimensionalidad (PCA) y t-SNE, identificando patrones, segmentos y estructuras ocultas en los datos.
 
 #### Problematica de negocio
 - Falta de etiquetas en los datos (no hay variable objetivo)
@@ -607,29 +431,9 @@ Explorar y extraer valor de datos no etiquetados mediante técnicas de clusterin
     - Escalamiento de datos antes de clustering
     - Uso de PCA para visualización
 
-#### Comunicacion
-- Interpretación de clusters (perfilamiento)
-- Traducción de segmentos a decisiones de negocio
-- Visualización de resultados (scatter plots, PCA)
-- Limitaciones del análisis no supervisado
-
-#### Reto: 1 punto
-- Aplicar K-Means y DBSCAN a un dataset real, comparar resultados y construir perfiles de los clusters identificados.
-
 #### Laboratorio
-- Pipeline de análisis no supervisado:
-    - Datos preprocesados (EDA + feature engineering)
-    - Escalamiento de variables
-    - Reducción de dimensionalidad (PCA)
-    - Clustering (K-Means, DBSCAN)
-    - Evaluación con métricas
-    - Visualización e interpretación de clusters
-
-#### Anexo: Fundamento matematico y computacional
-- Álgebra lineal en PCA (autovalores y autovectores)
-- Optimización en K-Means
-- Concepto de densidad en DBSCAN
-- Complejidad computacional de algoritmos de clustering
+- NTB1: Tecnicas de PCA, t-SNE
+- NTB2: Tecnicas de Clustering
 
 ---
 
@@ -693,79 +497,692 @@ Modelar y pronosticar datos temporales utilizando técnicas estadísticas clási
 - Machine learning: `sklearn`, `xgboost`, `lightgbm` aplicados a series con features temporales
 - Evaluación de modelos con métricas: MAE, MAPE, RMSE, MASE
 
-#### Comunicacion
-- Visualización de tendencias y estacionalidades
-- Comparación de pronósticos vs datos reales
-- Explicación del impacto de patrones estacionales y ciclos en decisiones de negocio
-- Comunicación de incertidumbre y límites del modelo
-
-#### Reto: 1 punto
-- Construir un pronóstico de ventas con ARIMA y Prophet, comparar métricas de error y explicar la elección de features temporales.
-
 #### Laboratorio
-- Pipeline de series temporales:
-    - Preparación de datos y creación de lags
-    - Descomposición de series para análisis de tendencia y estacionalidad
-    - Entrenamiento de modelos ARIMA/SARIMA
-    - Entrenamiento de Prophet y/o modelo ML con features temporales
-    - Evaluación de predicciones con métricas
-    - Visualización de pronósticos vs valores reales
-
-#### Anexo: Fundamento matematico y computacional
-- Autocorrelación y estacionariedad
-- Descomposición aditiva y multiplicativa
-- Optimización de parámetros ARIMA/SARIMA (p,d,q)
-- Concepto de errores y métricas escaladas
-- Complejidad computacional en series temporales y modelos ML
+- NTB1: Series temporales con Prophet y modelos ML
+- NTB2: Series temporales con ARIMA y SARIMA
 
 ---
 
-## Semana 11: Modelos Complementarios
+## 📘 Semana 11: Sistemas de Recomendación
 
-### Logro de la sesión
-Conocer y aplicar algoritmos adicionales de regresión y clustering que son útiles para problemas específicos o entrevistas técnicas, comprendiendo cuándo y por qué utilizarlos.
+Diseñar e implementar sistemas de recomendación capaces de sugerir productos, contenidos o servicios personalizados, utilizando enfoques basados en popularidad, filtrado colaborativo y contenido.
 
-#### Problematica de negocio
-- Manejo de datos con outliers o distribuciones no normales
-- Modelado de relaciones no lineales (regresión polinómica)
-- Segmentación de clientes o elementos con estructuras complejas o jerárquicas
-- Detección de patrones arbitrarios en datasets no etiquetados
+---
 
-#### Aplicaciones y casos típicos
-- Regresión robusta: predicción de precios de vivienda con outliers
-- SVR: problemas de regresión no lineales con pocos datos
-- DBSCAN: detección de anomalías, clusters irregulares
-- Clustering jerárquico: segmentación de clientes, análisis filogenético
+## 💼 Problemática de negocio
 
-#### Modelado
-- Regresión polinómica:
-    - Extensión de la regresión lineal
-    - Introducción de términos polinómicos
-    - Riesgo de overfitting y regularización
+* Sobrecarga de información (demasiadas opciones para el usuario)
+* Necesidad de personalización
+* Baja retención o engagement
+* Dificultad para descubrir nuevos productos/contenidos
 
-- Regresión robusta:
-    - HuberRegressor: combina MSE y MAE para outliers
-    - RANSACRegressor: ajuste iterativo ignorando outliers
-    - Aplicaciones en precios extremos o datos ruidosos
+---
 
-- SVM para regresión (SVR):
-    - Función de pérdida epsilon-insensitive
-    - Kernel lineal y no lineal
-    - Regularización y parámetro C
+## 📊 Aplicaciones y casos típicos
 
-- Clustering avanzado:
-    - DBSCAN: clustering basado en densidad, detección de ruido
-    - Clustering jerárquico: dendrogramas, aglomerativo vs divisivo
-    - Elección de parámetros y análisis de estructura jerárquica
+* Recomendación de productos (e-commerce)
+* Recomendación de contenido (streaming, noticias)
+* Sistemas de ranking (top items)
+* Cross-selling y up-selling
+* Personalización de feeds
 
-- Métricas adicionales:
-    - Clustering: Adjusted Rand Index, información mutua
-    - Interpretación de silueta y Davies-Bouldin para clusters complejos
+---
 
-#### Métricas
-- Regresión robusta: MAE, RMSE, \(R^2\)
-- Clustering: Silhouette, Davies-Bouldin, Adjusted Rand Index, Mutual Information
+## 🧠 Modelado
 
-#### Python
-- Regresión robusta: `sklearn.linear_model.HuberRegressor`, `RANSACRegressor`
-- SVR: `sklearn.svm.SVR
+### 🔹 Enfoques básicos
+
+* **Popularidad**
+
+  * Top-N más consumidos
+  * Basado en frecuencia o rating promedio
+  * Benchmark inicial
+
+---
+
+### 🔹 Filtrado basado en contenido
+
+* Uso de características de ítems
+* Similaridad (coseno, distancia)
+* Recomendación basada en perfil del usuario
+* Limitaciones:
+
+  * No descubre nuevos intereses
+  * Dependencia de features
+
+---
+
+### 🔹 Filtrado colaborativo
+
+#### Basado en memoria
+
+* User-based
+* Item-based
+* Matriz usuario–ítem
+* Medidas de similitud (coseno, Pearson)
+
+---
+
+#### Basado en modelos
+
+* Factorización de matrices (SVD)
+* Representación latente de usuarios e ítems
+* Predicción de ratings
+
+---
+
+### 🔹 Problemas comunes
+
+* Cold start (usuarios o ítems nuevos)
+* Sparsity (matrices dispersas)
+* Escalabilidad
+
+---
+
+### 🔹 Enfoques híbridos
+
+* Combinación de:
+
+  * contenido + colaborativo
+  * reglas de negocio
+
+---
+
+## 📏 Métricas
+
+### Offline
+
+* RMSE / MAE (predicción de ratings)
+* Precision@K
+* Recall@K
+* MAP (Mean Average Precision)
+* NDCG (ranking)
+
+---
+
+### Limitaciones
+
+* No capturan comportamiento real del usuario
+* Diferencia entre métricas offline vs impacto real
+
+---
+
+## 🐍 Python
+
+* Librerías:
+
+  * `surprise` (SVD, KNN para recomendadores)
+  * `sklearn.metrics.pairwise` (similitud)
+  * `pandas` (matriz usuario–ítem)
+
+* Buenas prácticas:
+
+  * Manejo de matrices dispersas
+  * Normalización de ratings
+  * Evaluación con train/test temporal
+
+---
+
+## 🧪 Laboratorio
+
+### Pipeline de sistema de recomendación:
+
+* Construcción de dataset:
+
+  * Interacciones usuario–ítem
+  * Ratings o eventos implícitos
+
+* Preprocesamiento:
+
+  * Filtrado de usuarios/ítems poco frecuentes
+  * Construcción de matriz usuario–ítem
+
+* Modelado:
+
+  * Baseline (popularidad)
+  * Filtrado colaborativo (user/item)
+  * Factorización de matrices (SVD)
+
+* Evaluación:
+
+  * Métricas de ranking (Precision@K, Recall@K)
+
+* Generación de recomendaciones:
+
+  * Top-N por usuario
+
+* Interpretación:
+
+  * Análisis de resultados
+  * Casos de éxito y errores
+
+
+
+## 📘 Semana 12: Graph ML y Geodata
+
+
+Modelar y analizar datos estructurados como grafos y datos geoespaciales, aplicando técnicas de Machine Learning para extraer relaciones, patrones espaciales y estructuras complejas en los datos.
+
+---
+
+## 💼 Problemática de negocio
+
+* Relaciones complejas entre entidades (usuarios, productos, transacciones)
+* Dificultad para modelar interacciones (redes)
+* Necesidad de explotar información geográfica (ubicación, proximidad)
+* Detección de patrones no evidentes en datos no tabulares
+
+---
+
+## 📊 Aplicaciones y casos típicos
+
+### 🔹 Graph ML
+
+* Sistemas de recomendación (user–item graph)
+* Detección de fraude (redes de transacciones)
+* Redes sociales (influencia, comunidades)
+* Análisis de conexiones (network analysis)
+
+---
+
+### 🔹 Geodata
+
+* Segmentación geográfica (clientes por ubicación)
+* Optimización de rutas (logística)
+* Análisis de zonas (hotspots)
+* Ubicación óptima de negocios
+
+---
+
+## 🧠 Modelado
+
+---
+
+## 🔹 Representación de grafos
+
+* Nodos (entidades) y aristas (relaciones)
+* Grafos dirigidos vs no dirigidos
+* Grafos ponderados
+* Matriz de adyacencia
+
+---
+
+## 🔹 Feature Engineering en grafos
+
+* Grado de nodo (degree)
+* Centralidad (básico)
+* Vecindad (neighbors)
+* Conteo de conexiones
+
+---
+
+## 🔹 Enfoques de ML sobre grafos (sin GNN profundo)
+
+* Transformar grafos → features tabulares
+* Link prediction (conceptual)
+* Node classification (conceptual)
+
+---
+
+## 🔹 Geodata: fundamentos
+
+* Coordenadas geográficas (latitud, longitud)
+* Distancias:
+
+  * Euclidiana vs Haversine
+* Escalamiento espacial
+
+---
+
+## 🔹 Técnicas sobre geodata
+
+* Clustering geoespacial:
+
+  * DBSCAN con coordenadas
+* Feature engineering espacial:
+
+  * Distancia a puntos de interés
+  * Densidad de eventos
+* Mapas de calor (heatmaps)
+
+---
+
+## 🔹 Problemas comunes
+
+* Alta dimensionalidad en grafos
+* Escalabilidad
+* Datos dispersos
+* Ruido en datos geográficos
+
+---
+
+## 📏 Métricas
+
+### Graph ML (básico)
+
+* Accuracy / F1 (clasificación de nodos)
+* AUC (link prediction, conceptual)
+
+---
+
+### Geodata
+
+* Métricas de clustering (silhouette, DB index)
+* Evaluación visual (mapas)
+
+---
+
+## 🐍 Python
+
+* Librerías:
+
+  * `networkx` (grafos)
+  * `geopandas` (datos geoespaciales)
+  * `sklearn` (clustering)
+  * `haversine` (distancias)
+
+* Buenas prácticas:
+
+  * Conversión de grafos a features
+  * Escalamiento antes de clustering
+  * Visualización geoespacial
+
+---
+
+## 🧪 Laboratorio
+
+### Pipeline: datos relacionales y geoespaciales
+
+---
+
+### 🔹 Parte 1: Graph ML
+
+* Construcción de grafo (usuarios–productos o transacciones)
+* Extracción de features:
+
+  * grado
+  * número de vecinos
+* Modelo simple:
+
+  * clasificación o scoring
+
+---
+
+### 🔹 Parte 2: Geodata
+
+* Dataset con coordenadas
+* Clustering geoespacial (DBSCAN)
+* Identificación de zonas densas
+
+---
+
+### 🔹 Parte 3: Integración
+
+* Combinar features:
+
+  * relacionales + espaciales
+* Análisis de patrones
+
+---
+
+### 🔹 Interpretación
+
+* Qué nodos son importantes
+* Qué zonas concentran actividad
+* Insights de negocio
+
+
+
+## 📘 Semana 13: Interpretabilidad de Modelos
+
+
+Comprender, analizar e interpretar el comportamiento de modelos de Machine Learning, explicando sus predicciones a nivel global y local para generar confianza, detectar sesgos y extraer insights accionables.
+
+---
+
+## 💼 Problemática de negocio
+
+* Modelos tipo “caja negra” difíciles de explicar
+* Falta de confianza en decisiones automatizadas
+* Necesidad de justificar predicciones (regulación, negocio)
+* Dificultad para identificar errores o sesgos del modelo
+
+---
+
+## 📊 Aplicaciones y casos típicos
+
+* Explicación de decisiones (créditos, riesgo)
+* Interpretación de variables importantes
+* Auditoría de modelos
+* Detección de sesgos
+* Comunicación con stakeholders no técnicos
+
+---
+
+## 🧠 Modelado
+
+---
+
+## 🔹 Tipos de interpretabilidad
+
+* Global:
+
+  * Entender el modelo completo
+* Local:
+
+  * Explicar predicciones individuales
+
+---
+
+## 🔹 Modelos interpretables vs no interpretables
+
+* Interpretables:
+
+  * Regresión lineal
+  * Árboles de decisión
+* Menos interpretables:
+
+  * Random Forest
+  * Gradient Boosting
+
+---
+
+## 🔹 Importancia de variables
+
+* Feature importance (model-based)
+* Limitaciones:
+
+  * Correlación entre variables
+  * Interpretación incorrecta
+
+---
+
+## 🔹 Técnicas de interpretabilidad
+
+### 🔸 Permutation Importance
+
+* Medir impacto al permutar variables
+* Independiente del modelo
+
+---
+
+### 🔸 SHAP (conceptual)
+
+* Contribución de cada feature
+* Explicaciones locales y globales
+* Interpretación de valores positivos/negativos
+
+---
+
+### 🔸 LIME (conceptual)
+
+* Aproximación local del modelo
+* Explicación en torno a una predicción
+
+---
+
+## 🔹 Visualización de interpretabilidad
+
+* Feature importance plots
+* SHAP summary plots
+* Dependence plots
+
+---
+
+## 🔹 Problemas comunes
+
+* Interpretaciones erróneas
+* Correlación vs causalidad
+* Exceso de confianza en explicaciones
+* Coste computacional
+
+---
+
+## 📏 Métricas
+
+*(Nota: la interpretabilidad no tiene métricas estándar universales)*
+
+Pero se pueden evaluar:
+
+* Estabilidad de explicaciones
+* Consistencia entre métodos
+* Simplicidad del modelo
+
+---
+
+## 🐍 Python
+
+* Librerías:
+
+  * `sklearn.inspection` (permutation importance)
+  * `shap` (SHAP values)
+  * `lime` (explicaciones locales)
+
+* Buenas prácticas:
+
+  * Comparar múltiples métodos
+  * Usar interpretabilidad post-entrenamiento
+  * Validar resultados con conocimiento del dominio
+
+---
+
+## 🧪 Laboratorio
+
+### Pipeline de interpretabilidad:
+
+---
+
+### 🔹 Entrenamiento
+
+* Modelo supervisado (ej: Random Forest o Gradient Boosting)
+
+---
+
+### 🔹 Interpretabilidad global
+
+* Feature importance
+* Permutation importance
+* SHAP summary plot
+
+---
+
+### 🔹 Interpretabilidad local
+
+* Explicación de predicciones individuales
+* Casos:
+
+  * predicción correcta
+  * predicción errónea
+
+---
+
+### 🔹 Análisis
+
+* Qué variables influyen más
+* Cómo cambian las predicciones
+* Detección de posibles sesgos
+
+
+
+## 📘 Semana 14: Evaluación en Producción y Ciclo de Vida del ML
+
+
+Comprender cómo se evalúan y gestionan los modelos de Machine Learning en entornos reales, utilizando experimentación (A/B testing), monitoreo y estrategias de mantenimiento para asegurar su desempeño a lo largo del tiempo.
+
+---
+
+## 💼 Problemática de negocio
+
+* Modelos que funcionan bien offline pero fallan en producción
+* Necesidad de medir impacto real en métricas de negocio
+* Cambios en los datos a lo largo del tiempo
+* Degradación del rendimiento del modelo
+* Falta de monitoreo y control del modelo
+
+---
+
+## 📊 Aplicaciones y casos típicos
+
+* Comparación de modelos en producción (A/B testing)
+* Sistemas de recomendación en plataformas reales
+* Modelos de scoring (fraude, crédito)
+* Personalización de productos y contenido
+* Optimización continua de modelos
+
+---
+
+## 🧠 Modelado (conceptual)
+
+---
+
+## 🔹 Evaluación offline vs online
+
+* Offline:
+
+  * Métricas en dataset (accuracy, RMSE)
+  * Limitaciones
+* Online:
+
+  * Métricas de negocio (CTR, conversión, revenue)
+  * Diferencias clave
+
+---
+
+## 🔹 A/B Testing
+
+* Qué es un experimento A/B
+* División de usuarios (grupos A vs B)
+* Comparación de modelos en producción
+* Métricas online:
+
+  * CTR (Click Through Rate)
+  * Conversion rate
+* Consideraciones:
+
+  * tamaño de muestra
+  * duración del experimento
+  * significancia estadística (conceptual)
+
+---
+
+## 🔹 Tipos de experimentación
+
+* A/B testing clásico
+* Multivariate testing (mención)
+* Bandits (conceptual, opcional)
+
+---
+
+## 🔹 Drift en Machine Learning
+
+### 🔸 Data Drift
+
+* Cambio en la distribución de los datos de entrada
+
+### 🔸 Concept Drift
+
+* Cambio en la relación entre variables y target
+
+---
+
+## 🔹 Monitoreo de modelos
+
+* Seguimiento de métricas en producción
+* Detección de degradación
+* Alertas
+
+---
+
+## 🔹 Ciclo de vida del modelo
+
+* Entrenamiento → validación → despliegue (conceptual)
+* Retraining periódico
+* Versionado de modelos (conceptual)
+* Iteración continua
+
+---
+
+## 🔹 Problemas comunes
+
+* Desalineación entre métricas offline y online
+* Experimentos mal diseñados
+* Falta de datos en producción
+* Retraining ineficiente
+
+---
+
+## 📏 Métricas
+
+### Online
+
+* CTR
+* Conversion rate
+* Retención
+* Revenue (según caso)
+
+---
+
+### Evaluación del experimento
+
+* Diferencia entre grupos (A vs B)
+* Intervalos de confianza (conceptual)
+
+---
+
+## 🐍 Python (ligero, conceptual)
+
+* Simulación de A/B testing:
+
+  * `numpy`, `pandas`
+
+* Visualización de resultados:
+
+  * `matplotlib`, `seaborn`
+
+* Buenas prácticas:
+
+  * Separar evaluación offline vs online
+  * No confiar solo en métricas tradicionales
+
+---
+
+## 🧪 Laboratorio
+
+### Simulación de evaluación en producción
+
+---
+
+### 🔹 Paso 1: Modelo base
+
+* Modelo entrenado previamente (ej: clasificación o recomendador)
+
+---
+
+### 🔹 Paso 2: Simulación A/B
+
+* Dividir datos en grupo A y B
+* Simular comportamiento de usuarios
+* Comparar métricas (ej: tasa de conversión)
+
+---
+
+### 🔹 Paso 3: Análisis
+
+* Evaluar si el modelo B mejora al A
+* Interpretar resultados
+
+---
+
+### 🔹 Paso 4: Simulación de drift
+
+* Introducir cambio en los datos
+* Evaluar degradación del modelo
+
+---
+
+### 🔹 Paso 5: Decisiones
+
+* ¿Reentrenar?
+* ¿Mantener modelo?
+* ¿Cambiar estrategia?
+
