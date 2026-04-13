@@ -5,14 +5,12 @@ layout: default
 # Sesion 1: Introducción
 [⬅️ Volver al Índice](../index.md)
 
-## 🎯 Objetivo de la Sesión
+## 🎯 Objetivo
 
 Comprender el flujo del aprendizaje automático (Supervisado y No Supervisado), en entornos de desarrollo y producción.
 
 
 ## 📘 Contenido Teórico
-
-Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 * 🖼️ [Sesión 1](../material/Sesion01/teoria/S01-ML.md)
 
