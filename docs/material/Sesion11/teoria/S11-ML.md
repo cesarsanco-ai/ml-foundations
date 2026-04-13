@@ -1,272 +1,130 @@
 ---
 layout: default
 ---
-# Semana 11: Modelos Complementarios
+# Sesión 11: Sistemas de recomendación
 
-En problemas reales surgen situaciones que requieren enfoques especializados: outliers severos, relaciones no lineales difíciles para árboles, clusters arbitrarios o interpretación jerárquica. Esta sesión presenta algoritmos complementarios frecuentes en entrevistas y en casos concretos.
 
----
+### 1. Logro de la sesión
 
-## Logro de la sesión
-
-Conocer algoritmos y técnicas complementarias, y entender cuándo aplicarlas según los datos y el problema.
+Diseñar **sistemas de recomendación** con **baselines**, **filtrado colaborativo** (memoria y modelos) y **contenido**, midiendo **Precision@K**, **Recall@K** y métricas de ranking (MAP, NDCG) con buenas prácticas de evaluación.
 
 ---
 
-## Regresión polinómica
+### 2. Historia breve
 
-### Idea
-
-Añadir términos $x, x^2, \dots, x^d$ como features. El modelo sigue siendo **lineal en los parámetros** $\beta$:
-
-$$
-y = \beta_0 + \beta_1 x + \beta_2 x^2 + \dots + \beta_d x^d + \varepsilon
-$$
-
-### Riesgo de overfitting
-
-Grados $d$ altos ajustan ruido en los extremos; validar $d$ con validación cruzada.
-
-### Cuándo usarla
-
-- Relación no lineal pero suave.
-- Pocas variables y necesidad de interpretabilidad relativa.
+| Año | Hito |
+|-----|------|
+| **1990s** | Amazon, Netflix popularizan personalización |
+| **2006** | Netflix Prize impulsa factorización matricial |
+| **2010s** | Deep learning + embeddings (word2vec, two-tower) en producción |
 
 ---
 
-## Regresión robusta
+### 3. Baselines y contenido
 
-### Huber
+**Popularidad (top-N):** ítems más vendidos/vistos — benchmark obligatorio.
 
-Pérdida que combina cuadrática (errores pequeños) y lineal (errores grandes):
+**Basado en contenido:** perfil de usuario = agregación de vectores de ítems (TF-IDF, atributos). Recomendar ítems similares por **coseno**.
 
-$$
-L_{\delta}(r) = \begin{cases}
-\frac{1}{2} r^2 & \text{si } |r| \le \delta \\
-\delta(|r| - \frac{1}{2}\delta) & \text{en otro caso}
-\end{cases}
-$$
-
-$r = y - \hat{y}$; $\delta$ controla la transición.
-
-### RANSAC
-
-1. Subconjunto aleatorio mínimo para ajustar el modelo.
-2. Contar inliers bajo umbral de distancia.
-3. Si hay suficientes inliers, reajustar con todos los inliers.
-4. Repetir y quedarse con el mejor modelo.
-
-**Ventaja:** muy robusto, tolera muchos outliers.  
-**Desventaja:** hiperparámetros y no determinismo.
-
-### Comparación de pérdidas
-
-| Función | Ecuación | Sensibilidad a outliers |
-| :--- | :--- | :--- |
-| MSE | $r^2$ | Alta |
-| MAE | $|r|$ | Moderada |
-| Huber | $L_{\delta}(r)$ | Baja (con $\delta$ adecuado) |
+**Límites:** *cold start* de ítems nuevos con metadatos ricos; puede faltar serendipidad.
 
 ---
 
-## Support Vector Regression (SVR)
+### 4. Filtrado colaborativo basado en memoria
 
-Extiende SVM a regresión: función $f(x)$ con margen $\varepsilon$ y máxima “planitud”.
+Matriz usuario–ítem $R$ sparse. Predicción para usuario $u$, ítem $i$:
 
-### Idea de formulación (lineal)
+$$ \hat{r}_{ui} = \bar{r}_u + \frac{\sum_{v \in N_k(u)} s(u,v)\,(r_{vi}-\bar{r}_v)}{\sum_{v} |s(u,v)|} $$
 
-Minimizar $\frac{1}{2}\|\mathbf{w}\|^2 + C\sum_i(\xi_i + \xi_i^*)$ con restricciones que acotan desviaciones fuera de la banda $\varepsilon$.
+con similitud $s$ coseno o Pearson.
 
-- **$\varepsilon$:** tolerancia (errores pequeños no penalizan).
-- **$C$:** penalización por puntos fuera de la banda.
-
-### Kernel
-
-Como en SVM clasificación: lineal, polinomial, RBF.
+**Item-based** a menudo más estable que user-based en producción (menos drift de usuarios).
 
 ---
 
-## DBSCAN en profundidad
+### 5. Factorización de matrices / SVD truncado
 
-### Parámetros
+Minimizar:
 
-- **eps:** gráfico de distancia al $k$-ésimo vecino (codo); $k$ suele ser `minPts`.
-- **minPts:** típicamente $\ge$ dimensión + 1; valores 3–10 habituales.
+$$ \sum_{(u,i)\in \Omega} (r_{ui} - \mathbf{p}_u^\top \mathbf{q}_i)^2 + \lambda(\|\mathbf{p}\|^2 + \|\mathbf{q}\|^2) $$
 
-### Métricas
+Latent factors $\mathbf{p}_u, \mathbf{q}_i \in \mathbb{R}^K$. Generaliza a usuarios/ítems sin co-ocurrencia directa.
 
-En alta dimensión la euclídea pierde significado; probar coseno o Manhattan.
-
-### Variantes
-
-- **OPTICS:** densidad variable; diagrama de alcanzabilidad.
-- **HDBSCAN:** jerárquico, distintas densidades.
-
-### vs K-Means
-
-- Formas no esféricas, sin fijar $k$, etiqueta ruido.
-- Limitación: sensibilidad a eps/minPts y densidades muy variables.
+**Librería:** `surprise` con `SVD`.
 
 ---
 
-## Clustering jerárquico
+### 6. Problemas: cold start, sparsity, escala
 
-### Tipos de enlace
-
-- **Single:** mínima distancia entre clusters → cadenas.
-- **Complete:** máxima → clusters compactos.
-- **Average:** promedio de distancias.
-- **Ward:** minimiza incremento de SS intra-cluster → tamaños más parejos.
-
-### Corte del dendrograma
-
-Saltos grandes en altura de fusión o barrido con silueta.
-
-### Complejidad
-
-Aglomerativo: $O(n^3)$ ingenuo o $O(n^2 \log n)$ con estructuras adecuadas; no ideal para datos enormes.
+| Problema | Mitigación |
+|----------|------------|
+| Usuario nuevo | contenido, reglas, popularidad |
+| Matriz muy vacía | regularización, factores latentes, implicit feedback |
+| Escala | sampling negativo, approximate nearest neighbors |
 
 ---
 
-## Métricas externas de clustering
+### 7. Métricas offline
 
-### Rand Index (RI)
+- **RMSE/MAE** si hay ratings explícitos.  
+- **Precision@K / Recall@K** en top-K.  
+- **NDCG** si el orden importa y hay grados de relevancia.
 
-$$
-RI = \frac{a + b}{\binom{n}{2}}
-$$
-
-$a$: pares en el mismo cluster en ambas particiones; $b$: en distinto en ambas.
-
-### Adjusted Rand Index (ARI)
-
-Corrige por azar; puede ser negativo si peor que aleatorio.
-
-### Mutual Information (MI) y NMI
-
-MI mide información compartida entre particiones; NMI normaliza a $[0,1]$ aprox.
-
-| Métrica | Rango | Corrige azar | Requiere etiquetas |
-| :--- | :--- | :--- | :--- |
-| Silueta | $[-1,1]$ | No | No |
-| Davies-Bouldin | $[0,\infty)$ menor mejor | No | No |
-| RI | $[0,1]$ | No | Sí |
-| ARI | $[-1,1]$ | Sí | Sí |
-| NMI | $[0,1]$ | Aprox. | Sí |
+**Limitación:** gap con CTR/conversión online — siempre validar A/B cuando sea posible.
 
 ---
 
-## Guía rápida
-
-| Técnica | Cuándo usarla |
-| :--- | :--- |
-| Polinómica | No lineal suave, pocas variables |
-| Huber | Outliers moderados |
-| RANSAC | Muchos outliers (>50%) |
-| SVR | No linealidad, control de banda $\varepsilon$ |
-| DBSCAN | Formas arbitrarias, ruido, $k$ desconocido |
-| Jerárquico | Jerarquía interpretable, $n$ moderado |
-
----
-
-## Caso integrado: sensores industriales
-
-RANSAC para temperatura vs presión (outliers = anomalías); DBSCAN en (T, P, vibración); regresión polinómica por cluster para límites de control; concordancia outliers con ARI entre métodos.
-
----
-
-## Implementación en Python
-
-### Polinómica
+### 8. Plantilla `surprise` (esquema)
 
 ```python
-from sklearn.preprocessing import PolynomialFeatures
-from sklearn.linear_model import LinearRegression
-from sklearn.pipeline import Pipeline
+from surprise import Dataset, Reader, SVD
+from surprise.model_selection import cross_validate
 
-model = Pipeline([
-    ("poly", PolynomialFeatures(degree=3)),
-    ("linear", LinearRegression()),
-])
-model.fit(X_train, y_train)
+reader = Reader(rating_scale=(1, 5))
+data = Dataset.load_from_df(df[["user", "item", "rating"]], reader)
+svd = SVD(n_factors=50, reg_all=0.02, lr_all=0.005, n_epochs=20)
+cross_validate(svd, data, measures=["RMSE", "MAE"], cv=5, verbose=True)
 ```
 
-### Huber
+---
+
+### 9. Laboratorio (según sílabo)
+
+- **NTB 1 —** Matriz usuario–ítem, popularidad, KNN user/item, Precision@K y Recall@K.  
+- **NTB 2 —** SVD / factorización, top-N por usuario, interpretación de errores.
+
+
+
+### 10. Híbridos y reglas de negocio
+
+Combinar score colaborativo con **filtros** (no recomendar productos ilegales en cierta región), **diversificación** (no solo ítems casi idénticos) y **exploración** (bandits) es práctica industrial estándar.
+
+### 11. Evaluación con partición temporal
+
+Si el comportamiento de usuarios **evoluciona**, el split aleatorio infla métricas. Usar **último mes** como test o **leave-last-out** por usuario.
+
+### 12. Implicit feedback (mención)
+
+Cuando solo hay **clics/compras** sin rating, se modelan como observaciones binarias o con confianza (Hu et al., *implicit feedback*). `surprise` puede adaptarse con datos binarios y métricas de ranking.
+
+### 13. Código: Precision@K / Recall@K manual (idea)
 
 ```python
-from sklearn.linear_model import HuberRegressor
-
-huber = HuberRegressor(epsilon=1.35)
-huber.fit(X_train, y_train)
-```
-
-### RANSAC
-
-```python
-from sklearn.linear_model import RANSACRegressor
-
-ransac = RANSACRegressor(min_samples=50, residual_threshold=5.0, max_trials=100)
-ransac.fit(X_train, y_train)
-inlier_mask = ransac.inlier_mask_
-```
-
-### SVR
-
-```python
-from sklearn.svm import SVR
-
-svr = SVR(kernel="rbf", C=1.0, epsilon=0.1)
-svr.fit(X_train, y_train)
-```
-
-### DBSCAN y gráfico k-distancia
-
-```python
-from sklearn.cluster import DBSCAN
-from sklearn.neighbors import NearestNeighbors
 import numpy as np
-import matplotlib.pyplot as plt
 
-neigh = NearestNeighbors(n_neighbors=5)
-neigh.fit(X)
-distances, _ = neigh.kneighbors(X)
-k_dist = np.sort(distances[:, -1])
-plt.plot(k_dist)
-plt.show()
+def precision_at_k(reco, relevant, k):
+    topk = set(reco[:k])
+    return len(topk & set(relevant)) / k
 
-dbscan = DBSCAN(eps=0.5, min_samples=5)
-labels = dbscan.fit_predict(X)
+def recall_at_k(reco, relevant, k):
+    topk = set(reco[:k])
+    return len(topk & set(relevant)) / max(1, len(set(relevant)))
 ```
 
-### Jerárquico
-
-```python
-from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
-import matplotlib.pyplot as plt
-
-Z = linkage(X, method="ward")
-plt.figure(figsize=(10, 5))
-dendrogram(Z)
-plt.show()
-clusters = fcluster(Z, t=3, criterion="maxclust")
-```
-
-### ARI / NMI
-
-```python
-from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score
-
-ari = adjusted_rand_score(y_true, labels)
-nmi = normalized_mutual_info_score(y_true, labels)
-```
 
 ---
 
-## Resumen
+## Referencias bibliográficas principales
 
-- Polinómica: flexibilidad con riesgo de overfitting.
-- Huber y RANSAC: robustez frente a outliers.
-- SVR: regresión con margen y kernels.
-- DBSCAN y variantes: densidad y ruido.
-- Jerárquico: dendrograma y elección de enlace.
-- ARI y NMI evalúan clustering con ground truth.
+1. Koren, Y., Bell, R., & Volinsky, C. (2009). Matrix factorization techniques for recommender systems. *IEEE Computer*, 42(8), 30–37.  
+2. Ricci, F., Rokach, L., & Shapira, B. (Eds.). (2015). *Recommender Systems Handbook*. Springer.  

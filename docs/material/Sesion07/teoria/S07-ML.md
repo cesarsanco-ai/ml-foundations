@@ -1,177 +1,251 @@
 ---
 layout: default
 ---
-# Gradient Boosting Machines (XGBoost, LightGBM, CatBoost)
+# Sesión 7: Gradient Boosting
 
-## 1. Introducción y Contextualización
+### 1. Logro de la sesión
 
-### a) Definición del problema
-Es un problema de **aprendizaje supervisado** (tanto regresión como clasificación binaria/multiclase). Se dispone de un conjunto de entrenamiento $\{(x_i, y_i)\}_{i=1}^N$ con $x_i \in \mathbb{R}^d$ e $y_i$ continua (regresión) o categórica (clasificación). El objetivo es aproximar una función $F^*(x)$ que minimice el riesgo esperado bajo una función de pérdida $L(y, F(x))$.
+Comprender el **principio de boosting** y su instanciación en **Gradient Boosting**, dominar las particularidades de **XGBoost**, **LightGBM** y **CatBoost**, y relacionar **hiperparámetros**, **funciones de pérdida** y **estrategias anti-overfitting** con prácticas de entrenamiento en Python.
 
-### b) Objetivo del modelo
-Construir un **conjunto (ensemble) de árboles de decisión** de forma secuencial, donde cada nuevo árbol corrige los errores residuales del conjunto anterior. La búsqueda se realiza bajo restricciones de **eficiencia computacional** (gran escala: millones de filas y miles de columnas), **robustez frente a datos sucios** (valores nulos, outliers, características categóricas) y **alta precisión** sin overfitting excesivo.
+---
 
-## 2. Antecedentes (Estado del Arte)
+### 2. Historia y línea temporal
 
-### a) Evolución histórica
+| Periodo | Hito |
+|---------|------|
+| **1990** | **AdaBoost** (Freund & Schapire): repondera ejemplos difíciles |
+| **1999–2001** | **Gradient Boosting** (Friedman): boosting como descenso funcional en espacio de funciones |
+| **2010s** | **XGBoost** (Chen & Guestrin, 2016): regularización de hojas, sistema eficiente |
+| **2017** | **LightGBM** (Ke et al.): histogramas, GOSS, leaf-wise |
+| **2018** | **CatBoost** (Prokhorenkova et al.): categorías, ordered boosting |
+| **Actualidad** | Dominio en datos tabulares competitivos; integración con Optuna, MLflow |
 
-| Año | Hito | Descripción |
-|-----|------|-------------|
-| 1988-1990 | El Origen Teórico | Michael Kearns, Leslie Valiant y Robert Schapire demostraron matemáticamente que un conjunto de "aprendices débiles" podía combinarse para formar un "aprendiz fuerte". |
-| 1999 | AdaBoost (Freund & Schapire) | Primer boosting con pesos adaptativos, árboles como débiles. |
-| 2001 | Gradient Boosting Machine (Friedman) | Generalización a cualquier pérdida diferenciable usando gradientes. |
-| 2014 | XGBoost (Chen & Guestrin) | Optimización con regularización, manejo de nulos, paralelización. |
-| 2016 | LightGBM (Microsoft) | Basado en histogramas y crecimiento leaf-wise; enorme velocidad. |
-| 2017 | CatBoost (Yandex) | Manejo nativo de categóricas con ordered boosting y simetría. |
+---
 
-### b) Comparativa de paradigmas
+### 3. Marco teórico: de AdaBoost a Gradient Boosting
 
-| Paradigma | Ventaja clave | Desventaja | Relevancia actual |
-|-----------|---------------|------------|-------------------|
-| Random Forest | Paralelizable, robusto a overfitting | Menor precisión en tabulares densos | Baja en alta dimensionalidad |
-| Redes Neuronales | Alta capacidad en no estructurados (imagen, texto) | Requiere mucho dato y tuning | Media en tabulares |
-| GBM modernos | Precisión SOTA en tabulares + velocidad | Sensible a hiperparámetros | Muy alta (Kaggle, industria) |
+#### 3.1 Idea de boosting
 
-## 3. Fundamentos Técnicos (El Algoritmo)
+A diferencia del **bagging** (promedio de modelos **independientes**), el boosting entrena modelos **secuencialmente**; cada etapa intenta corregir los errores de la combinación anterior.
 
-Sea $F_0(x)$ un modelo base (usualmente la media o log-odds). Para cada iteración $m=1,\dots,M$:
+#### 3.2 Gradient Boosting (Friedman, 2001)
 
-1. Calcular los **pseudo-residuos** (gradiente negativo de la pérdida):
-   $$r_{im} = -\left[ \frac{\partial L(y_i, F(x_i))}{\partial F(x_i)} \right]_{F(x)=F_{m-1}(x)}$$
-2. Ajustar un árbol débil $h_m(x)$ a los residuos $\{(x_i, r_{im})\}$.
-3. Actualizar $F_m(x) = F_{m-1}(x) + \eta \cdot \gamma_m h_m(x)$, con $\eta$ *learning rate* y $\gamma_m$ obtenido por *line search*.
+Sea $\hat{F}^{(m-1)}$ el modelo acumulado hasta la iteración $m-1$. Se añade un **árbol débil** $h_m$ escalado por $\eta$ (learning rate):
 
-**Arquitectura específica de cada implementación**:
-- **XGBoost**: usa *gradient statistics* y un árbol de estructura exacta (o aproximada por percentiles). Regularización $L_1$/$L_2$ en pesos de hojas.
-- **LightGBM**: discretiza features en histogramas (acelera); crecimiento *leaf-wise* (expande la hoja con mayor pérdida) en vez de *level-wise*.
-- **CatBoost**: construye árboles simétricos (oblivious); maneja categóricas con estadísticas ordenadas (target encoding con prior) y *ordered boosting* para evitar overfitting.
+$$ \hat{F}^{(m)}(\mathbf{x}) = \hat{F}^{(m-1)}(\mathbf{x}) + \eta\, h_m(\mathbf{x}) $$
 
-**Función de pérdida común**: Log-loss para clasificación:
-$$L(y, \hat{y}) = -\left[ y \log(\hat{y}) + (1-y) \log(1-\hat{y}) \right]$$
-donde $\hat{y} = \sigma(F(x))$ y $\sigma$ es la función sigmoide.
+donde $h_m$ aproxima el **gradiente negativo** de la pérdida $L\bigl(y, F(\mathbf{x})\bigr)$ respecto a $F$ evaluado en los datos (pseudoresiduos).
 
-## 4. Problemática y Justificación de Negocio
+**Pérdidas típicas:**
 
-### a) Drivers de decisión
-Usar estos modelos cuando:
-- Los datos son **tabulares** con mezcla de numéricas y categóricas.
-- El volumen supera los 100k registros (LightGBM/CatBoost excelentes >1M).
-- Se necesita **explicabilidad** parcial (importancia de features, SHAP).
-- El tiempo de entrenamiento es crítico (modelos baseline rápidos).
+- Regresión: **MSE** → pseudoresiduos $y_i - \hat{F}^{(m-1)}(x_i)$.  
+- Clasificación binaria: **log-loss** → pseudoresiduos relacionados con probabilidades.
 
-### b) Casos de uso industriales
-1. **Banca**: scoring crediticio (clasificación de morosidad) – CatBoost por categóricas.
-2. **Retail**: predicción de churn (clientes que abandonan) – LightGBM por velocidad.
-3. **Seguros**: estimación de siniestralidad (regresión Poisson) – XGBoost con pérdida personalizada.
-4. **Logística**: tiempo de entrega (regresión) – cualquier GBM con features de calendario.
-5. **Fraude**: detección de transacciones fraudulentas – XGBoost por robustez a desbalanceo.
+#### 3.3 Bagging vs boosting (contraste)
 
-### c) Trade-offs
-| Aspecto | XGBoost | LightGBM | CatBoost |
-|---------|---------|----------|----------|
-| Velocidad (entrenamiento) | Media | **Muy alta** | Media (con GPU: alta) |
-| Precisión baseline | Alta | Alta | **Muy alta** (especialmente con categóricas) |
-| Memoria RAM | Media | **Baja** (histogramas) | Media-alta |
-| Manejo de categóricas | Requiere encoding manual | Requiere encoding manual | **Nativo** |
-| Tolerancia a nulos | Sí (dirección optimizada) | Sí | Sí |
+| Aspecto | Bagging (RF) | Boosting |
+|---------|--------------|----------|
+| Entrenamiento | Paralelo | Secuencial |
+| Objetivo principal | Reducir **varianza** | Reducir **sesgo** (y luego regularizar varianza) |
+| Riesgo típico | Subajuste si árboles muy simples | **Overfitting** si demasiadas iteraciones sin control |
 
-**Decisión**: si importa sobre todo rapidez → LightGBM; si hay muchas categóricas → CatBoost; si se busca madurez y documentación → XGBoost.
+---
 
-## 5. Guía de Implementación y Ecosistema
+### 4. XGBoost: elementos distintivos
 
-### a) Ecosistema de despliegue
-- **Librerías**: `xgboost`, `lightgbm`, `catboost` (Python); también API `scikit-learn` (wrappers).
-- **Plataformas**: CPU/GPU (todas soportan CUDA); Spark (XGBoost4J-Spark, SynapseML); Cloud (AWS SageMaker, GCP Vertex AI).
-- **Optimización**: Integración con `Optuna`, `Hyperopt` para búsqueda de hiperparámetros.
+**Publicación:** Chen & Guestrin, KDD 2016.
 
-### b) Plantilla base en Python (clasificación binaria con LightGBM como ejemplo)
+**Características:**
+
+1. **Regularización** en la función objetivo: penalización L1/L2 sobre pesos de hojas (según formulación) además de la calidad del split.  
+2. **Segunda derivada** (aproximación de Taylor) para elegir splits de forma eficiente.  
+3. **Manejo de nulos:** aprende **dirección por defecto** en splits (muy útil en datos reales).  
+4. **Paralelización** a nivel de columnas y bloques.
+
+**Parámetros frecuentes (concepto):** `n_estimators`, `learning_rate`, `max_depth`, `subsample`, `colsample_bytree`, `reg_lambda`, `reg_alpha`.
+
+**Plantilla mínima:**
+
 ```python
-import lightgbm as lgb                                      # Librería principal
-from sklearn.model_selection import train_test_split        # División train/test
-from sklearn.metrics import roc_auc_score, log_loss         # Métricas
+import xgboost as xgb
+from sklearn.model_selection import train_test_split
 
-# Asumiendo X (DataFrame o numpy) e y (serie 0/1) ya cargados
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42, stratify=y
-)                                                           # División estratificada
+X_tr, X_val, y_tr, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Crear dataset en formato LightGBM (opcional pero acelera)
-train_data = lgb.Dataset(X_train, label=y_train)
-test_data = lgb.Dataset(X_test, label=y_test, reference=train_data)
-
-# Parámetros base
-params = {
-    'objective': 'binary',          # Clasificación binaria
-    'metric': 'auc',                # Métrica de evaluación
-    'boosting_type': 'gbdt',        # Gradient Boosting tradicional
-    'num_leaves': 31,               # Máximo hojas por árbol (leaf-wise)
-    'learning_rate': 0.05,          # Contracción (eta)
-    'feature_fraction': 0.8,        # Submuestreo de columnas
-    'bagging_fraction': 0.8,        # Submuestreo de filas
-    'bagging_freq': 5,              # Frecuencia de bagging
-    'verbose': -1                   # Silencioso
-}
-
-# Entrenamiento
-model = lgb.train(
-    params,
-    train_data,
-    num_boost_round=100,            # Número de árboles (M)
-    valid_sets=[test_data],         # Para early stopping
-    callbacks=[lgb.early_stopping(10), lgb.log_evaluation(0)]
-)                                   # Early stopping con paciencia 10
-
-# Predicción de probabilidades
-y_pred_proba = model.predict(X_test, num_iteration=model.best_iteration)
-
-# Evaluación
-auc = roc_auc_score(y_test, y_pred_proba)   # Área bajo la curva ROC
-logloss = log_loss(y_test, y_pred_proba)    # Pérdida logarítmica
-
-print(f"AUC: {auc:.4f} | LogLoss: {logloss:.4f}")
+model = xgb.XGBClassifier(
+    n_estimators=800,
+    learning_rate=0.05,
+    max_depth=6,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    reg_lambda=1.0,
+    objective="binary:logistic",
+    eval_metric="auc",
+    early_stopping_rounds=50,
+)
+model.fit(X_tr, y_tr, eval_set=[(X_val, y_val)], verbose=False)
 ```
 
-## 6. Evaluación de Rendimiento (Métricas)
+*(Sintaxis exacta de `early_stopping` puede variar según versión de xgboost; consultar documentación vigente.)*
 
-### a) Formulación Matemática
-**AUC-ROC** (clasificación):
-$$AUC = \frac{1}{n_+ n_-} \sum_{i=1}^{n_+} \sum_{j=1}^{n_-} \mathbb{1}[s_i > s_j]$$
-donde $s_i$ son las predicciones para positivos, $s_j$ para negativos. Interpretación: probabilidad de que un positivo aleatorio tenga score mayor que un negativo.
+---
 
-**Log-Loss**:
-$$LogLoss = -\frac{1}{N} \sum_{i=1}^N \left[ y_i \log(\hat{y}_i) + (1-y_i) \log(1-\hat{y}_i) \right]$$
+### 5. LightGBM
 
-**RMSE** (regresión):
-$$RMSE = \sqrt{\frac{1}{N} \sum_{i=1}^N (y_i - \hat{y}_i)^2}$$
+**Ideas clave (Ke et al., 2017):**
 
-### b) Rangos y Umbrales
-| Métrica | Rango | Óptimo | Umbral de negocio típico |
-|---------|-------|--------|---------------------------|
-| AUC | [0.5, 1] | 1 | >0.75 (aceptable), >0.85 (bueno) |
-| LogLoss | [0, ∞) | 0 | <0.5 (clases balanceadas) |
-| RMSE | [0, ∞) | 0 | Depende de escala; se compara con baseline (media) |
+- **Histogram-based:** discretiza features en bins → menos memoria y más velocidad.  
+- **GOSS:** muestrea gradientes grandes y una parte aleatoria de pequeños para acelerar sin perder demasiada señal.  
+- **Leaf-wise** (crecimiento por hoja) en lugar de nivel por nivel → puede lograr menor error con **riesgo de overfitting** si no se controla `num_leaves`.
 
-### c) Interpretación de Negocio
-Un **Falso Positivo** (FP) en detección de fraude: aprobar una transacción fraudulenta → costo de monto perdido. Un **Falso Negativo** (FN): rechazar una transacción legítima → costo de oportunidad + mala experiencia. El umbral de decisión se elige minimizando el costo esperado:
-$$C = C_{FP} \cdot FP + C_{FN} \cdot FN$$
+**Ventaja:** datasets **grandes** y muchas columnas.
 
-### d) Criterio de Selección
-1. **AUC** para comparar poder discriminatorio (independiente del umbral).
-2. **LogLoss** para calibrar probabilidades (importante en scoring).
-3. **Tiempo de entrenamiento** y **memoria** en producción.
-4. **Estabilidad** de la importancia de variables entre folds (baja varianza).
+```python
+import lightgbm as lgb
 
-## 7. Interpretabilidad y Explicabilidad
+clf = lgb.LGBMClassifier(
+    n_estimators=1200,
+    learning_rate=0.05,
+    num_leaves=63,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    random_state=42,
+)
+clf.fit(X_train, y_train)
+```
 
-### a) Transparencia del modelo
-- **Caja gris**: los GBM no son caja negra total porque se pueden extraer reglas de los árboles. Sin embargo, con cientos de árboles, la complejidad es humana-incomprensible.  
-- Las implementaciones modernas ofrecen **importancia global** (ganancia, cobertura, frecuencia) y **explicaciones locales** (SHAP, LIME).
+---
 
-### b) Herramientas de diagnóstico
-- **Importancia de características**: `model.feature_importances_` en XGBoost/LightGBM.
-- **SHAP** (SHapley Additive exPlanations): descompone la predicción como suma de contribuciones de cada feature.
-  $$f(x) = \phi_0 + \sum_{j=1}^d \phi_j(x)$$
-  donde $\phi_j$ es el valor Shapley (efecto marginal medio).  
-  Se implementa con `shap.Explainer(model, X_train)`.
-- **LIME** (Local Interpretable Model-agnostic Explanations): ajusta un modelo lineal local alrededor de la instancia.
-- **Gráficos de dependencia parcial (PDP)**: muestra el efecto marginal de una feature en la predicción promediando el resto.
+### 6. CatBoost
+
+**Prokhorenkova et al., 2018.**
+
+**Fortalezas:**
+
+- Tratamiento nativo de **variables categóricas** (codificación ordenada con *ordered target statistics* para reducir *target leakage* interno).  
+- **Ordered boosting** para mitigar sesgo de predicción en pequeñas muestras por categoría.
+
+**Cuándo brilla:** muchas columnas categóricas de alta cardinalidad sin one-hot masivo manual.
+
+```python
+from catboost import CatBoostClassifier
+
+cat = CatBoostClassifier(
+    iterations=800,
+    learning_rate=0.05,
+    depth=6,
+    loss_function="Logloss",
+    verbose=False,
+)
+cat.fit(X_train, y_train, cat_features=cat_cols)
+```
+
+---
+
+### 7. Comparativa práctica (sin dogmas)
+
+| Librería | Fortalezas típicas | Puntos de atención |
+|----------|---------------------|---------------------|
+| XGBoost | Madurez, ecosistema, regularización explícita | Sintonización de muchos knobs |
+| LightGBM | Velocidad y escala | Controlar leaf-wise |
+| CatBoost | Categorías, defaults razonables | Tiempo y memoria en algunos regímenes |
+
+**Regla:** validar con **misma métrica y mismos folds** (Sesión 8); no extrapolar resultados de benchmarks ajenos.
+
+---
+
+### 8. Profundización: pseudocódigo, pérdidas y *early stopping*
+
+#### 8.1 Esquema iterativo (gradient tree boosting)
+
+En la iteración $m$:
+
+1. Calcular pseudoresiduos $r_{im} = -\frac{\partial L(y_i, F)}{\partial F}\Big|_{F=\hat{F}^{(m-1)}(x_i)}$.  
+2. Ajustar un árbol de regresión $h_m$ a los $\{r_{im}\}$ (con límites de profundidad).  
+3. Line search para $\gamma_m$ óptimo o absorber escala en $\eta$.  
+4. Actualizar $\hat{F}^{(m)} = \hat{F}^{(m-1)} + \eta\, \gamma_m h_m$.
+
+Para **log-loss** binaria, los pseudoresiduos coinciden con $y_i - p_i^{(m-1)}$ donde $p_i$ es la probabilidad estimada en la iteración previa — puente intuitivo con “residuos de clasificación”.
+
+#### 8.2 *Shrinkage* ($\eta$ pequeño)
+
+Friedman recomienda **learning rates** bajos (p.ej. 0.01–0.1) y muchos árboles: reduce overfitting al impedir que un solo árbol corrija demasiado de una vez.
+
+#### 8.3 *Early stopping*
+
+Se monitoriza la métrica en validación tras cada iteración (o cada $k$ iteraciones). Si no mejora durante `patience` rondas, se restaura el mejor modelo. **Crítico:** el conjunto de validación debe ser **honesto** (no el test final).
+
+#### 8.4 Comparativa rápida en Python (tres APIs)
+
+```python
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import roc_auc_score
+from xgboost import XGBClassifier
+from lightgbm import LGBMClassifier
+from catboost import CatBoostClassifier
+
+X, y = make_classification(n_samples=8000, n_features=30, random_state=42)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42)
+
+xgb = XGBClassifier(
+    n_estimators=400, learning_rate=0.05, max_depth=4, subsample=0.8,
+    colsample_bytree=0.8, eval_metric="logloss", random_state=42,
+)
+xgb.fit(X_tr, y_tr)
+print("XGB AUC:", roc_auc_score(y_te, xgb.predict_proba(X_te)[:, 1]))
+
+lgbm = LGBMClassifier(
+    n_estimators=400, learning_rate=0.05, num_leaves=31, subsample=0.8,
+    colsample_bytree=0.8, random_state=42,
+)
+lgbm.fit(X_tr, y_tr)
+print("LGBM AUC:", roc_auc_score(y_te, lgbm.predict_proba(X_te)[:, 1]))
+
+cat = CatBoostClassifier(
+    iterations=400, learning_rate=0.05, depth=4, verbose=False, random_state=42,
+)
+cat.fit(X_tr, y_tr)
+print("CAT AUC:", roc_auc_score(y_te, cat.predict_proba(X_te)[:, 1]))
+```
+
+---
+
+### 9. Hiperparámetros, métricas y laboratorio
+
+#### 9.1 Tabla de hiperparámetros (temario)
+
+| Parámetro | Rol conceptual |
+|-----------|----------------|
+| `n_estimators` | Número de árboles / rondas de boosting |
+| `learning_rate` ($\eta$) | Paso de cada contribución; menor $\eta$ suele requerir más árboles |
+| `max_depth` / `num_leaves` | Complejidad de cada árbol débil |
+| `subsample`, `colsample_bytree` | Bagging de filas/columnas → regularización |
+| `reg_lambda`, `reg_alpha` (XGBoost) | Penalización L2/L1 en hojas/pesos |
+
+#### 9.2 Anti-overfitting
+
+- `early_stopping` con conjunto de validación.  
+- Limitar `max_depth` / `num_leaves`.  
+- Aumentar `min_child_samples` (LightGBM) o equivalentes.  
+- Más datos reales siempre que sea posible.
+
+#### 9.3 Métricas
+
+- Clasificación: **log-loss**, AUC-ROC, F1.  
+- Regresión: RMSE, MAE, $R^2$.
+
+#### 9.4 Laboratorio (según sílabo)
+
+- **NTB 1 —** Clasificación con XGBoost, LightGBM y CatBoost (hiperparámetros y validación).  
+- **NTB 2 —** Regresión con XGBoost, LightGBM y CatBoost.
+
+---
+
+## Referencias bibliográficas principales
+
+1. Friedman, J. H. (2001). Greedy function approximation: a gradient boosting machine. *Annals of Statistics*, 29(5), 1189–1232.  
+2. Chen, T., & Guestrin, C. (2016). XGBoost: A scalable tree boosting system. *KDD*.  
+3. Ke, G., et al. (2017). LightGBM: A highly efficient gradient boosting decision tree. *NeurIPS*.  
+4. Prokhorenkova, L., et al. (2018). CatBoost: unbiased boosting with categorical features. *NeurIPS*.  
+5. Natekin, A., & Knoll, A. (2013). Gradient boosting machines, a tutorial. *Frontiers in Neurorobotics*, 7, 21.  

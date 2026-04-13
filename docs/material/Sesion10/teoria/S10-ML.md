@@ -1,242 +1,224 @@
 ---
 layout: default
 ---
-# Semana 10: Series de Tiempo
+# Sesión 10: Series de Tiempo
 
-Los datos temporales aparecen en innumerables contextos: ventas diarias, tráfico web, indicadores económicos, sensores IoT, etc. Modelar correctamente la dependencia temporal es esencial para pronósticos precisos. Esta sesión aborda modelos estadísticos clásicos (ARIMA, SARIMA) y enfoques modernos (XGBoost, Prophet), con feature engineering temporal, métricas y ejemplos prácticos.
 
----
+### 1. Logro de la sesión
 
-## Logro de la sesión
-
-Modelar datos temporales con técnicas estadísticas y de machine learning, comprendiendo particularidades de los datos temporales y métricas adecuadas para evaluar pronósticos.
+Modelar series temporales integrando **descomposición**, **ARIMA/SARIMA**, **Prophet** y **modelos tabulares con features de tiempo** (lags, ventanas), con **métricas** adecuadas (MAE, RMSE, MAPE, MASE) y **validación temporal** sin *leakage*.
 
 ---
 
-## Componentes de una serie temporal
+### 2. Historia y contexto
 
-Una serie temporal $y_t$ (con $t=1,\dots,T$) puede descomponerse en:
-
-- **Tendencia (Trend):** movimiento a largo plazo (creciente, decreciente o estable).
-- **Estacionalidad (Seasonal):** patrones que se repiten en períodos fijos (diario, semanal, anual).
-- **Ciclo (Cycle):** fluctuaciones sin período fijo (p. ej. ciclos económicos); a diferencia de la estacionalidad, la duración no es predecible.
-- **Ruido (Noise):** variaciones aleatorias no explicadas.
-
-### Descomposición clásica
-
-- **Aditiva:** $y_t = T_t + S_t + C_t + R_t$
-- **Multiplicativa:** $y_t = T_t \times S_t \times C_t \times R_t$
-
-La multiplicativa conviene cuando la magnitud de fluctuaciones crece con el nivel de la serie.
-
-### Descomposición en la práctica
-
-Métodos como **STL** (Seasonal and Trend decomposition using Loess) estiman componentes de forma robusta. Sirve para entender la serie, ajuste estacional y crear features para ML.
+| Periodo | Hito |
+|---------|------|
+| **1920s–30s** | Yule, Walker: autoregresión |
+| **1970** | Box & Jenkins popularizan **ARIMA** como marco integrado |
+| **1990s** | Modelos de espacio de estados, SARIMA estacional |
+| **2017** | **Prophet** (Taylor & Letham): tendencias y estacionalidades flexibles en industria |
+| **2010s+** | ML con lags (XGBoost) compite/ complementa modelos clásicos en tabular temporal |
 
 ---
 
-## Feature engineering para series temporales
+### 3. Componentes de una serie
 
-Para usar regresión, árboles o XGBoost hay que transformar el problema en supervisado.
+**Tendencia** $T_t$: cambio lento del nivel medio.  
+**Estacionalidad** $S_t$: patrones que se repiten con periodo $s$ (día, semana, año).  
+**Ciclos**: oscilaciones sin periodo fijo (económico).  
+**Ruido** $\varepsilon_t$: irregular.
 
-### Rezagos (lags)
-
-$y_{t-1}, y_{t-2}, \dots, y_{t-L}$ con $L$ el máximo rezago.
-
-### Ventanas móviles
-
-- Media móvil: $\frac{1}{w}\sum_{i=t-w}^{t-1} y_i$
-- Desviación estándar, mínimo, máximo, percentiles
-
-### Diferencias
-
-$\Delta y_t = y_t - y_{t-1}$ (útil para estacionariedad y como features).
-
-### Variables de calendario
-
-- Hora, día de la semana, mes, año; festivos, fines de semana.
-- Codificación cíclica: $\sin(2\pi \cdot \text{hora}/24)$, $\cos(2\pi \cdot \text{hora}/24)$.
-
-### Agregaciones multiescala
-
-- Media últimos 7 días; mismo día de la semana en últimas 4 semanas; mismo día del año anterior.
+Descomposición **aditiva** $Y_t = T_t + S_t + R_t$ vs **multiplicativa** $Y_t = T_t \cdot S_t \cdot R_t$ (cuando la amplitud estacional crece con el nivel).
 
 ---
 
-## Modelos clásicos: ARIMA y SARIMA
+### 4. Estacionariedad
 
-### ARMA $(p,q)$
-
-$$
-y_t = c + \phi_1 y_{t-1} + \dots + \phi_p y_{t-p} + \varepsilon_t + \theta_1 \varepsilon_{t-1} + \dots + \theta_q \varepsilon_{t-q}
-$$
-
-$\varepsilon_t$: ruido blanco.
-
-### ARIMA $(p,d,q)$
-
-$d$ diferencias para lograr estacionariedad; equivale a ARMA sobre la serie diferenciada.
-
-### SARIMA $(p,d,q)(P,D,Q)_s$
-
-Estacionalidad con período $s$; operador de rezago $B$ con componentes regulares y estacionales.
-
-### Selección de órdenes
-
-- **ACF / PACF** para orientar $p$ y $q$.
-- **AIC / BIC** para comparar modelos.
-- Validación en ventana de prueba (últimos períodos).
-
-### Ejemplo clásico
-
-Serie de pasajeros aéreos: a menudo log + diferencias y SARIMA$(0,1,1)(0,1,1)_{12}$.
+Una serie es **débilmente estacionaria** si media y covarianza no dependen del tiempo (condiciones simplificadas). **Pruebas** (ADF, KPSS) orientan necesidad de **diferenciación** $d$ en ARIMA.
 
 ---
 
-## Machine learning para series
+### 5. ARIMA y SARIMA
 
-### Regresión con features temporales
+**ARIMA$(p,d,q)$:** parte autorregresiva (AR), integrada (I = diferencias), media móvil (MA).
 
-Dataset con lags, ventanas y exógenas; regresión lineal, árboles, etc.
+**SARIMA** añade términos estacionales $(P,D,Q)_s$ para patrones que se repiten cada $s$ pasos.
 
-### XGBoost
+**Diagnóstico:** residuos deben parecer **ruido blanco** (ACF de residuos sin estructura). Si queda estructura → modelo incompleto.
 
-- Lags y ventanas cuidadosos; dummies de estacionalidad.
-- **Validación cruzada temporal** (no aleatoria).
-
-**Ventajas:** no linealidad, muchas features, robustez a outliers.  
-**Desventajas:** extrapolación de tendencia limitada fuera del rango de entrenamiento.
-
-### Prophet
-
-Modelo aditivo:
-
-$$
-y(t) = g(t) + s(t) + h(t) + \varepsilon_t
-$$
-
-- $g(t)$: tendencia (lineal por tramos o logística).
-- $s(t)$: estacionalidad (Fourier).
-- $h(t)$: festivos.
-
-**Ventajas:** datos faltantes, cambios de tendencia, uso sencillo.  
-**Desventajas:** menos flexible que XGBoost con muchos predictores externos.
-
-### Comparación rápida
-
-| Característica | ARIMA/SARIMA | XGBoost | Prophet |
-| :--- | :--- | :--- | :--- |
-| Fundamento | Estadístico | Boosting | Aditivo |
-| Estacionalidad | Explícita (SARIMA) | Features / dummies | Fourier |
-| Variables exógenas | Limitado (ARIMAX) | Sí | Limitado (festivos / regresores) |
-| Extrapolación tendencia | Sí | Limitada | Sí |
-| Facilidad | Media | Alta | Muy alta |
+**Python:** `statsmodels.tsa.arima.model.ARIMA`, `SARIMAX` con exógenas.
 
 ---
 
-## Métricas de evaluación
+### 6. Prophet (visión práctica)
 
-### MAE
+Descomposición tipo:
 
-$$
-\text{MAE} = \frac{1}{n} \sum_{t=1}^n |y_t - \hat{y}_t|
-$$
+$$ y(t) = g(t) + s(t) + h(t) + \varepsilon_t $$
 
-### RMSE
+donde $g$ es tendencia (piecewise), $s$ estacionalidades (Fourier), $h$ festividades.
 
-$$
-\text{RMSE} = \sqrt{\frac{1}{n} \sum_{t=1}^n (y_t - \hat{y}_t)^2}
-$$
-
-### MAPE
-
-$$
-\text{MAPE} = \frac{100}{n} \sum_{t=1}^n \left| \frac{y_t - \hat{y}_t}{y_t} \right|
-$$
-
-Problemas si $y_t \approx 0$.
-
-### MASE
-
-$$
-\text{MASE} = \frac{\frac{1}{n} \sum_{t=1}^n |y_t - \hat{y}_t|}{\frac{1}{n-1} \sum_{t=2}^n |y_t - y_{t-1}|}
-$$
-
-Denominador = error del pronóstico naive $\hat{y}_t = y_{t-1}$. MASE $< 1$ mejora al naive.
+**Ventajas:** manejo de **datos faltantes**, **cambios de tendencia**, estacionalidades múltiples.  
+**Límites:** no captura bien dinámicas muy no lineales sin features adicionales; validar frente a baselines.
 
 ---
 
-## Caso integrado: ventas diarias retail
+### 7. Machine learning con features temporales
 
-**Datos:** ventas 3 años, festivos/promociones, clima, opcional economía local.
+Construir tabla supervisada $(X_t, y_t)$ con:
 
-**EDA:** tendencia, estacionalidad semanal, picos en festividades, efecto promociones.
+- **Lags:** $y_{t-1},\ldots,y_{t-L}$  
+- **Medias móviles**, desviaciones, máximos en ventana  
+- **Calendario:** día de la semana, mes (codificado)  
+- **Diferencias** $\Delta y_t$
 
-**Features:** calendario, festivos, clima con posibles lags, lags de ventas (7, 14, 28 días), medias móviles.
+Modelar con **LightGBM/XGBoost** o regresión lineal regularizada.
 
-**Modelos:** SARIMA con $s=7$; XGBoost con time series split y Optuna; Prophet con weekly/yearly y festivos.
-
-**Evaluación:** MAE, RMSE, MAPE, MASE en últimos 28 días (ejemplo ilustrativo en la teoría original con tabla comparativa Naive / SARIMA / XGBoost / Prophet).
+**Crítico:** partición **temporal** train/test (últimos meses test), nunca mezclar aleatoriamente filas temporales.
 
 ---
 
-## Implementación en Python
+### 8. Métricas
 
-### ARIMA (statsmodels)
+| Métrica | Fórmula / idea | Uso |
+|---------|----------------|-----|
+| MAE | $\frac{1}{H}\sum |e_t|$ | Robusta, misma unidad |
+| RMSE | $\sqrt{\mathrm{MSE}}$ | Penaliza grandes errores |
+| MAPE | media $\|e_t/y_t\|$ | Relativo; problemas si $y_t\approx 0$ |
+| MASE | error vs error de modelo naive estacional | Escalable entre series |
+
+---
+
+### 9. Plantillas Python (esquema)
 
 ```python
-import statsmodels.api as sm
-from statsmodels.tsa.arima.model import ARIMA
+import pandas as pd
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 
-model = ARIMA(series, order=(1, 1, 1), seasonal_order=(1, 1, 1, 7))
-fitted = model.fit()
-forecast = fitted.forecast(steps=28)
+# y: Series con índice DatetimeIndex frecuente
+model = SARIMAX(y, order=(1, 1, 1), seasonal_order=(1, 1, 1, 12))
+res = model.fit(disp=False)
+fc = res.get_forecast(steps=24)
 ```
-
-### XGBoost con validación temporal
-
-```python
-import xgboost as xgb
-from sklearn.model_selection import TimeSeriesSplit
-
-tscv = TimeSeriesSplit(n_splits=5)
-for train_index, val_index in tscv.split(X):
-    X_train, X_val = X[train_index], X[val_index]
-    y_train, y_val = y[train_index], y[val_index]
-    model = xgb.XGBRegressor(n_estimators=100, learning_rate=0.1)
-    model.fit(X_train, y_train)
-```
-
-### Prophet
 
 ```python
 from prophet import Prophet
-import pandas as pd
 
-df = pd.DataFrame({"ds": fechas, "y": ventas})
-model = Prophet(yearly_seasonality=True, weekly_seasonality=True)
-model.add_country_holidays(country_name="PE")
-model.fit(df)
-future = model.make_future_dataframe(periods=28)
-forecast = model.predict(future)
+df = pd.DataFrame({"ds": fechas, "y": valores})
+m = Prophet(yearly_seasonality=True, weekly_seasonality=True)
+m.fit(df)
+future = m.make_future_dataframe(periods=30, freq="D")
+forecast = m.predict(future)
 ```
 
 ---
 
-## Conexión con el resto del curso
+### 10. Laboratorio (según sílabo)
 
-- Feature engineering conecta con transformaciones y agregaciones previas.
-- XGBoost se relaciona con la sesión de Gradient Boosting.
-- Validación temporal complementa métodos de la sesión de validación.
-- MAE y RMSE son métricas de regresión ya vistas.
+- **NTB 1 —** Series temporales con Prophet y features + modelos ML (XGBoost/LightGBM).  
+- **NTB 2 —** Series temporales con ARIMA/SARIMA y diagnóstico de residuos.
+
 
 ---
 
-## Resumen
+### 11. Profundización ARIMA/SARIMA (notación y diagnóstico)
 
-- Las series se descomponen en tendencia, estacionalidad, ciclo y ruido.
-- Lags, ventanas y calendario son clave para ML en series.
-- ARIMA/SARIMA modelan autocorrelación y estacionalidad de forma paramétrica.
-- XGBoost y Prophet son alternativas flexibles con predictores externos o uso rápido.
-- Evaluar con MAE, RMSE, MAPE, MASE y validación temporal.
-- La elección del modelo depende de la serie, datos externos e interpretabilidad.
+Un proceso **ARMA$(p,q)$** estacionario satisface:
+
+$$ \phi(B) X_t = \theta(B) \varepsilon_t $$
+
+donde $B$ es el operador retardo, $\phi$ y $\theta$ polinomios de orden $p$ y $q$. **ARIMA$(p,d,q)$** aplica $(1-B)^d$ para lograr estacionariedad en media.
+
+**SARIMA** añade parte estacional $\Phi(B^s)$, $(1-B^s)^D$, $\Theta(B^s)$.
+
+**ACF/PACF** sirven como guía exploratoria para órdenes (no sustituyen validación out-of-sample).
+
+**Ljung-Box** sobre residuos: detectar autocorrelación residual.
+
+---
+
+### 12. Validación temporal (*time series cross-validation*)
+
+```python
+from sklearn.model_selection import TimeSeriesSplit
+
+tscv = TimeSeriesSplit(n_splits=5)
+for train_idx, test_idx in tscv.split(X):
+    ...
+```
+
+Nunca usar KFold aleatorio en series ordenadas: mezcla información futura en el train.
+
+---
+
+### 13. Feature matrix para ML tabular (ejemplo)
+
+```python
+import pandas as pd
+
+df = df.sort_index()
+df["lag1"] = df["y"].shift(1)
+df["roll7"] = df["y"].rolling(7).mean()
+df["dow"] = df.index.dayofweek
+df = df.dropna()
+X = df[["lag1", "roll7", "dow"]]
+y = df["y"]
+```
+
+---
+
+### 14. Errores frecuentes
+
+| Error | Consecuencia |
+|-------|--------------|
+| Mezclar orden temporal en split | Métricas irreales |
+| Filtrar outliers sin entender estacionalidad | Pérdida de señal |
+| Ignorar festivos en retail | Residuos estructurados |
+
+
+
+
+### 15. Casos de uso del temario (detalle)
+
+| Dominio | Patrón temporal | Modelo típico |
+|---------|-----------------|---------------|
+| Retail | ventas diarias/semanales con estacionalidad fuerte | SARIMA, Prophet, ML+lags |
+| Energía | demanda con ciclo día/noche | SARIMA con $s=48$ (media hora) o ML con calendario |
+| Web | tráfico con tendencia + weekly | Prophet o ML con Fourier + lags |
+
+**Comparación estadístico vs ML:** los modelos estadísticos clásicos suelen ser más **parsimoniosos** y con intervalos de predicción mejor estudiados; el ML brilla cuando hay **covariables exógenas** ricas (promociones, clima, precios competencia) que entran como columnas.
+
+### 16. Plantilla ML completa con `TimeSeriesSplit` + LightGBM
+
+```python
+import lightgbm as lgb
+from sklearn.model_selection import TimeSeriesSplit
+from sklearn.metrics import mean_absolute_error
+
+tscv = TimeSeriesSplit(n_splits=5)
+scores = []
+for tr, va in tscv.split(X):
+    model = lgb.LGBMRegressor(n_estimators=500, learning_rate=0.05)
+    model.fit(X.iloc[tr], y.iloc[tr])
+    pred = model.predict(X.iloc[va])
+    scores.append(mean_absolute_error(y.iloc[va], pred))
+print("MAE medio:", float(np.mean(scores)))
+```
+
+*(Requiere `import numpy as np`.)*
+
+### 17. Métricas relativas y MASE (detalle)
+
+**MASE** compara el MAE del modelo con el MAE de un modelo **naive** estacional (p.ej. mismo día año anterior o drift). Valores $<1$ indican mejora respecto al baseline ingenuo.
+
+**sMAPE** (simétrica) mitiga asimetrías de MAPE pero tiene otros sesgos — Hyndman discute elección en su libro abierto.
+
+
+---
+
+## Referencias bibliográficas principales
+
+1. Box, G. E. P., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M. (2015). *Time Series Analysis: Forecasting and Control*. Wiley.  
+2. Hyndman, R. J., & Athanasopoulos, G. (2021). *Forecasting: Principles and Practice* (3rd ed.). OTexts.  
+3. Taylor, S. J., & Letham, B. (2018). Forecasting at scale. *The American Statistician*, 72(1), 37–45.  

@@ -3,259 +3,227 @@ layout: default
 ---
 # Sesión 1: Introducción al Machine Learning
 
-## Logro de la sesión
-Al finalizar la sesión, el estudiante será capaz de:
-- Comprender el flujo completo de un proyecto de machine learning.
-- Identificar los tipos de aprendizaje y los modelos más representativos.
-- Reconocer casos de uso en la industria y el rol de los distintos perfiles profesionales.
+### 1. Logro de la sesión
 
-## Conceptos fundamentales
-
-### Definición de Machine Learning, Deep Learning y su relación con la IA
-La **Inteligencia Artificial (IA)** es el campo que busca crear sistemas capaces de realizar tareas que requieren inteligencia humana. El **Machine Learning (ML)** es una rama de la IA que permite a las máquinas aprender patrones a partir de datos sin ser explícitamente programadas. El **Deep Learning** es una subárea del ML que utiliza redes neuronales profundas para modelar representaciones complejas, especialmente útil en visión por computador, procesamiento de lenguaje natural y otras tareas con grandes volúmenes de datos.
-
-### Problemas de negocios y Tipos de aprendizaje
-Los proyectos de ML suelen originarse en necesidades de negocio. Según la naturaleza de los datos y el objetivo, se clasifican en:
-- **Aprendizaje supervisado:** Se dispone de datos etiquetados. Incluye regresión (valores continuos) y clasificación (categorías discretas).
-- **Aprendizaje no supervisado:** No hay etiquetas; se busca estructuras ocultas. Ejemplos: clustering, reducción de dimensionalidad, reglas de asociación.
-- **Aprendizaje por refuerzo:** Un agente aprende a través de interacciones con un entorno, recibiendo recompensas o castigos.
-- **Aprendizaje semi-supervisado y autosupervisado:** Combinan datos etiquetados y no etiquetados; el autosupervisado genera etiquetas a partir de los propios datos (muy usado en NLP).
-
-### Métodos paramétricos y no paramétricos en ML
-Los modelos paramétricos asumen una forma funcional fija para la relación entre entradas y salidas (por ejemplo, regresión lineal). Su complejidad no crece con el tamaño de los datos. Los modelos no paramétricos (como k-Vecinos o árboles de decisión) no presuponen una forma funcional y su complejidad aumenta con los datos, lo que les da más flexibilidad pero también riesgo de sobreajuste.
-
-
-## Historia y auge de los Modelos de Machine Learning
-
-El **Machine Learning (ML)** se desarrolla a partir de la estadística, la cibernética y la inteligencia artificial de mediados del siglo XX, buscando que las máquinas aprendan patrones de los datos sin depender únicamente de reglas explícitas.
+Comprender un panorama inicial del flujo de datos a nivel de ingenieria y ciencia de datos, con los modelos principales del Machine Learning.
 
 ---
 
-### 1950s – 1960s: Los comienzos
+### 2. Fundamentos conceptuales
 
-* **Perceptrón (1958, Frank Rosenblatt)**: Primera red neuronal capaz de clasificación binaria. Limitado a problemas lineales.
-* **Regresión Lineal (desconocido, usada desde principios del siglo XX)**: Predicción de variables continuas.
-* **k-vecinos más cercanos – k-NN (1967, Thomas Cover & Peter Hart)**: Clasificación basada en proximidad de los datos.
-* **Regresión Logística (desconocido, formalizada en ML 1960s)**: Clasificación binaria probabilística.
+#### Definición IA / ML / DL
 
----
+**Marco teórico:** Basado en la **jerarquía de Russell y Norvig** (AI: A Modern Approach). La IA se divide en cuatro enfoques: sistemas que piensan como humanos, actúan como humanos, piensan racionalmente o actúan racionalmente. ML es un subconjunto del enfoque racional (aprendizaje a partir de datos). DL es un subconjunto de ML basado en representaciones jerárquicas.
 
-### 1970s – 1980s: Árboles y modelos probabilísticos
+**Referentes:** 
+- Arthur Samuel (1959): "Campo de estudio que da a las computadoras la capacidad de aprender sin ser explícitamente programadas"
+- Tom Mitchell (1997): "Un programa aprende si su rendimiento en tareas T mejora con la experiencia E"
 
-* **Árboles de Decisión**:
+#### Tipos de aprendizaje
 
-  * **ID3 (1986, J. Ross Quinlan)**
-  * **C4.5 (1993, J. Ross Quinlan)**
-* **Naive Bayes (desconocido; teorema de Thomas Bayes 1763; aplicado en ML formalmente 1970s–1980s)**: Clasificador probabilístico simple pero eficiente.
-* **Redes Bayesianas (1980s, Judea Pearl)**: Extienden Naive Bayes para dependencias entre variables.
-* **K-means (desconocido, popularizado en ML 1980s)**: Clustering particional clásico.
+**Marco teórico:** Basado en la **clasificación de Murphy (Machine Learning: A Probabilistic Perspective)**:
 
----
+| Tipo | Fundamento | Autores clave |
+|------|-----------|---------------|
+| Supervisado | Teoría de la decisión estadística | Vapnik (Statistical Learning Theory) |
+| No supervisado | Teoría de la información / clustering | Hartigan (1975) |
+| Refuerzo | Procesos de decisión de Markov (MDP) | Sutton & Barto (1998) |
+| Semisupervisado | Teoría del aprendizaje semi-supervisado | Chapelle, Scholkopf, Zien (2006) |
 
-### 1990s: Modelos de margen y ensemble
+#### Métodos paramétricos vs no paramétricos
 
-* **Support Vector Machines – SVM (1992, Vladimir Vapnik & Alexey Chervonenkis)**: Clasificador de margen máximo, útil en alta dimensión.
-* **Random Forest (2001, Leo Breiman)**: Ensemble de árboles de decisión, robusto y preciso.
-* **Gradient Boosting (1999, Jerome Friedman)**: Base de modelos potentes de boosting.
-* **DBSCAN (1996, Martin Ester, Hans-Peter Kriegel, Jörg Sander, Xiaowei Xu)**: Clustering basado en densidad.
-* **Redes Neuronales Multicapa – MLP (1986, Rumelhart, Hinton & Williams)**: Extiende el perceptrón a múltiples capas con backpropagation.
-* **Regresión Logística multiclase (desconocido, formalización en ML 1990s)**
+**Marco teórico:** Basado en la **teoría de la complejidad estadística** (Vapnik-Chervonenkis theory):
 
----
+- **Paramétricos:** Asumen una distribución fija (ej: Gaussiana). La complejidad del modelo no crece con n. Sesgo alto, varianza baja.
+- **No paramétricos:** No asumen forma funcional fija. La complejidad crece con n. Sesgo bajo, varianza alta.
 
-### 2000s: Optimización y nuevos enfoques
-
-* **XGBoost (2014, Tianqi Chen & Carlos Guestrin)**: Gradient boosting eficiente, ampliamente usado en datos tabulares.
-* **LightGBM (2017, Microsoft, Ke et al.)**: Variante de boosting rápida y eficiente.
-* **Prophet (2017, Sean J. Taylor & Benjamin Letham, Facebook)**: Predicción de series temporales basada en descomposición y regresión.
-* **Ensemble stacking y bagging (desconocido, popularización 2000s)**: Combina varios modelos para mejorar desempeño.
+**Referente:** Wasserman (All of Statistics, 2004)
 
 ---
 
-### 2010s – presente: Deep Learning y transformers
+### 3. Fundamentos matemáticos
 
-* **AlexNet (2012, Alex Krizhevsky, Ilya Sutskever, Geoffrey Hinton)**: CNN que revolucionó visión por computadora.
-* **ResNet (2015, Kaiming He et al.)**: Introduce conexiones residuales, facilita redes profundas.
-* **LSTM – Long Short-Term Memory (1997, Sepp Hochreiter & Jürgen Schmidhuber)**: Redes recurrentes mejoradas para secuencias largas.
-* **BERT (2018, Jacob Devlin et al., Google)**: Transformer para NLP, aprendizaje de contexto bidireccional.
-* **GPT (2018–presente, OpenAI, Alec Radford et al.)**: Modelos de lenguaje generativo basados en transformers.
+#### Funciones de coste
 
+**Marco teórico:** Basado en la **teoría de la estimación** (Casella & Berger, Statistical Inference). La función de coste cuantifica la discrepancia entre predicción $\hat{y}$ y valor real $y$.
 
+| Función | Problema | Fundamento |
+|---------|----------|------------|
+| MSE | Regresión | Riesgo cuadrático, óptimo para errores Gaussianos |
+| Entropía cruzada | Clasificación | Máxima verosimilitud para distribución Bernoulli |
+| Hinge loss | SVM | Aproximación convexa del error de clasificación 0-1 |
 
-### Ciclo de vida y metodología CRISP-DM
-El estándar de facto para proyectos de ML es CRISP-DM (Cross-Industry Standard Process for Data Mining), que consta de seis fases iterativas:
-1. Comprensión del negocio
-2. Comprensión de los datos
-3. Preparación de los datos
-4. Modelado
-5. Evaluación
-6. Despliegue
+**Referente:** Bishop (Pattern Recognition and Machine Learning, 2006)
 
-Este ciclo asegura que las soluciones de ML estén alineadas con los objetivos de negocio y sean sostenibles en el tiempo.
+#### Optimización
 
-### Diferencias: Data Engineer, Data Scientist, ML Engineer, MLOps
-- **Data Engineer:** Construye y mantiene la infraestructura de datos (pipelines, almacenes, calidad).
-- **Data Scientist:** Explora datos, construye modelos y extrae insights; suele tener perfil estadístico/analítico.
-- **ML Engineer:** Se enfoca en la implementación, escalado y puesta en producción de modelos; conoce de ingeniería de software y MLOps.
-- **MLOps:** Prácticas que combinan ML, DevOps y automatización para gestionar el ciclo de vida completo de los modelos en producción (CI/CD, monitoreo, gobernanza).
+**Marco teórico:** Basado en la **optimización convexa** (Boyd & Vandenberghe):
 
-## Aplicaciones y casos típicos
-El ML está presente en numerosos sectores. Algunos ejemplos representativos:
-- **Sistemas de recomendación:** Netflix, Amazon, Spotify personalizan contenidos y productos.
-- **Detección de fraude:** Bancos y tarjetas de crédito identifican transacciones sospechosas en tiempo real.
-- **Mantenimiento predictivo:** Maquinaria industrial sensorizada anticipa fallos y optimiza paradas.
-- **Clasificación de imágenes:** Diagnóstico médico (radiografías, resonancias), vehículos autónomos (detección de objetos).
-- **Predicción de series temporales:** Ventas minoristas, demanda energética, tráfico.
+- **Gradiente descendente:** Método iterativo de primer orden. Converge a óptimo global si la función es convexa.
+- **SGD:** Robbins-Monro (1951). Permite procesar datasets que no caben en memoria.
+- **Solución cerrada (Normal Equation):** Aplica solo a regresión lineal. Usa pseudoinversa de Moore-Penrose.
 
-## Fundamentos matemáticos y computacionales
+#### Regularización
 
-Los modelos de **Machine Learning** se fundamentan en conceptos matemáticos sólidos: funciones de coste, optimización y regularización para lograr buena **generalización**. A continuación se detallan los más importantes, con ejemplos por modelo.
+**Marco teórico:** Basado en la **teoría de la complejidad estadística** y el **principio de la navaja de Occam**:
 
----
+| Técnica | Fundamento matemático | Efecto |
+|---------|----------------------|--------|
+| Ridge (L2) | Norma euclidiana | Contrae coeficientes, no los lleva a cero |
+| Lasso (L1) | Norma L1 | Selección de características (escasa) |
+| Elastic Net | Combinación L1 + L2 | Maneja correlaciones altas |
 
+**Referente:** Hastie, Tibshirani, Friedman (The Elements of Statistical Learning)
 
-### 1. Funciones de coste
+#### Overfitting y generalización
 
-Las funciones de coste cuantifican la discrepancia entre las predicciones $\hat{y}$ y los valores reales $y$:
+**Marco teórico:** Basado en la **teoría de Vapnik-Chervonenkis (VC theory)**. El error de generalización se descompone como:
 
-* **Error cuadrático medio (MSE, para regresión lineal):**
-  $$ J(\theta) = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 $$
-  donde $\hat{y}_i = \theta_0 + \theta_1 x_i + \dots + \theta_p x_i^{(p)}$.
+$$Error_{generalización} = Error_{entrenamiento} + \epsilon_{complejidad}$$
 
-* **Entropía cruzada (cross-entropy, para regresión logística y clasificación):**
-  $$ J(\theta) = - \frac{1}{n} \sum_{i=1}^{n} \left[y_i \log \hat{y}_i + (1-y_i) \log (1-\hat{y}_i)\right] $$
-  donde $\hat{y}_i = \sigma(\theta^T x_i)$ y $\sigma(z) = \frac{1}{1+e^{-z}}$ es la función sigmoide.
-
-* **Función de coste para SVM (hinge loss):**
-  $$ J(\mathbf{w}, b) = \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^{n} \max(0, 1 - y_i (\mathbf{w}^T x_i + b)) $$
-
-* **Clustering (k-means, suma de distancias al cuadrado):**
-  $$ J = \sum_{k=1}^{K} \sum_{x_i \in C_k} \| x_i - \mu_k \|^2 $$
-  donde $\mu_k$ es el centroide del cluster $C_k$.
+El **sesgo** mide la capacidad del modelo, la **varianza** mide la sensibilidad a los datos.
 
 ---
 
-### 2. Optimización
+### 4. Historia y evolución
 
-Para minimizar la función de coste se usan distintos métodos:
+**Marco teórico:** Basado en la **historiografía de la IA** (Nilsson, The Quest for Artificial Intelligence). Se organiza en "olas" o "estaciones" del ML:
 
-* **Gradiente descendente (Gradient Descent):**
-  $$ \theta := \theta - \alpha \nabla_\theta J(\theta) $$
-  donde $\alpha$ es la tasa de aprendizaje.
-
-* **Gradiente descendente estocástico (SGD):** Ajusta parámetros por cada muestra o minibatch, más rápido en datasets grandes.
-
-* **Métodos cerrados (Closed-form solution):** Para **regresión lineal**, la solución óptima puede encontrarse sin iteraciones:
-  $$ \hat{\theta} = (X^T X)^{-1} X^T y $$
-
-* **Métodos de optimización convexa:** Usados en **regresión logística** y SVM, aprovechando que la función de coste es convexa.
+| Década | Paradigma dominante | Hitos clave |
+|--------|---------------------|-------------|
+| 1950s-60s | Conexionismo temprano | Perceptrón (Rosenblatt) |
+| 1970s-80s | Simbolismo / árboles | ID3 (Quinlan), backpropagation (Rumelhart) |
+| 1990s | Teoría del aprendizaje estadístico | SVM (Vapnik), Random Forest (Breiman) |
+| 2000s | Ensembles y boosting | XGBoost (Chen), LightGBM (Microsoft) |
+| 2010s-presente | Deep Learning y transformers | AlexNet, ResNet, BERT, GPT |
 
 ---
 
-### 3. Regularización y generalización
+### 5. Metodología y ciclo de vida
 
-Para evitar **overfitting**, se introducen penalizaciones:
+#### CRISP-DM
 
-* **Ridge (L2):**
-  $$ J(\theta) = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} \theta_j^2 $$
+**Marco teórico:** Estándar de facto desde 1999, desarrollado por SPSS, NCR, DaimlerChrysler. Se basa en la **metodología de proyectos en cascada adaptada con iteraciones**.
 
-* **Lasso (L1):**
-  $$ J(\theta) = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 + \lambda \sum_{j=1}^{p} |\theta_j| $$
+| Fase | Propósito | Entregable típico |
+|------|-----------|-------------------|
+| Comprensión del negocio | Definir objetivos desde el negocio | Plan de proyecto |
+| Comprensión de los datos | Recolectar y explorar datos | Reporte de calidad de datos |
+| Preparación de datos | Limpiar y transformar | Dataset final |
+| Modelado | Seleccionar y entrenar modelos | Modelo candidato |
+| Evaluación | Validar contra objetivos | Decisión de deploy |
+| Despliegue | Poner en producción | Sistema operativo |
 
-* **Elastic Net (combinación L1 + L2)** también es común.
+#### Roles profesionales
 
----
+**Marco teórico:** Basado en el **modelo de madurez de datos de Gartner** y los frameworks de competencias de la industria:
 
-### 4. Matemáticas específicas por modelo
-
-| Modelo                      | Conceptos matemáticos clave                   | Función de coste / ecuación                                                                      |
-| --------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| **Regresión Lineal**        | Álgebra lineal, MSE                           | $J(\theta) = \frac{1}{n} \sum (y_i - \theta^T x_i)^2$                                            |
-| **Regresión Logística**     | Probabilidad, optimización convexa            | $J(\theta) = -\frac{1}{n} \sum [y_i \log \hat{y}_i + (1-y_i) \log(1-\hat{y}_i)]$                 |
-| **SVM**                     | Optimización convexa, geometría de margen     | $J(\mathbf{w}, b) = \frac{1}{2} \|\mathbf{w}\|^2 + C \sum \max(0, 1 - y_i (\mathbf{w}^T x_i + b))$ |
-| **k-NN**                    | Distancia euclidiana                          | $d(x_i, x_j) = \|x_i - x_j\|$                                                                      |
-| **k-means**                 | Distancias, centroides                        | $J = \sum_{k} \sum_{x_i \in C_k} \| x_i - \mu_k \|^2$                                              |
-| **DBSCAN**                  | Distancias y densidad                         | $N_\epsilon(x) = \{ y \in D \mid \|x - y\| \le \epsilon \}$                                       |
-| **Random Forest / XGBoost** | Árboles, splits, reducción de entropía / Gini | Funciones de coste según impurity (Gini/Entropy) y suma de errores de predicción                 |
-
----
-
-
-
-
-
-### Complejidad algorítmica de los modelos
-La eficiencia computacional es clave en ML. Se analiza tanto en entrenamiento como en inferencia:
-- Regresión lineal: entrenamiento $O(n^3)$ (ecuación normal) o $O(n\cdot\text{iter})$ con gradiente descendente.
-- k-NN: entrenamiento $O(1)$ (solo almacena datos), inferencia $O(N\cdot n)$ sin optimizaciones.
-- Árboles de decisión: entrenamiento $O(N\cdot n\cdot\log N)$, inferencia $O(\text{profundidad})$.
-- Redes neuronales: depende del número de capas, neuronas y épocas; altamente paralelizable en GPUs.
-
-### Hardware: CPU, GPU, TPU
-
-En el contexto de **Machine Learning clásico**, la selección del hardware es fundamental para el rendimiento de los modelos, especialmente según el tamaño del dataset. La mayoría de los modelos clásicos **no requieren GPU o TPU** y funcionan eficientemente en CPU, salvo casos de datasets muy grandes o modelos específicos como XGBoost.
+| Rol | Dominio primario | Responsabilidad clave |
+|-----|-----------------|----------------------|
+| Data Engineer | Ingeniería de datos | Pipelines ETL/ELT, Data Lakes/Warehouses |
+| Data Scientist | Estadística/ML | Exploración, modelado, insights |
+| ML Engineer | Ingeniería software + ML | API, escalado, versionado de modelos |
+| MLOps Engineer | DevOps + ML | CI/CD, monitoreo, gobernanza |
 
 ---
 
-### 1. CPU (Central Processing Unit)
+### 6. Aspectos computacionales
 
-La CPU es un procesador de propósito general, ideal para tareas secuenciales y modelos de ML clásico. Es suficiente para la mayoría de los modelos, incluyendo **regresión lineal, regresión logística, Naive Bayes, árboles de decisión, Random Forest, k-NN, k-means, DBSCAN y Prophet**.
+#### Complejidad algorítmica
 
-* Para **datasets pequeños y medianos**, la CPU permite entrenamientos rápidos y precisos.
-* Para **datasets muy grandes**, algunos modelos como Random Forest pueden beneficiarse de optimizaciones adicionales, pero la CPU sigue siendo funcional.
+**Marco teórico:** Basado en la **teoría de la complejidad computacional (notación Big O)**. Distingue entre:
 
----
+- **Complejidad de entrenamiento:** Lo que importa para desarrollo
+- **Complejidad de inferencia:** Lo que importa para producción
 
-### 2. GPU (Graphics Processing Unit)
+| Modelo | Entrenamiento | Inferencia | Referente |
+|--------|---------------|------------|-----------|
+| Regresión lineal (normal) | O(n³) | O(p) | Strassen (1969) |
+| k-NN | O(1) | O(n·p) | Cover & Hart (1967) |
+| Árboles | O(n·p·log n) | O(profundidad) | Quinlan (1986) |
+| Random Forest | O(k·n·p·log n) | O(k·profundidad) | Breiman (2001) |
 
-Las GPU, originalmente diseñadas para gráficos, cuentan con miles de núcleos paralelos que permiten ejecutar operaciones matriciales simultáneamente. Su uso en ML clásico es más limitado y específico:
+#### Hardware: CPU / GPU / TPU
 
-* **Aplicable principalmente a:**
+**Marco teórico:** Basado en la **arquitectura de computadoras (Flynn's taxonomy)** y la **ley de Moore** con evolución hacia aceleradores:
 
-  * Gradient Boosting, XGBoost y LightGBM en datasets grandes, donde acelera cálculos de histogramas y splits.
-  * Random Forest con árboles muy profundos.
-* **No necesario para:** Regresión lineal/logística, Naive Bayes, k-means pequeño-mediano, árboles de decisión simples.
-* En datasets pequeños, la CPU suele ser más eficiente debido al overhead de transferencia de datos hacia la GPU.
+| Hardware | Arquitectura | Ideal para | Limitación |
+|----------|--------------|------------|------------|
+| CPU | Control + ALU, pocos núcleos potentes | Tareas secuenciales, ML clásico | Paralelismo limitado |
+| GPU | Miles de núcleos simples | Operaciones matriciales (DL, XGBoost) | Overhead de transferencia |
+| TPU | Matriz de multiplicación optimizada | Tensor operations (DL exclusivo) | No útil para ML clásico |
 
----
-
-### 3. TPU (Tensor Processing Unit)
-
-Las TPU, desarrolladas por Google, están optimizadas para **operaciones tensoriales masivas**, típicas en deep learning. En ML clásico, su uso **no es relevante**, dado que los modelos como regresión lineal, regresión logística, Prophet, Random Forest, k-means y DBSCAN no requieren operaciones tensoriales intensivas.
-
-* Su aplicación se limita a experimentos avanzados que combinan ML clásico con deep learning, lo cual está fuera del alcance de un curso de ML clásico.
-
----
-
-### 4. Resumen por modelo y tamaño de datos
-
-| Modelo / Técnica                       | Dataset pequeño | Dataset grande            | CPU          | GPU                            | TPU           |
-| -------------------------------------- | --------------- | ------------------------- | ------------ | ------------------------------ | ------------- |
-| Regresión lineal                       | ✅ ideal         | ⚪ hasta millones de filas | ✅ suficiente | ⚪ opcional                     | ⚪ innecesario |
-| Regresión logística                    | ✅ ideal         | ⚪ hasta millones          | ✅ suficiente | ⚪ opcional                     | ⚪ innecesario |
-| Naive Bayes                            | ✅ ideal         | ⚪ hasta millones          | ✅ suficiente | ⚪ innecesario                  | ⚪ innecesario |
-| Árbol de decisión                      | ✅ ideal         | ⚪ grandes árboles         | ✅ suficiente | ⚪ acelera                      | ⚪ innecesario |
-| Random Forest                          | ✅ ideal         | ✅ grandes datasets        | ✅ posible    | ✅ recomendable                 | ⚪ innecesario |
-| Gradient Boosting / XGBoost / LightGBM | ✅ pequeño       | ✅ muy grande              | ✅ posible    | ✅ recomendable                 | ⚪ limitado    |
-| k-NN                                   | ✅ ideal         | ⚪ hasta decenas de miles  | ✅ suficiente | ⚪ útil en datasets muy grandes | ⚪ innecesario |
-| k-means                                | ✅ ideal         | ✅ millones                | ✅ suficiente | ⚪ útil                         | ⚪ innecesario |
-| DBSCAN                                 | ✅ ideal         | ⚪ hasta cientos de miles  | ✅ suficiente | ⚪ útil                         | ⚪ innecesario |
-| Prophet                                | ✅ ideal         | ⚪ hasta cientos de miles  | ✅ suficiente | ⚪ innecesario                  | ⚪ innecesario |
+**Referente:** Hennessy & Patterson (Computer Architecture: A Quantitative Approach)
 
 ---
 
-### Conclusión
+### 7. Evaluación (Métricas)
 
-Para **ML clásico**, la **CPU** es suficiente para casi todos los modelos y tamaños de datos. La **GPU** se recomienda únicamente para Gradient Boosting/XGBoost/LightGBM con datasets grandes o Random Forest muy profundos. Las **TPU** no se utilizan en ML clásico y su aplicación se limita al entrenamiento de modelos de deep learning.
+**Marco teórico:** Basado en la **teoría de la decisión estadística** y el **análisis de costes**. La métrica debe elegirse en función del problema de negocio, no del modelo.
+
+| Tipo de problema | Métricas clave | Fundamento |
+|-----------------|---------------|------------|
+| Clasificación | Precisión, Recall, F1, AUC-ROC | Análisis de la matriz de confusión (Provost & Fawcett) |
+| Regresión | MAE, RMSE, R² | Teoría del error (Hastie et al.) |
+| Clustering | Silhouette, Davies-Bouldin, Inercia | Validación interna de clusters (Rousseeuw, 1987) |
+
+**Principio fundamental:** "Lo que no se mide, no se mejora" — la métrica debe reflejar el coste real de los errores en el contexto de la aplicación.
 
 ---
 
+### 8. Aplicaciones reales
 
-## Métricas
-Seleccionar la métrica adecuada es fundamental para evaluar el rendimiento del modelo y su alineación con el negocio.
-- **Clasificación:** Precisión, recall, F1-score, AUC-ROC, matriz de confusión.
-- **Regresión:** Error absoluto medio (MAE), error cuadrático medio (RMSE), $R^2$.
-- **Clustering:** Coeficiente de silueta, índice de Davies–Bouldin, inercia.
+**Marco teórico:** Basado en el **aprendizaje basado en casos (Case-Based Learning)** y la **transferencia de conocimiento**. Los casos deben:
 
-La métrica debe reflejar el coste real de los errores en el contexto de la aplicación (por ejemplo, en detección de fraudes es más crítico minimizar falsos negativos).
+1. Ser **auténticos** (problemas reales de la industria)
+2. Cubrir **múltiples sectores**
+3. Conectar cada caso con **tipos de aprendizaje y métricas**
 
+| Industria | Caso de uso | Tipo de aprendizaje | Métrica crítica |
+|-----------|-------------|---------------------|-----------------|
+| Retail/E-commerce | Recomendación | Supervisado / Filtrado colaborativo | Precision@K, Recall@K |
+| Finanzas | Detección de fraude | Supervisado (clasificación desbalanceada) | Recall (sobre F1) |
+| Manufactura | Mantenimiento predictivo | Supervisado (series temporales) | RMSE, Precisión |
+| Salud | Diagnóstico médico | Supervisado (clasificación de imágenes) | Sensibilidad/Especificidad |
+| Energía | Predicción de demanda | Supervisado (series temporales) | MAE, MAPE |
+
+---
+
+### 9. Apéndice: línea temporal del ML en la industria (visión panorámica)
+
+| Periodo | Tendencia | Implicación práctica |
+|---------|-----------|----------------------|
+| **2010–2015** | *Big data* + Hadoop/Spark; **deep learning** revoluciona visión | Pipelines distribuidos; GPUs accesibles |
+| **2015–2020** | **TensorFlow/PyTorch**; transfer learning | Equipos mixtos investigación–ingeniería |
+| **2020–2026** | **MLOps**, feature stores, gobernanza, LLMs | Menos “solo notebook”, más productos reproducibles |
+
+#### 9.1 Plantilla mínima de exploración en Python (sesiones posteriores la amplían)
+
+```python
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(42)
+df = pd.DataFrame({"x": rng.normal(size=200), "y": rng.normal(size=200)})
+print(df.describe())
+```
+
+Este patrón (`import` → objeto `DataFrame`/`ndarray` → métodos `describe`, `plot`) es la base sobre la que se montan los laboratorios NTB.
+
+#### 9.2 Cómo usar este documento para estudiar
+
+1. Leer cada **Marco teórico** intentando reformular con tus palabras.  
+2. Para cada tabla de métricas, escribir **un ejemplo de negocio** donde esa métrica sea la adecuada.  
+3. Antes de cada laboratorio, trazar el **flujo de datos** desde archivo bruto hasta métrica final.
+
+---
+
+## Referencias bibliográficas principales
+
+1. Bishop, C. M. (2006). *Pattern Recognition and Machine Learning*. Springer.
+2. Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning*. Springer.
+3. Goodfellow, I., Bengio, Y., & Courville, A. (2016). *Deep Learning*. MIT Press.
+4. Murphy, K. P. (2012). *Machine Learning: A Probabilistic Perspective*. MIT Press.
+5. Russell, S., & Norvig, P. (2020). *Artificial Intelligence: A Modern Approach*. Pearson.
+6. Vapnik, V. N. (1998). *Statistical Learning Theory*. Wiley.
+7. Sutton, R. S., & Barto, A. G. (2018). *Reinforcement Learning: An Introduction*. MIT Press.

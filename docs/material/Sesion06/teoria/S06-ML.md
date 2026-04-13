@@ -1,615 +1,256 @@
 ---
 layout: default
 ---
-# Semana 6: Árboles de Decisión y Random Forest
+# Sesión 6: Árboles de Decisión y Random Forest
 
-## Logro de la sesión
+### 1. Logro de la sesión
 
-Construir, interpretar y comparar modelos basados en árboles de decisión y ensambles tipo Random Forest, comprendiendo su capacidad para capturar relaciones no lineales y su aplicación en problemas reales de clasificación y regresión.
-
----
-
-## Problemática de negocio
-
-Los modelos basados en árboles responden a necesidades críticas en el mundo empresarial:
-
-- **Modelos interpretables vs modelos de alto performance:** ¿Cómo equilibrar la necesidad de explicar las predicciones (requisitos regulatorios) con la precisión requerida para competir?
-- **Manejo de relaciones no lineales:** Los datos del mundo real rara vez siguen relaciones lineales simples; los árboles capturan naturalmente interacciones complejas.
-- **Variables categóricas:** A diferencia de regresión lineal, los árboles manejan variables categóricas sin necesidad de one-hot encoding extensivo.
-- **Reducción de overfitting:** Especialmente con Random Forest, que mediante ensambles controla la varianza excesiva.
-- **Interpretabilidad:** Necesidad de entender qué variables impactan más en la predicción para tomar decisiones de negocio informadas.
-
-**Ejemplos de aplicación por industria:**
-
-| Industria | Caso de uso | Objetivo |
-|-----------|-------------|----------|
-| **Banca** | Scoring crediticio | Evaluar riesgo de impago con reglas interpretables |
-| **Fintech** | Detección de fraude | Identificar transacciones sospechosas en tiempo real |
-| **Seguros** | Predicción de siniestralidad | Tarificar pólizas según perfil de riesgo |
-| **Marketing** | Segmentación de clientes | Identificar perfiles de alto valor |
-| **Salud** | Diagnóstico asistido | Apoyar decisiones clínicas con reglas claras |
-| **RRHH** | Predicción de rotación | Identificar empleados en riesgo de abandonar |
-| **E-commerce** | Recomendación de productos | Personalizar ofertas según comportamiento |
-| **Telecom** | Predicción de churn | Retener clientes con mayor probabilidad de fuga |
-
-**Limitaciones de modelos anteriores que resuelven los árboles:**
-
-| Modelo | Limitación | Cómo lo resuelve el árbol |
-|--------|------------|---------------------------|
-| Regresión lineal | Asume linealidad | Captura relaciones no lineales naturalmente |
-| Regresión logística | Requiere transformaciones manuales | Las divisiones sucesivas modelan interacciones |
-| KNN | Lento en predicción, sensible a escala | Rápido en predicción, robusto a escala |
-| SVM | Caja negra, tuning complejo | Interpretable, hiperparámetros intuitivos |
-| Naive Bayes | Asume independencia | Captura dependencias entre variables |
+Construir e interpretar **árboles de decisión** (CART) para clasificación y regresión, y **ensambles tipo Random Forest** mediante **bagging**, comprendiendo **criterios de impureza**, **control de complejidad**, **error OOB** e **importancia de variables** con visión crítica de sus sesgos.
 
 ---
 
-## Modelado
+### 2. Historia y línea temporal
 
-### Árboles de Decisión
+| Periodo | Hito |
+|---------|------|
+| **1960s** | **Morgan & Sonquist (1963)** y sistemas AID: primeros árboles automáticos en ciencias sociales |
+| **1980s** | **CART** (Breiman et al., 1984): binario, poda por coste-complejidad |
+| **1986** | **ID3 / C4.5** (Quinlan): ganancia de información, dominio simbólico |
+| **1990s–2000s** | Árboles como base de **boosting** y **bagging** |
+| **2001** | **Random Forest** (Breiman): bagging + aleatorización de features |
+| **Actualidad** | RF y boosting (XGBoost, etc.) dominan tabular; interpretación con SHAP |
 
-#### Estructura del Árbol
+**Lectura:** el árbol es el modelo **más interpretable** localmente (reglas), pero un árbol profundo puede ser tan opaco como cualquier otro modelo complejo.
 
-Un árbol de decisión es una estructura jerárquica que particiona recursivamente el espacio de características:
+---
 
-```
-                    [Nodo Raíz]
-                   (Todas las datos)
-                   /            \
-          [Rama] Sí             No [Rama]
-                 /                  \
-          [Nodo Interno]         [Nodo Interno]
-           (Feature j)            (Feature k)
-           /        \              /        \
-        ...        ...           ...        ...
-        /            \           /            \
-  [Hoja: Clase A] [Hoja: Clase B] [Hoja: Clase A] [Hoja: Clase C]
-```
+### 3. Árboles CART: estructura y algoritmo
 
-**Componentes:**
-- **Nodo raíz:** Contiene todos los datos, primera división.
-- **Nodos internos:** Puntos de decisión donde se evalúa una característica.
-- **Ramas:** Resultados de las evaluaciones (Sí/No o valores discretos).
-- **Hojas (nodos terminales):** Predicción final (clase o valor).
+#### 3.1 Componentes
 
-#### Criterios de División
+- **Nodo raíz:** toda la muestra.  
+- **Nodos internos:** pregunta sobre una variable $x_j$ y un umbral $t$ (“¿$x_j \le t$?”).  
+- **Hojas:** predicción = clase mayoritaria (clasificación) o media (regresión).
 
-**Para clasificación:**
+#### 3.2 Criterios de división
 
-| Criterio | Fórmula | Interpretación |
-|----------|---------|----------------|
-| **Gini Impurity** | $G = 1 - \sum_{i=1}^{c} p_i^2$ | Probabilidad de clasificación errónea si se etiqueta aleatoriamente según distribución. Valor 0 = nodo puro. |
-| **Entropía** | $H = -\sum_{i=1}^{c} p_i \log_2(p_i)$ | Medida de desorden/incertidumbre. Valor 0 = nodo puro. |
-| **Information Gain** | $IG = H(padre) - \sum_{j} \frac{n_j}{n} H(hijo_j)$ | Reducción de entropía lograda por la división. Se maximiza. |
+**Clasificación** (nodos $m$ con proporciones $\hat{p}_{mk}$ de clase $k$):
 
-**Comparación Gini vs Entropía:**
+- **Gini:** $\sum_k \hat{p}_{mk}(1-\hat{p}_{mk})$ — mide impureza.  
+- **Entropía:** $-\sum_k \hat{p}_{mk}\log \hat{p}_{mk}$ — de la teoría de información (Quinlan).
 
-| Aspecto | Gini | Entropía |
-|---------|------|----------|
-| **Cálculo** | Más rápido (sin logaritmos) | Más lento (requiere log) |
-| **Sensibilidad** | Similar en práctica | Similar en práctica |
-| **Diferencia** | Máximo en 0.5 (clases balanceadas) | Máximo en 1.0 (clases balanceadas) |
-| **Recomendación** | Por defecto en scikit-learn | Cuando se desea máxima pureza |
+**Regresión:** minimizar **SSE** intra-nodo, equivalente a reducir **MSE** ponderado.
 
-**Para regresión:**
+En cada split se evalúan muchos $(j,t)$; se elige el que **más reduce** la impurez o el error.
 
-| Criterio | Fórmula | Interpretación |
-|----------|---------|----------------|
-| **MSE (Mean Squared Error)** | $MSE = \frac{1}{n}\sum_{i=1}^{n} (y_i - \bar{y})^2$ | Varianza dentro del nodo. Se minimiza. |
-| **MAE (Mean Absolute Error)** | $MAE = \frac{1}{n}\sum_{i=1}^{n} \|y_i - \bar{y}\|$ | Desviación absoluta media. Más robusto a outliers. |
+#### 3.3 Sobreajuste y control
 
-#### Sobreajuste (Overfitting) y Control de Complejidad
+Los árboles **profundos** encajan ruido → **alta varianza**. Parámetros clave en `sklearn`:
 
-Los árboles de decisión son propensos al sobreajuste porque pueden crecer hasta que cada hoja contenga una sola observación. Hiperparámetros para controlar la complejidad:
+| Parámetro | Efecto al **subir** el valor |
+|-----------|------------------------------|
+| `max_depth` | Más profundidad → más flexibilidad (riesgo overfitting) |
+| `min_samples_leaf` | Hojas más pobladas → modelo más regularizado |
+| `min_samples_split` | Exige más datos para dividir un nodo |
+| `max_features` | En RandomForest, no en árbol simple |
 
-| Hiperparámetro | Descripción | Efecto | Valor típico |
-|----------------|-------------|--------|--------------|
-| `max_depth` | Profundidad máxima del árbol | Limita el número de divisiones | 3-10 |
-| `min_samples_split` | Mínimo de muestras para dividir un nodo | Evita divisiones con pocos datos | 20-100 |
-| `min_samples_leaf` | Mínimo de muestras en una hoja | Suaviza predicciones | 10-50 |
-| `max_features` | Número máximo de features a considerar | Reduce correlación entre árboles | `sqrt(n_features)` |
-| `ccp_alpha` | Complejidad de poda (cost-complexity pruning) | Poda el árbol después de crecer | Validación cruzada |
+**Poda:** en CART clásico, poda por coste-complejidad; en sklearn se controla principalmente por **pre**-poda vía `max_depth` y afines.
 
-**Trade-off Bias-Varianza en árboles:**
+#### 3.4 Ventajas y limitaciones del árbol solo
 
-| Configuración | Sesgo | Varianza | Riesgo |
-|---------------|-------|----------|--------|
-| Árbol profundo (`max_depth` alto) | Bajo | Alta | Overfitting |
-| Árbol poco profundo (`max_depth` bajo) | Alto | Baja | Underfitting |
-| `min_samples_split` bajo | Bajo | Alta | Overfitting |
-| `min_samples_split` alto | Alto | Baja | Underfitting |
+**Ventajas:**
 
-#### Interpretación de Decisiones
+- Captura **no linealidades** e **interacciones** sin especificarlas.  
+- Manejo natural de **variables mixtas** (según implementación).  
+- **Interpretación** vía reglas si el árbol no es enorme.
 
-Los árboles ofrecen múltiples formas de interpretación:
+**Limitaciones:**
 
-1. **Reglas de decisión:** Cada camino del árbol puede expresarse como una regla IF-THEN.
-   
-   ```
-   IF (ingreso > 50000) AND (edad >= 30) AND (historial_crediticio = 'bueno')
-   THEN riesgo = 'bajo'
-   ```
+- **Inestabilidad:** pequeños cambios en datos pueden cambiar el árbol por completo.  
+- Sesgo hacia variables con muchos niveles de corte posibles si no se controla.
 
-2. **Visualización del árbol:** Representación gráfica de las divisiones.
-
-3. **Importancia de variables:** Basada en la reducción de impureza ponderada por las muestras.
-
-#### Plantilla Base en Python (Clasificación)
+#### 3.5 Plantilla Python (árbol de clasificación)
 
 ```python
-# Importaciones necesarias
-from sklearn.tree import DecisionTreeClassifier, plot_tree
-from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
-import matplotlib.pyplot as plt
 
-# División de datos
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42, stratify=y
+    X, y, test_size=0.2, stratify=y, random_state=42
 )
 
-# Definición del modelo base
-model = DecisionTreeClassifier(random_state=42)
-
-# Búsqueda de hiperparámetros (opcional)
-param_grid = {
-    'max_depth': [3, 5, 7, 10, None],
-    'min_samples_split': [10, 20, 50, 100],
-    'min_samples_leaf': [5, 10, 20, 50],
-    'criterion': ['gini', 'entropy']
-}
-
-grid_search = GridSearchCV(
-    model, param_grid, cv=5, scoring='f1', n_jobs=-1
+tree = DecisionTreeClassifier(
+    criterion="gini",
+    max_depth=6,
+    min_samples_leaf=20,
+    random_state=42,
 )
-grid_search.fit(X_train, y_train)
-
-# Mejor modelo
-best_model = grid_search.best_estimator_
-
-# Entrenamiento (si no se usa grid search)
-# best_model = DecisionTreeClassifier(max_depth=5, min_samples_split=20, random_state=42)
-# best_model.fit(X_train, y_train)
-
-# Predicciones
-y_pred = best_model.predict(X_test)
-y_proba = best_model.predict_proba(X_test)
-
-# Visualización del árbol
-plt.figure(figsize=(20, 10))
-plot_tree(best_model, feature_names=feature_names, 
-          class_names=target_names, filled=True, rounded=True)
-plt.show()
-```
-
-#### Plantilla Base en Python (Regresión)
-
-```python
-# Importaciones necesarias
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-
-# División de datos
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
-
-# Definición del modelo
-model = DecisionTreeRegressor(random_state=42)
-
-# Búsqueda de hiperparámetros
-param_grid = {
-    'max_depth': [3, 5, 7, 10, None],
-    'min_samples_split': [10, 20, 50, 100],
-    'min_samples_leaf': [5, 10, 20, 50],
-    'criterion': ['squared_error', 'friedman_mse', 'absolute_error']
-}
-
-grid_search = GridSearchCV(
-    model, param_grid, cv=5, scoring='neg_mean_squared_error', n_jobs=-1
-)
-grid_search.fit(X_train, y_train)
-
-# Mejor modelo
-best_model = grid_search.best_estimator_
-
-# Predicciones
-y_pred = best_model.predict(X_test)
-
-# Métricas
-mse = mean_squared_error(y_test, y_pred)
-rmse = np.sqrt(mse)
-mae = mean_absolute_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
-
-print(f"RMSE: {rmse:.4f}, MAE: {mae:.4f}, R²: {r2:.4f}")
-```
-
----
-
-### Random Forest (Bagging)
-
-#### Concepto de Ensamble
-
-Random Forest pertenece a la familia de métodos de **ensamble**, específicamente **bagging** (Bootstrap Aggregating). La idea fundamental: **combinar múltiples modelos débiles para crear un modelo fuerte**.
-
-**Fundamento matemático:** Si tenemos $B$ árboles con varianza $\sigma^2$ y correlación $\rho$, la varianza del promedio es:
-
-$$Var(\bar{f}) = \rho \sigma^2 + \frac{1-\rho}{B} \sigma^2$$
-
-A medida que $B$ aumenta, el segundo término desaparece, pero el primero (correlación) permanece. Random Forest reduce la correlación mediante la aleatorización de características.
-
-#### Bootstrap Sampling (Muestreo con Reemplazo)
-
-**Proceso:**
-1. Del dataset original con $n$ muestras, se crean $B$ muestras bootstrap.
-2. Cada muestra bootstrap se obtiene muestreando $n$ veces con reemplazo.
-3. Aproximadamente 63.2% de las muestras originales aparecen en cada bootstrap (el resto son duplicados).
-
-**Muestras Out-of-Bag (OOB):** Las muestras no seleccionadas en un bootstrap (~36.8%) constituyen el conjunto OOB, que sirve como validación interna sin necesidad de un conjunto de validación separado.
-
-#### Selección Aleatoria de Variables (Feature Randomness)
-
-En cada división del árbol, solo se considera un subconjunto aleatorio de características:
-
-- **Clasificación:** típicamente `max_features = sqrt(n_features)`
-- **Regresión:** típicamente `max_features = n_features/3`
-
-Esto descorrelaciona los árboles, haciendo que el promedio sea más estable.
-
-#### Reducción de Varianza vs Árbol Individual
-
-| Aspecto | Árbol Simple | Random Forest |
-|---------|--------------|---------------|
-| **Sesgo** | Similar | Ligeramente mayor (por aleatoriedad) |
-| **Varianza** | Alta | Mucho menor |
-| **Overfitting** | Propenso | Robusto (promedia errores) |
-| **Estabilidad** | Inestable (cambia con datos) | Estable |
-| **Generalización** | Limitada | Excelente |
-
-#### Out-of-Bag (OOB) Error
-
-El error OOB es una estimación del error de generalización sin necesidad de validación cruzada:
-
-```python
-from sklearn.ensemble import RandomForestClassifier
-
-rf = RandomForestClassifier(n_estimators=100, oob_score=True, random_state=42)
-rf.fit(X_train, y_train)
-print(f"OOB Score: {rf.oob_score_:.4f}")
-print(f"Test Score: {rf.score(X_test, y_test):.4f}")
-```
-
-**Interpretación:** Si OOB score y test score son similares, el modelo generaliza bien. Si OOB es mucho menor, hay sobreajuste.
-
-#### Hiperparámetros Clave en Random Forest
-
-| Hiperparámetro | Descripción | Rango típico | Impacto |
-|----------------|-------------|--------------|---------|
-| `n_estimators` | Número de árboles | 100-1000 | A mayor, mejor (con ley de rendimientos decrecientes) |
-| `max_depth` | Profundidad máxima | 10-50 o None | Controla complejidad individual |
-| `min_samples_split` | Mínimo para dividir | 2-20 | Evita divisiones espurias |
-| `min_samples_leaf` | Mínimo en hoja | 1-10 | Suaviza predicciones |
-| `max_features` | Features por división | `sqrt`, `log2`, fracción | Controla correlación entre árboles |
-| `bootstrap` | Muestreo con reemplazo | True/False | True por defecto |
-| `oob_score` | Calcular error OOB | True/False | Útil para validación |
-
-#### Plantilla Base en Python (Clasificación)
-
-```python
-# Importaciones necesarias
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV
-from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
-import matplotlib.pyplot as plt
-import numpy as np
-
-# División de datos
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42, stratify=y
-)
-
-# Definición del modelo base
-rf = RandomForestClassifier(random_state=42, oob_score=True)
-
-# Búsqueda de hiperparámetros (RandomizedSearchCV es más eficiente)
-param_dist = {
-    'n_estimators': [100, 200, 300, 500],
-    'max_depth': [10, 20, 30, 50, None],
-    'min_samples_split': [2, 5, 10, 20],
-    'min_samples_leaf': [1, 2, 5, 10],
-    'max_features': ['sqrt', 'log2', 0.3, 0.5],
-    'bootstrap': [True, False]
-}
-
-random_search = RandomizedSearchCV(
-    rf, param_dist, n_iter=50, cv=5, scoring='f1', 
-    n_jobs=-1, random_state=42, verbose=1
-)
-random_search.fit(X_train, y_train)
-
-# Mejor modelo
-best_rf = random_search.best_estimator_
-
-print("Mejores parámetros:", random_search.best_params_)
-print("Mejor score CV:", random_search.best_score_)
-print("OOB Score:", best_rf.oob_score_)
-
-# Predicciones
-y_pred = best_rf.predict(X_test)
-y_proba = best_rf.predict_proba(X_test)
-
-# Evaluación
+tree.fit(X_train, y_train)
+y_pred = tree.predict(X_test)
+print(confusion_matrix(y_test, y_pred))
 print(classification_report(y_test, y_pred))
-
-# Importancia de variables
-importances = best_rf.feature_importances_
-indices = np.argsort(importances)[::-1]
-
-plt.figure(figsize=(10, 6))
-plt.title("Importancia de Variables - Random Forest")
-plt.bar(range(len(importances)), importances[indices])
-plt.xticks(range(len(importances)), [feature_names[i] for i in indices], rotation=45)
-plt.tight_layout()
-plt.show()
 ```
 
-#### Plantilla Base en Python (Regresión)
+Visualización (opcional): `plot_tree` o exportar a Graphviz.
+
+---
+
+### 4. Random Forest: bagging + aleatorización
+
+#### 4.1 Bagging (Bootstrap AGGregatING)
+
+1. Generar $B$ muestras bootstrap de tamaño $n$ con reemplazo.  
+2. Entrenar un árbol profundo en cada muestra.  
+3. **Clasificación:** voto mayoritario. **Regresión:** media de predicciones.
+
+**Efecto:** los árboles tienen **alta varianza** pero están **poco correlacionados** si el modelo base es inestable → el promedio **reduce varianza** sin aumentar tanto el sesgo (Breiman, 1996).
+
+#### 4.2 Aleatorización de variables (`max_features`)
+
+En cada split, solo se considera un **subconjunto aleatorio** de predictores → los árboles se **decorrelacionan** más, mejorando la reducción de varianza respecto a bagging puro.
+
+#### 4.3 Out-of-Bag (OOB) error
+
+Para cada árbol $b$, aproximadamente **37 %** de las observaciones queda fuera del bootstrap (“out-of-bag”). Se puede estimar error sin conjunto de validación explícito:
+
+$$ \mathrm{OOB} \approx \frac{1}{n}\sum_{i=1}^{n} L\bigl(y_i, \hat{f}_{\mathrm{OOB}}(x_i)\bigr) $$
+
+**Ventaja:** estimación interna “gratis”. **Cuidado:** no sustituye siempre un **test holdout** riguroso en producción.
+
+#### 4.4 Hiperparámetros importantes
+
+- `n_estimators` ($B$): más árboles → estimación más estable (rendimientos decrecientes).  
+- `max_depth` / `min_samples_leaf`: controlan profundidad de cada árbol base.  
+- `max_features`: típicamente `sqrt(p)` (clasificación) o `p/3` (regresión) como heurística inicial.
+
+#### 4.5 Plantilla Python
 
 ```python
-# Importaciones necesarias
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split, RandomizedSearchCV
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-import numpy as np
-import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestClassifier
 
-# División de datos
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
+rf = RandomForestClassifier(
+    n_estimators=300,
+    max_depth=None,
+    min_samples_leaf=2,
+    max_features="sqrt",
+    n_jobs=-1,
+    random_state=42,
+    oob_score=True,
 )
-
-# Definición del modelo
-rf_reg = RandomForestRegressor(random_state=42, oob_score=True)
-
-# Búsqueda de hiperparámetros
-param_dist = {
-    'n_estimators': [100, 200, 300, 500],
-    'max_depth': [10, 20, 30, 50, None],
-    'min_samples_split': [2, 5, 10, 20],
-    'min_samples_leaf': [1, 2, 5, 10],
-    'max_features': [1.0, 'sqrt', 'log2', 0.3, 0.5],
-    'bootstrap': [True, False]
-}
-
-random_search = RandomizedSearchCV(
-    rf_reg, param_dist, n_iter=50, cv=5, 
-    scoring='neg_mean_squared_error', n_jobs=-1, random_state=42
-)
-random_search.fit(X_train, y_train)
-
-# Mejor modelo
-best_rf = random_search.best_estimator_
-
-# Predicciones
-y_pred = best_rf.predict(X_test)
-
-# Métricas
-mse = mean_squared_error(y_test, y_pred)
-rmse = np.sqrt(mse)
-mae = mean_absolute_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
-
-print(f"RMSE: {rmse:.4f}")
-print(f"MAE: {mae:.4f}")
-print(f"R²: {r2:.4f}")
-print(f"OOB Score: {best_rf.oob_score_:.4f}")
+rf.fit(X_train, y_train)
+print("OOB score (accuracy):", rf.oob_score_)
 ```
+
+Para regresión: `RandomForestRegressor`, criterio `squared_error`.
 
 ---
 
-### Comparación: Árbol Simple vs Random Forest
+### 5. Comparación árbol vs bosque
 
-| Aspecto | Árbol de Decisión | Random Forest |
-|---------|-------------------|---------------|
-| **Estructura** | Un solo árbol | Conjunto de árboles |
-| **Varianza** | Alta | Baja (promedia) |
-| **Sesgo** | Bajo (puede sobreajustar) | Similar o ligeramente mayor |
-| **Interpretabilidad** | Muy alta (visualizable) | Baja (promedio de muchos árboles) |
-| **Importancia variables** | Inestable | Estable y confiable |
-| **Tiempo entrenamiento** | Rápido | Lento (muchos árboles) |
-| **Tiempo predicción** | Rápido | Moderado (promediar) |
-| **Overfitting** | Propenso | Robusto (con suficientes árboles) |
-| **Manejo de ruido** | Sensible | Robusto |
-| **Outliers** | Pueden crear ramas espurias | Efecto promediado |
-
-**Trade-off Interpretabilidad vs Performance:**
-
-```
-Interpretabilidad
-       ↑
-  10   | Árbol simple
-       |   |
-  8    |   |   Reglas extraídas
-       |   |   |
-  6    |   |   |   Árbol podado
-       |   |   |   |
-  4    |   |   |   |   Random Forest (pocos árboles)
-       |   |   |   |   |
-  2    |   |   |   |   |   Random Forest (óptimo)
-       |   |   |   |   |   |
-  0    +---+---+---+---+---+--→ Performance
-       0   2   4   6   8   10
-```
-
-**Cuándo usar cada uno:**
-
-- **Árbol simple:** Cuando la interpretabilidad es crítica (regulaciones, auditorías, explicaciones a clientes).
-- **Random Forest:** Cuando la prioridad es la precisión y se puede sacrificar interpretabilidad.
+| Criterio | Árbol único | Random Forest |
+|----------|-------------|----------------|
+| Interpretabilidad | Alta si poco profundo | Baja (muchas reglas) |
+| Varianza | Alta | Mucho menor |
+| Tiempo inferencia | Muy rápido | Más lento (promedio de $B$ árboles) |
+| Necesidad de escalado | Menor que kNN/SVM | Menor (árboles por cortes ordinales) |
 
 ---
 
-## Métricas
+### 6. Importancia de variables
 
-### Métricas para Clasificación
+#### 6.1 Mean Decrease in Impurity (MDI) — “importancia Gini”
 
-| Métrica | Fórmula | Interpretación | Uso en árboles |
-|---------|---------|----------------|----------------|
-| **Precisión** | $TP/(TP+FP)$ | Confiabilidad de predicciones positivas | Evaluar falsos positivos |
-| **Recall** | $TP/(TP+FN)$ | Capacidad de detectar positivos | Evaluar falsos negativos |
-| **F1-Score** | $2 \cdot \frac{P \cdot R}{P+R}$ | Balance general | Comparación de modelos |
-| **AUC-ROC** | Área bajo curva ROC | Capacidad discriminativa | Independiente del umbral |
-| **PR-AUC** | Área bajo curva PR | Mejor para clases desbalanceadas | Crítico en fraude, churn |
+Suma de reducciones de impureza aportadas por $j$ en todos los splits donde participa.
 
-### Métricas para Regresión
+**Sesgos conocidos:**
 
-| Métrica | Fórmula | Interpretación | Rango |
-|---------|---------|----------------|-------|
-| **MSE** | $\frac{1}{n}\sum(y_i - \hat{y}_i)^2$ | Error cuadrático medio | [0, ∞) |
-| **RMSE** | $\sqrt{MSE}$ | Error en unidades originales | [0, ∞) |
-| **MAE** | $\frac{1}{n}\sum\|y_i - \hat{y}_i\|$ | Error absoluto medio | [0, ∞) |
-| **R²** | $1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}$ | Proporción de varianza explicada | (-∞, 1] |
+- Sesgo hacia variables **numéricas con muchos valores únicos** o alta cardinalidad.  
+- **Correlación:** puede repartir importancia entre features redundantes de forma opaca.
 
-### Importancia de Variables
+#### 6.2 Permutation importance
 
-#### Gini Importance (Feature Importance)
-
-**Cálculo:** Para cada variable, se suma la reducción de impureza (Gini o MSE) ponderada por la proporción de muestras en cada nodo donde se usa esa variable.
-
-**Interpretación:** Mide cuánto contribuye cada variable a reducir la impureza en las divisiones.
-
-**Ventajas:**
-- Integrada en scikit-learn (`model.feature_importances_`)
-- Rápida de calcular
-- Escala a [0, 1] (suma = 1)
-
-**Desventajas:**
-- Sesgo hacia variables numéricas con muchos valores
-- Puede sobreestimar variables correlacionadas
-
-#### Permutation Importance
-
-**Cálculo:** 
-1. Entrenar el modelo y medir performance base.
-2. Para cada variable, permutar aleatoriamente sus valores y medir la caída en performance.
-3. Mayor caída → mayor importancia.
-
-**Ventajas:**
-- Modelo-agnóstico (funciona con cualquier modelo)
-- Más confiable que Gini importance
-- Detecta correlaciones
-
-**Desventajas:**
-- Computacionalmente costoso
-- Puede ser inestable con pocos datos
-
-**Implementación:**
+Tras el modelo entrenado, se **perm**uta columna $j$ en validación y se mide caída de rendimiento. Más costoso pero a menudo más **alineado** con contribución predictiva real (Breiman, 2001; Fisher et al., 2019 en sklearn).
 
 ```python
 from sklearn.inspection import permutation_importance
 
-# Calcular permutation importance
-result = permutation_importance(
-    best_rf, X_test, y_test, n_repeats=10, random_state=42, n_jobs=-1
-)
-
-# Visualizar
-importances = result.importances_mean
-std = result.importances_std
-
-plt.figure(figsize=(10, 6))
-plt.bar(range(len(importances)), importances, yerr=std)
-plt.xticks(range(len(importances)), feature_names, rotation=45)
-plt.title("Permutation Importance - Random Forest")
-plt.tight_layout()
-plt.show()
+r = permutation_importance(rf, X_test, y_test, n_repeats=10, random_state=42)
 ```
-
-### Selección de Métricas según Objetivo de Negocio
-
-| Objetivo de Negocio | Métrica Principal | Métricas Secundarias |
-|---------------------|-------------------|---------------------|
-| **Minimizar fraudes no detectados** | Recall | F1, PR-AUC |
-| **Minimizar falsas alarmas** | Precision | F1, Especificidad |
-| **Maximizar retención de clientes** | F1 o Recall | AUC-ROC, Lift |
-| **Predicción de ventas** | RMSE | MAE, R² |
-| **Segmentación de clientes** | Interpretabilidad | Reglas del árbol |
-| **Scoring crediticio** | AUC-ROC | F1, KS statistic |
-| **Optimización de inventario** | MAE (robusto a outliers) | RMSE, MAPE |
-| **Explicabilidad regulatoria** | Reglas del árbol | Feature importance |
 
 ---
 
-## Comunicación de Resultados
+### 7. Métricas
 
-### Explicación de Decisiones mediante Reglas del Árbol
+- **Clasificación:** precisión, recall, F1, AUC (Sesión 4).  
+- **Regresión:** MSE, RMSE, MAE, $R^2$ (Sesión 3).
 
-**Ejemplo para negocio (scoring crediticio):**
+---
 
-```python
-from sklearn.tree import export_text
+### 7.1 Profundización: algoritmo CART (esquema)
 
-# Exportar reglas del árbol
-tree_rules = export_text(best_tree, feature_names=feature_names)
-print(tree_rules)
-```
+**Entrenamiento (simplificado):**
 
-**Salida interpretable para stakeholders:**
+1. Si el nodo cumple criterio de parada (`min_samples_leaf`, `max_depth`, impureza nula), declarar hoja.  
+2. Para cada variable $j$ y cada punto de corte viable $t$, calcular la **reducción de impureza** $\Delta$ al dividir en $\{x_j \le t\}$ y $\{x_j > t\}$.  
+3. Elegir $(j^\star, t^\star)$ que maximiza $\Delta$.  
+4. Repetir recursivamente en hijos.
 
-```
-|--- ingreso <= 50000.00
-|   |--- edad <= 30.00
-|   |   |--- historial_crediticio = malo
-|   |   |   |--- clase: ALTO RIESGO (84% de impagos)
-|   |   |--- historial_crediticio = bueno
-|   |       |--- clase: RIESGO MEDIO (32% de impagos)
-|   |--- edad > 30.00
-|       |--- deuda_ingreso <= 0.40
-|           |--- clase: BAJO RIESGO (5% de impagos)
-```
+**Complejidad:** depende del número de puntos de corte evaluados; en variables continuas se suelen ordenar valores y solo considerar **cortes entre valores distintos** adyacentes.
 
-**Traducción a lenguaje de negocio:**
+**Poda (CART clásico):** se introduce penalización por número de hojas $|T|$:
 
-> "El perfil de mayor riesgo son clientes con ingresos menores a 50,000, menores de 30 años y con mal historial crediticio. Este segmento tiene una probabilidad de impago del 84%. En contraste, clientes con ingresos superiores a 50,000 o mayores de 30 años con baja relación deuda/ingreso presentan riesgo mínimo (5% de impago)."
+$$ R_\alpha(T) = R(T) + \alpha |T| $$
 
-### Uso de Importancia de Variables para Generar Insights
+donde $R(T)$ es el error de predicción en muestra (impureza o MSE). $\alpha$ controla trade-off ajuste–complejidad. En `sklearn` la poda post-hoc completa no está expuesta igual; se emula con `max_depth`, `ccp_alpha` (*cost complexity pruning*).
 
-**Visualización para stakeholders:**
+---
 
-```python
-# Gráfico de importancia
-import pandas as pd
+### 7.2 Gini vs entropía (¿cuál usar?)
 
-importance_df = pd.DataFrame({
-    'Variable': feature_names,
-    'Importancia': best_rf.feature_importances_
-}).sort_values('Importancia', ascending=False)
+Ambas son **cóncavas** y favorecen nodos puros. Diferencias prácticas:
 
-plt.figure(figsize=(10, 6))
-sns.barplot(data=importance_df.head(10), x='Importancia', y='Variable')
-plt.title('Top 10 Variables más Importantes - Random Forest')
-plt.tight_layout()
-plt.show()
-```
+- **Gini** suele ser más rápida de evaluar (sin logaritmos).  
+- **Entropía** puede producir splits ligeramente distintos; en la práctica los resultados suelen ser **muy similares** (Breiman et al., 1984).
 
-**Interpretación para negocio:**
+`sklearn` por defecto usa Gini en `DecisionTreeClassifier`.
 
-> "Las tres variables que más impactan en la predicción de fraude son: **monto de la transacción**, **hora del día** y **país de origen**. Esto sugiere que debemos enfocar nuestros controles en transacciones de alto monto en horarios atípicos y ciertos países de riesgo. Las variables demográficas del cliente tienen menor impacto relativo."
+---
 
-### Comparación Clara entre Modelos Simples y Ensambles
+### 7.3 Profundización: por qué el bosque reduce varianza
 
-**Tabla comparativa para reporte ejecutivo:**
+Sea $\hat{f}_1,\ldots,\hat{f}_B$ árboles entrenados con muestras bootstrap **correlacionadas** con correlación $\rho$ entre pares. La varianza del promedio $\bar{f}$ puede aproximarse (intuición de Breiman) como proporcional a:
 
-| Métrica | Árbol Simple | Random Forest | Mejora |
-|---------|--------------|---------------|--------|
-| Accuracy | 0.82 | 0.89 | +8.5% |
-| Precision | 0.68 | 0.75 | +10.3% |
-| Recall | 0.71 | 0.84 | +18.3% |
-| F1-Score | 0.69 | 0.79 | +14.5% |
-| AUC-ROC | 0.85 | 0.93 | +9.4% |
+$$ \rho \sigma^2 + \frac{1-\rho}{B}\sigma^2 $$
 
-**Explicación del trade-off:**
+- Aumentar $B$ reduce el segundo término.  
+- **Reducir $\rho$** (con `max_features` < $p$) es clave: si todos los árboles son idénticos, no hay ganancia respecto a uno solo.
 
-> "El árbol simple nos permite explicar cada decisión con reglas claras (por ejemplo, 'si ingreso < 50,000 y edad < 30, entonces riesgo alto'). Sin embargo, su precisión es limitada (F1=0.69). Random Forest mejora significativamente todas las métricas (+14.5% en F1), pero perdemos la capacidad de visualizar el modelo completo. Podemos compensar usando importancia de variables y extrayendo reglas de árboles individuales."
+---
 
+### 7.4 `max_features` en RandomForest: guía práctica
+
+| Valor | Comportamiento típico |
+|-------|------------------------|
+| `"sqrt"` ($\sqrt{p}$) | Heurística clásica en clasificación |
+| `"log2"` | Menos aleatorización por split |
+| `0.3`–`0.7` de $p$ | Explorar en validación si $p$ es grande |
+
+Valores **muy bajos** aumentan sesgo (cada split ve pocas variables); valores **altos** acercan los árboles y sube correlación.
+
+---
+
+### 8. Laboratorio (según sílabo)
+
+- **NTB 1 —** Clasificación con árboles de decisión y Random Forest.  
+- **NTB 2 —** Regresión con árboles de decisión y Random Forest (importancia de variables).
+
+---
+
+## Referencias bibliográficas principales
+
+1. Breiman, L., Friedman, J., Stone, C. J., & Olshen, R. A. (1984). *Classification and Regression Trees*. Wadsworth.  
+2. Breiman, L. (1996). Bagging predictors. *Machine Learning*, 24(2), 123–140.  
+3. Breiman, L. (2001). Random forests. *Machine Learning*, 45(1), 5–32.  
+4. Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning* (2nd ed.). Springer.  
+5. Louppe, G. (2014). Understanding random forests: from theory to practice. *PhD thesis*, University of Liège.  

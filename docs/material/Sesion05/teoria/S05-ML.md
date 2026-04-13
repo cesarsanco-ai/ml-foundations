@@ -1,409 +1,274 @@
 ---
 layout: default
 ---
-# Semana 5: kNN, Naive Bayes, SVM
+# Sesión 5: kNN, Naive Bayes y SVM
 
-## 1. K-Nearest Neighbors (KNN)
+### 1. Logro de la sesión
 
-### 1.1 Fundamento Teórico
+Dominar los fundamentos, **hiperparámetros** y **patrones de uso en Python** de **k vecinos más cercanos (kNN)**, **Naive Bayes** y **máquinas de vectores de soporte (SVM)** en clasificación y regresión, incluyendo el papel del **preprocesamiento**, las **métricas** adecuadas y la intuición **geométrica** de fronteras de decisión.
 
-KNN es un algoritmo **no paramétrico** y **basado en instancias** (lazy learning). No construye un modelo explícito durante el entrenamiento; simplemente almacena todos los datos. La predicción se realiza en el momento de la inferencia.
+---
 
-**Principio fundamental:** "Dime quiénes son tus vecinos y te diré quién eres"
+### 2. Historia y línea temporal (síntesis)
 
-### 1.2 Matemáticas del Algoritmo
+| Algoritmo | Hitos | Lectura |
+|-----------|-------|---------|
+| **kNN** | Fix & Hodges (1951) análisis no paramétrico; Cover & Hart (1967) formalización | “Lazy learning”: el entrenamiento almacena datos; la complejidad se traslada a la predicción. |
+| **Naive Bayes** | Origen en **Teorema de Bayes** (1763); independencia condicional como aproximación práctica desde spam filtering (1990s–2000s) | Extremadamente rápido en alta dimensión dispersa (texto). |
+| **SVM** | Vapnik–Chervonenkis (1960s–1990s); Cortes & Vapnik (1995) SVM no lineal con kernels | Fronteras con **margen máximo** y truco del kernel para separación en espacio de características. |
 
-#### Distancia Euclidiana (la más común)
-$$d(p,q) = \sqrt{\sum_{i=1}^{n} (p_i - q_i)^2}$$
+---
 
-#### Distancia Manhattan
-$$d(p,q) = \sum_{i=1}^{n} |p_i - q_i|$$
+### 3. k-Nearest Neighbors (kNN)
 
-#### Distancia Minkowski (generalización)
-$$d(p,q) = \left(\sum_{i=1}^{n} |p_i - q_i|^p\right)^{1/p}$$
+#### 3.1 Idea central
 
-Donde:
-- $p$ = parámetro de la métrica Minkowski
-- Si $p=1$: Manhattan
-- Si $p=2$: Euclidiana
+No estima una función global explícita en la fase de “entrenamiento”: **memoriza** el conjunto de entrenamiento y predice por **consenso local** de vecinos.
 
-### 1.3 Clasificación con KNN
+- **Clasificación:** voto mayoritario entre los $k$ vecinos más cercanos (o ponderado por $1/\mathrm{dist}$).  
+- **Regresión:** media o mediana de los $y$ de los $k$ vecinos.
 
-Para un nuevo punto $x$:
-1. Calcular distancias a todos los puntos de entrenamiento
-2. Seleccionar los $k$ puntos más cercanos
-3. Asignar la clase mayoritaria:
+#### 3.2 Distancias comunes
 
-$$\hat{y} = \text{mode}(y_i) \quad \forall i \in \text{vecinos}(x)$$
+Para vectores $\mathbf{x}, \mathbf{x}' \in \mathbb{R}^p$:
 
-### 1.4 Regresión con KNN
+| Métrica | Fórmula | Comentario |
+|---------|---------|------------|
+| **Euclídea** ($L_2$) | $\|\mathbf{x}-\mathbf{x}'\|_2$ | Por defecto en muchos problemas tabulares escalados |
+| **Manhattan** ($L_1$) | $\|\mathbf{x}-\mathbf{x}'\|_1$ | Robusta a outliers en una dimensión |
+| **Minkowski** | $\|\mathbf{x}-\mathbf{x}'\|_q$ | Generaliza $L_1$ y $L_2$ |
+| **Mahalanobis** (avanzado) | $(\mathbf{x}-\mathbf{x}')^\top \mathbf{S}^{-1}(\mathbf{x}-\mathbf{x}')$ | Correlaciones entre features (no siempre en kNN estándar) |
 
-Para un nuevo punto $x$:
-1. Calcular distancias a todos los puntos de entrenamiento
-2. Seleccionar los $k$ puntos más cercanos
-3. Promediar sus valores:
+**Crítico:** sin **escalado**, variables con mayor rango numérico **dominan** la distancia.
 
-$$\hat{y} = \frac{1}{k} \sum_{i \in \text{vecinos}(x)} y_i$$
+#### 3.3 Elección de $k$
 
-**Variante con pesos por distancia:**
-$$\hat{y} = \frac{\sum_{i \in \text{vecinos}(x)} w_i \cdot y_i}{\sum w_i}$$
+| $k$ | Comportamiento típico |
+|-----|------------------------|
+| **Pequeño** | Fronteras flexibles; **alta varianza**, sensible a ruido |
+| **Grande** | Superficies más suaves; **mayor sesgo**, riesgo de perder detalle local |
 
-donde $w_i = \frac{1}{d(x, x_i)}$ (inverso de la distancia)
+Selección por **validación cruzada** (Sesión 8). Regla heurística: $k$ impar en binario para evitar empates en voto.
 
-### 1.5 Hiperparámetros de KNN
-
-| Hiperparámetro | Valores típicos | Efecto | Cómo optimizar |
-|----------------|----------------|--------|----------------|
-| **$k$** (n_neighbors) | 3, 5, 7, 9, 11, 15 | Controla la suavidad de la frontera | Validación cruzada |
-| **Métrica** (metric) | 'euclidean', 'manhattan', 'minkowski' | Define qué es "cercano" | Según naturaleza datos |
-| **Pesos** (weights) | 'uniform', 'distance' | Importancia relativa de vecinos | Validación cruzada |
-| **$p$** (si metric='minkowski') | 1, 2, 3... | Exponente de Minkowski | Validación cruzada |
-
-**Interpretación de $k$:**
-- $k$ pequeño → modelo complejo, alta varianza (sobreajuste)
-- $k$ grande → modelo simple, alto sesgo (subajuste)
-- Regla empírica: $k \approx \sqrt{n}$ (raíz del número de muestras)
-
-### 1.6 Ventajas y Limitaciones
+#### 3.4 Ventajas y limitaciones
 
 **Ventajas:**
-- No asume distribución de datos
-- Fácil de implementar
-- Naturalmente multiclase
-- Interpretable (basado en ejemplos)
+
+- Implementación conceptual simple; captura **no linealidad** local.  
+- No asume forma paramétrica global.
 
 **Limitaciones:**
-- Maldición de la dimensionalidad
-- Sensible a escala de variables
-- Costoso en predicción $O(n \cdot d)$
-- Requiere normalización obligatoria
 
-### 1.7 Plantilla Base
+- **Maldición de la dimensionalidad:** en $p$ alto, distancias pierden discriminación (vecinos equidistantes).  
+- **Coste predictivo** $O(n)$ por consulta en forma ingenua (estructuras de ayuda: KD-ball, approximate NN).  
+- Requiere **memoria** para almacenar train completo.
+
+#### 3.5 Plantilla Python (clasificación)
 
 ```python
-from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
-
-# Clasificación
-knn_clf = KNeighborsClassifier(
-    n_neighbors=5,      # k: número de vecinos
-    weights='uniform',  # 'uniform' o 'distance'
-    metric='minkowski', # 'euclidean', 'manhattan', 'minkowski'
-    p=2                 # para minkowski: 1=Manhattan, 2=Euclidiana
-)
-
-# Regresión
-knn_reg = KNeighborsRegressor(
-    n_neighbors=5,
-    weights='uniform',
-    metric='minkowski',
-    p=2
-)
-
-# Escalado OBLIGATORIO
+import numpy as np
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
+from sklearn.pipeline import Pipeline
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import classification_report, confusion_matrix
 
-knn_clf.fit(X_scaled, y)
-predicciones = knn_clf.predict(X_test_scaled)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, stratify=y, random_state=42
+)
+
+knn_pipe = Pipeline([
+    ("scaler", StandardScaler()),
+    (
+        "knn",
+        KNeighborsClassifier(
+            n_neighbors=15,
+            weights="distance",  # pondera por 1/distancia
+            metric="minkowski",
+            p=2,  # 2=Euclídea
+            n_jobs=-1,
+        ),
+    ),
+])
+knn_pipe.fit(X_train, y_train)
+y_pred = knn_pipe.predict(X_test)
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+```
+
+#### 3.6 Plantilla Python (regresión)
+
+```python
+from sklearn.neighbors import KNeighborsRegressor
+
+knn_reg = Pipeline([
+    ("scaler", StandardScaler()),
+    ("knn", KNeighborsRegressor(n_neighbors=10, weights="distance")),
+])
+knn_reg.fit(X_train, y_train)
+y_hat = knn_reg.predict(X_test)
 ```
 
 ---
 
-## 2. Naive Bayes
+### 4. Naive Bayes
 
-### 2.1 Fundamento Teórico
+#### 4.1 Teorema de Bayes (recordatorio)
 
-Naive Bayes es un clasificador **probabilístico** basado en el **Teorema de Bayes** con un supuesto "naive": **independencia condicional** de las características dada la clase.
+$$ P(y=c \mid \mathbf{x}) = \frac{P(y=c)\, P(\mathbf{x} \mid y=c)}{P(\mathbf{x})} $$
 
-### 2.2 Teorema de Bayes
+El denominador es constante respecto a $c$ al comparar clases → basta maximizar el **numerador** o su log.
 
-$$P(C_k | \mathbf{x}) = \frac{P(C_k) \cdot P(\mathbf{x} | C_k)}{P(\mathbf{x})}$$
+#### 4.2 Supuesto “ingenuo”
 
-Donde:
-- $P(C_k | \mathbf{x})$: **Probabilidad posterior** (lo que queremos)
-- $P(C_k)$: **Probabilidad a priori** de la clase
-- $P(\mathbf{x} | C_k)$: **Verosimilitud** (probabilidad de los datos dada la clase)
-- $P(\mathbf{x})$: **Evidencia** (factor de normalización)
+$$ P(\mathbf{x} \mid y=c) = \prod_{j=1}^{p} P(x_j \mid y=c) $$
 
-### 2.3 El Supuesto Naive (Independencia Condicional)
+**Independencia condicional** dada la clase: raramente es cierta en la vida real, pero el clasificador puede ser **muy competitivo** porque la decisión solo requiere que las **densidades relativas** estén bien ordenadas, no perfectas.
 
-$$P(\mathbf{x} | C_k) = P(x_1, x_2, ..., x_n | C_k) = \prod_{i=1}^{n} P(x_i | C_k)$$
+#### 4.3 Variantes
 
-**Interpretación:** Dada la clase, la probabilidad de observar todas las características juntas es el producto de las probabilidades de cada característica individual.
-
-### 2.4 Clasificación Final
-
-$$\hat{y} = \arg\max_{C_k} P(C_k) \prod_{i=1}^{n} P(x_i | C_k)$$
-
-El denominador $P(\mathbf{x})$ se omite porque es constante para todas las clases.
-
-### 2.5 Variantes según distribución de datos
-
-#### Gaussian Naive Bayes (variables continuas)
-Asume distribución normal para cada característica:
-
-$$P(x_i | C_k) = \frac{1}{\sqrt{2\pi\sigma_{ik}^2}} \exp\left(-\frac{(x_i - \mu_{ik})^2}{2\sigma_{ik}^2}\right)$$
-
-Donde $\mu_{ik}$ y $\sigma_{ik}^2$ son la media y varianza de $x_i$ en la clase $C_k$.
-
-#### Multinomial Naive Bayes (conteos/frecuencias)
-Para datos que representan frecuencias (ej. conteo de palabras):
-
-$$P(x_i | C_k) = \frac{N_{ik} + \alpha}{N_k + \alpha \cdot n}$$
-
-Donde:
-- $N_{ik}$: número de veces que la característica $i$ aparece en clase $k$
-- $N_k$: total de características en clase $k$
-- $\alpha$: parámetro de suavizado (Laplace)
-- $n$: número de características
-
-#### Bernoulli Naive Bayes (variables binarias)
-Para características binarias (0/1):
-
-$$P(x_i | C_k) = p_{ik}^{x_i} (1-p_{ik})^{1-x_i}$$
-
-Donde $p_{ik}$ es la probabilidad de que $x_i=1$ en clase $C_k$.
-
-### 2.6 Hiperparámetros de Naive Bayes
-
-| Hiperparámetro | Variante | Valores típicos | Efecto |
-|----------------|----------|----------------|--------|
-| **alpha** ($\alpha$) | Multinomial, Bernoulli | 0.1, 0.5, 1.0, 2.0 | Suavizado de Laplace (evita probabilidades cero) |
-| **var_smoothing** | Gaussian | 1e-12 a 1e-3 | Suavizado de varianza (estabilidad numérica) |
-| **fit_prior** | Todas | True, False | Aprender probabilidades a priori vs uniformes |
-| **binarize** | Bernoulli | 0.0, 0.5, 1.0 | Umbral para binarizar características |
-
-**Interpretación de alpha ($\alpha$):**
-- $\alpha = 1$: Suavizado de Laplace (estándar)
-- $\alpha < 1$: Suavizado de Lidstone (menos sesgo)
-- $\alpha$ grande → más suavizado, más sesgo
-- $\alpha$ pequeño → menos suavizado, más varianza
-
-### 2.7 Ventajas y Limitaciones
+| Variante | Modelo de $P(x_j\mid c)$ | Cuándo usarla |
+|----------|---------------------------|---------------|
+| **GaussianNB** | Gaussian por dimensión y clase | Features continuas aproximadamente normales por clase |
+| **MultinomialNB** | Conteos discretos (palabras) | Texto, conteos de eventos |
+| **BernoulliNB** | Binario por dimensión | Presencia/ausencia de términos, features 0/1 |
+| **ComplementNB** | Variante que usa complementos | A veces mejor con datos desbalanceados |
 
 **Ventajas:**
-- Extremadamente rápido (entrenamiento $O(n \cdot d)$)
-- Funciona bien con alta dimensionalidad
-- Maneja datos faltantes naturalmente
-- Base probabilística interpretable
+
+- Entrenamiento **extremadamente rápido** (conteos + parámetros cerrados en muchos casos).  
+- Funciona bien en **alta dimensión** si la dispersidad es manejable.
 
 **Limitaciones:**
-- Supuesto de independencia muy fuerte (raramente cierto)
-- Malo cuando hay correlaciones fuertes entre variables
-- Estimaciones de probabilidad mal calibradas
-- No funciona para regresión (solo clasificación)
 
-### 2.8 Plantilla Base
+- Si el supuesto de independencia falla fuerte, puede haber **sesgo** sistemático.  
+- **Probabilidades calibradas** pueden ser pobres → calibración posterior si se usan como scores.
+
+#### 4.4 Plantilla Python (tabular Gaussiano)
 
 ```python
-from sklearn.naive_bayes import GaussianNB, MultinomialNB, BernoulliNB
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import roc_auc_score
 
-# Para variables continuas (distribución normal)
-gnb = GaussianNB(
-    var_smoothing=1e-9    # Suavizado de varianza
-)
-
-# Para conteos/frecuencias (texto, genes)
-mnb = MultinomialNB(
-    alpha=1.0,            # Suavizado de Laplace
-    fit_prior=True        # Aprender probabilidades a priori
-)
-
-# Para variables binarias
-bnb = BernoulliNB(
-    alpha=1.0,            # Suavizado de Laplace
-    binarize=0.0,         # Umbral para binarizar
-    fit_prior=True
-)
-
-# Escalado NO necesario
+gnb = GaussianNB()
 gnb.fit(X_train, y_train)
-predicciones = gnb.predict(X_test)
-probabilidades = gnb.predict_proba(X_test)  # Obtener probabilidades
+p = gnb.predict_proba(X_test)[:, 1]
+y_hat = gnb.predict(X_test)
+print("AUC:", roc_auc_score(y_test, p))
 ```
 
----
-
-## 3. Support Vector Machines (SVM)
-
-### 3.1 Fundamento Teórico
-
-SVM es un algoritmo **paramétrico** que busca encontrar el **hiperplano óptimo** que maximiza el **margen** entre clases. Para datos no lineales, utiliza el **kernel trick** para mapear los datos a un espacio de mayor dimensión.
-
-### 3.2 Caso Linealmente Separable
-
-**Objetivo:** Encontrar el hiperplano $f(x) = \mathbf{w}^T \mathbf{x} + b = 0$ que maximiza el margen.
-
-**Problema de optimización primal:**
-$$\min_{\mathbf{w}, b} \frac{1}{2} \|\mathbf{w}\|^2$$
-
-Sujeto a:
-$$y_i(\mathbf{w}^T \mathbf{x}_i + b) \geq 1 \quad \forall i$$
-
-Donde:
-- $\mathbf{w}$: vector de pesos (normal al hiperplano)
-- $b$: sesgo (offset)
-- $y_i \in \{-1, +1\}$: etiquetas de clase
-- $\|\mathbf{w}\|$: norma euclidiana de $\mathbf{w}$
-
-**Margen:** $\frac{2}{\|\mathbf{w}\|}$
-
-**Vectores de soporte:** Puntos donde $y_i(\mathbf{w}^T \mathbf{x}_i + b) = 1$
-
-### 3.3 Caso No Linealmente Separable (Soft Margin)
-
-Introducimos **variables de holgura** $\xi_i$ para permitir errores de clasificación:
-
-$$\min_{\mathbf{w}, b, \xi} \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^{n} \xi_i$$
-
-Sujeto a:
-$$y_i(\mathbf{w}^T \mathbf{x}_i + b) \geq 1 - \xi_i$$
-$$\xi_i \geq 0 \quad \forall i$$
-
-Donde:
-- $C$: parámetro de regularización (balance entre margen y error)
-- $\xi_i$: penalización por punto mal clasificado
-
-**Interpretación de $C$:**
-- $C$ grande → margen estrecho, menos errores (alta varianza)
-- $C$ pequeño → margen amplio, más errores (alto sesgo)
-
-### 3.4 Kernel Trick (Mapeo a Espacios de Mayor Dimensión)
-
-Para datos no lineales, mapeamos $\mathbf{x}$ a un espacio de características $\phi(\mathbf{x})$ donde sean linealmente separables.
-
-**Función kernel:** $K(\mathbf{x}_i, \mathbf{x}_j) = \phi(\mathbf{x}_i)^T \phi(\mathbf{x}_j)$
-
-Permite calcular productos punto en el espacio transformado sin calcular explícitamente $\phi$.
-
-#### Kernels comunes
-
-**Kernel Lineal:**
-$$K(\mathbf{x}_i, \mathbf{x}_j) = \mathbf{x}_i^T \mathbf{x}_j$$
-
-**Kernel Polinomial:**
-$$K(\mathbf{x}_i, \mathbf{x}_j) = (\gamma \mathbf{x}_i^T \mathbf{x}_j + r)^d$$
-
-Donde:
-- $d$: grado del polinomio
-- $\gamma$: escala (coeficiente)
-- $r$: término independiente (coef0)
-
-**Kernel RBF (Radial Basis Function) - el más popular:**
-$$K(\mathbf{x}_i, \mathbf{x}_j) = \exp(-\gamma \|\mathbf{x}_i - \mathbf{x}_j\|^2)$$
-
-Donde $\gamma$ controla la influencia de cada punto:
-- $\gamma$ pequeño → influencia amplia, decisión suave (alto sesgo)
-- $\gamma$ grande → influencia local, ajusta ruido (alta varianza)
-
-**Kernel Sigmoide:**
-$$K(\mathbf{x}_i, \mathbf{x}_j) = \tanh(\gamma \mathbf{x}_i^T \mathbf{x}_j + r)$$
-
-### 3.5 SVM para Regresión (SVR)
-
-En lugar de maximizar el margen, SVR intenta ajustar la mayoría de los puntos dentro de un tubo de ancho $\epsilon$:
-
-$$\min_{\mathbf{w}, b} \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^{n} (\xi_i + \xi_i^*)$$
-
-Sujeto a:
-$$y_i - (\mathbf{w}^T \phi(\mathbf{x}_i) + b) \leq \epsilon + \xi_i$$
-$$(\mathbf{w}^T \phi(\mathbf{x}_i) + b) - y_i \leq \epsilon + \xi_i^*$$
-$$\xi_i, \xi_i^* \geq 0$$
-
-Donde:
-- $\epsilon$: ancho del tubo (error tolerable)
-- $\xi_i, \xi_i^*$: variables de holgura para errores por encima/debajo
-
-### 3.6 Hiperparámetros de SVM
-
-| Hiperparámetro | Valores típicos | Efecto | Optimización |
-|----------------|----------------|--------|--------------|
-| **$C$** (regularización) | 0.1, 1, 10, 100 | Controla trade-off margen-error | Logarítmica |
-| **kernel** | 'linear', 'rbf', 'poly', 'sigmoid' | Tipo de transformación | Según datos |
-| **$\gamma$** (RBF/poly) | 0.001, 0.01, 0.1, 1 | Influencia de cada punto | Logarítmica |
-| **degree** (poly) | 2, 3, 4, 5 | Grado del polinomio | Enteros pequeños |
-| **coef0** (poly/sigmoid) | 0.0, 1.0, 2.0 | Término independiente | Lineal |
-| **$\epsilon$** (SVR) | 0.1, 0.2, 0.5 | Ancho del tubo | Validación cruzada |
-
-**Regla empírica para $\gamma$:**
-$$\gamma = \frac{1}{n \cdot \text{var}(X)}$$
-
-### 3.7 Ventajas y Limitaciones
-
-**Ventajas:**
-- Efectivo en alta dimensión
-- Memoria eficiente (usa vectores soporte)
-- Versátil (diferentes kernels)
-- Robusto a overfitting (regularización)
-
-**Limitaciones:**
-- No escala bien a grandes datasets ($O(n^2)$ a $O(n^3)$)
-- Sensible a escala de variables
-- Interpretabilidad baja (especialmente kernels no lineales)
-- Requiere ajuste fino de hiperparámetros
-
-### 3.8 Plantilla Base
+#### 4.5 Texto (esquema)
 
 ```python
-from sklearn.svm import SVC, SVR
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import Pipeline
+
+text_clf = Pipeline([
+    ("tfidf", TfidfVectorizer(max_features=50_000, ngram_range=(1, 2))),
+    ("nb", MultinomialNB(alpha=1.0)),  # suavizado Laplace
+])
+text_clf.fit(text_train, y_train)
+```
+
+`alpha` evita probabilidades cero por palabras no vistas en una clase (*smoothing*).
+
+---
+
+### 5. Support Vector Machines (SVM)
+
+#### 5.1 Clasificación: margen máximo y variables duales
+
+Para datos **linealmente separables** (idealización), la SVM busca el hiperplano que **maximiza el margen** entre clases. Para solapamiento, se introducen **variables de holgura** $\xi_i$ y penalización $C$ que controla el trade-off **margen vs violaciones** (Cortes & Vapnik, 1995).
+
+**Kernel trick:** productos escalares $K(\mathbf{x},\mathbf{x}') = \langle \phi(\mathbf{x}), \phi(\mathbf{x}') \rangle$ permiten fronteras no lineales sin calcular $\phi$ explícitamente.
+
+#### 5.2 Kernels habituales
+
+| Kernel | Expresión | Intuición |
+|--------|-----------|-----------|
+| **Lineal** | $K(\mathbf{x},\mathbf{x}') = \mathbf{x}^\top \mathbf{x}'$ | Baseline en datos escalados |
+| **RBF (Gaussiano)** | $\exp(-\gamma \|\mathbf{x}-\mathbf{x}'\|^2)$ | Muy flexible; $\gamma$ alto → fronteras muy locales |
+| **Polinomial** | $(\gamma \mathbf{x}^\top \mathbf{x}' + r)^d$ | Interacciones hasta grado $d$ |
+
+**Hiperparámetros clave:**
+
+- **C:** mayor C → menos tolerancia a errores de entrenamiento → puede **sobreajustar**.  
+- **$\gamma$ (RBF):** mayor $\gamma$ → influencia local de cada soporte → riesgo de overfitting.
+
+#### 5.3 Regresión: SVR
+
+**$\epsilon$-SVR:** no penaliza errores menores que $\epsilon$ en valor absoluto (zona insensible), lo que produce soluciones **sparse** en dual (Vapnik et al., *estimation of dependences*).
+
+#### 5.4 Ventajas y limitaciones
+
+**Ventajas:**
+
+- Efectivas en **medias dimensiones** y fronteras no lineales con RBF.  
+- Fundamentación teórica fuerte (margen, dualidad).
+
+**Limitaciones:**
+
+- En **muy grandes $n$**, entrenamiento costoso (aunque existen aproximaciones).  
+- **Calibración** de C y $\gamma$ es crítica; requiere búsqueda sistemática.  
+- Salidas no siempre calibradas como probabilidades (`predict_proba` solo en envoltorios tipo `CalibratedClassifierCV` o `probability=True` en sklearn con coste).
+
+#### 5.5 Plantilla Python (clasificación RBF)
+
+```python
+from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
 
-# ========== CLASIFICACIÓN ==========
-# Kernel RBF (por defecto)
-svm_clf = SVC(
-    C=1.0,                    # Regularización
-    kernel='rbf',             # 'linear', 'rbf', 'poly', 'sigmoid'
-    gamma='scale',            # 'scale', 'auto' o valor numérico
-    degree=3,                 # Solo para kernel='poly'
-    coef0=0.0,                # Solo para 'poly' y 'sigmoid'
-    probability=False,        # Si True, permite predict_proba
-    class_weight=None         # 'balanced' para clases desbalanceadas
-)
+svm_pipe = Pipeline([
+    ("scaler", StandardScaler()),
+    (
+        "svc",
+        SVC(
+            kernel="rbf",
+            C=1.0,
+            gamma="scale",
+            class_weight="balanced",
+            random_state=42,
+        ),
+    ),
+])
+svm_pipe.fit(X_train, y_train)
+```
 
-# Kernel Lineal (más rápido, interpretable)
-svm_linear = SVC(
-    C=1.0,
-    kernel='linear'
-)
+#### 5.6 Plantilla Python (regresión)
 
-# ========== REGRESIÓN ==========
-svr = SVR(
-    C=1.0,                    # Regularización
-    kernel='rbf',             # Tipo de kernel
-    gamma='scale',            # Parámetro del kernel
-    epsilon=0.1,              # Ancho del tubo
-    degree=3,
-    coef0=0.0
-)
+```python
+from sklearn.svm import SVR
 
-# ========== ESCALADO OBLIGATORIO ==========
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-# Entrenamiento y predicción
-svm_clf.fit(X_scaled, y)
-predicciones = svm_clf.predict(X_test_scaled)
-
-# Para obtener probabilidades (si probability=True)
-probabilidades = svm_clf.predict_proba(X_test_scaled)
+svr = Pipeline([
+    ("scaler", StandardScaler()),
+    ("svr", SVR(kernel="rbf", C=1.0, epsilon=0.1, gamma="scale")),
+])
+svr.fit(X_train, y_train)
+y_hat = svr.predict(X_test)
 ```
 
 ---
 
-## Resumen de Cuándo Usar Cada Modelo
+### 6. Métricas (clasificación y regresión)
 
-| Modelo | Mejor para | Evitar cuando |
-|--------|-----------|---------------|
-| **KNN** | Datos de baja dimensión, similitud local, interpretabilidad | Alta dimensión, datos grandes (>100k), outliers |
-| **Naive Bayes** | Texto, alta dimensionalidad, clasificación rápida | Características correlacionadas, regresión |
-| **SVM** | Dimensionalidad media, fronteras complejas, precisión | Datos muy grandes (>100k), necesidad de interpretabilidad |
+- **Clasificación:** matriz de confusión, precisión, recall, F1, AUC-ROC, PR-AUC si hay desbalance (Sesión 4).  
+- **Regresión:** MAE, RMSE, $R^2$ (Sesión 3).
 
-## Requisitos Clave por Modelo
+---
 
-| Requisito | KNN | Naive Bayes | SVM |
-|-----------|-----|-------------|-----|
-| **Escalado** | OBLIGATORIO | NO necesario | OBLIGATORIO |
-| **Normalidad** | No | GaussianNB sí | No |
-| **Independencia** | No | SÍ (supuesto) | No |
-| **Linealidad** | No | No | Depende kernel |
+### 7. Laboratorio (según sílabo)
+
+- **NTB 1 —** Clasificación con kNN, Naive Bayes y SVM (comparación y ajuste).  
+- **NTB 2 —** Regresión con Naive Bayes y SVM.
+
+---
+
+## Referencias bibliográficas principales
+
+1. Cover, T., & Hart, P. (1967). Nearest neighbor pattern classification. *IEEE Transactions on Information Theory*, 13(1), 21–27.  
+2. Cortes, C., & Vapnik, V. (1995). Support-vector networks. *Machine Learning*, 20(3), 273–297.  
+3. Bishop, C. M. (2006). *Pattern Recognition and Machine Learning*. Springer.  
+4. Manning, C. D., Raghavan, P., & Schütze, H. (2008). *Introduction to Information Retrieval*. Cambridge University Press.  
+5. Schölkopf, B., & Smola, A. J. (2002). *Learning with Kernels*. MIT Press.  

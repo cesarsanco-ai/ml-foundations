@@ -2,7 +2,11 @@
 
 ## Presentación del Curso
 
-Este curso está diseñado para futuros ingenieros y científicos donde se muestra la teoria necesaria para acompañarlo con python y sus librerias, brindando teoria necesaria para comprender el funcionamiento de los algoritmos y sus aplicaciones en la industria con Python.
+Este curso está diseñado para futuros ingenieros y científicos donde se muestra la **teoría** necesaria para acompañarlo con Python y sus **librerías**, brindando fundamentos para comprender el funcionamiento de los algoritmos y sus aplicaciones en la industria.
+
+El programa consta de **14 sesiones (semanas)**. Cada sesión sigue la misma estructura: **logro de la sesión**, bloques de contenido (`####`) y, al final, **laboratorio** con dos notebooks (**NTB 1** y **NTB 2**) en Google Colab salvo indicación distinta en clase.
+
+La guía teórica unificada (estructura tipo **Sesión $n$**, *Marco teórico*, tablas y referencias) vive en `5_ML/docs/material/SesionNN/teoria/SNN-ML.md` para $n=1,\ldots,14$, alineada a las secciones de este sílabo.
 
 ## Semana 1: Introducción al ML
 
@@ -25,6 +29,10 @@ Comprender el flujo completo de un proyecto de machine learning, identificar los
 - Clasificación de imágenes (diagnóstico médico, vehículos autónomos).
 - Predicción de series temporales (ventas, demanda energética).
 
+### Laboratorio
+- **NTB 1 —** repaso de numpy y pandas
+- **NTB 2 —** repaso de matplotlib y seaborn
+
 ---
 
 ## Semana 2: Análisis Exploratorio y Feature Engineering
@@ -36,7 +44,7 @@ Realizar un análisis exploratorio y aplicar técnicas de feature engineering pa
 - Importancia del EDA
 - Casos famosos de exito y fracaso en negocios
 - Pipeline de EDA
-- Limpieza de datos (valores faltantes, tipos de imputacion de faltantes, valores duplicados, errores de tipo de dato, tratamiento basicode outliers, inconsistencias y errores logicos)
+- Limpieza de datos (valores faltantes; criterios de imputación: media, mediana, moda, constante/indicador, por grupos, series temporales; KNN y encadenada/MICE; valores duplicados; errores de tipo de dato; tratamiento básico de outliers; inconsistencias y errores lógicos)
 - Analisis univariado (Variables numericas: medidas de tendencia central, medidas de dispersion, medidas de forma, tipos de visualizaciones; Variables categoricas: frecuencias, moda, proporciones, tipos de visualizaciones; Variables de Fecha: Componentes de fechas, tipos de visualizaciones)
 - Analisis bivariado (Variables numericas vs numericas, categoricas vs categoricas, numericas vs categoricas)
 - Analisis multivariado (Matrices de correlacion, Pairplots, Heatmaps)
@@ -46,17 +54,15 @@ Realizar un análisis exploratorio y aplicar técnicas de feature engineering pa
 - Codificación de variables categoricas (One-Hot Encoding, Label Encoding, Target Encoding, Binary Encoding, Hashing Encoding)
 - Escalado y Normalizacion (Z-score, Min-max, RobustScaler, Normalizer)
 - Manejo de datos desbalanceados (Oversampling, Undersampling, SMOTE)
-- Imputación de datos (Mean, Median, Mode, KNNImputer, IterativeImputer)
+- Imputación de datos (cuándo usar media, mediana, moda; indicadores de ausencia; KNNImputer, IterativeImputer)
 - Manejo de outliers (variable indicadora de outlier, winsorizacion, transformaciones para reducir impacto)
 - Selección de características (Filtros, Wrappers, Embebidos)
 - Variables derivadas del negocio (ratios, agregaciones temporales, interacciones)
-- Feature Store
+- Feature Store (consistencia train/serving, reutilización, punto en el tiempo; visión general de herramientas)
 
-
-#### Laboratorio
-- EDA
-- Feature engineering
-
+### Laboratorio
+- **NTB 1 —** Análisis exploratorio de datos (EDA): univariado, bivariado y calidad de datos.
+- **NTB 2 —** Feature engineering: codificación, escalado, desbalanceo e imputación.
 
 ---
 
@@ -78,11 +84,9 @@ Construir e interpretar modelos de regresión lineal múltiple, aplicando regula
 - Error Cuadrático Medio (MSE), Raíz del Error Cuadrático Medio (RMSE), Error Absoluto Medio (MAE), Coeficiente de determinación \(R^2\).
 - Interpretacion y selección de metricas
 
-
-#### Laboratorio: Ver Colab
-- NTB1: Comparación de metricas con regresion multiple como baseline, regulacion L1, L2, L1+L2 (Dataset1)
-- NTB2: Comparación de metricas con regresion multiple como baseline, regulacion L1, L2, L1+L2 (Dataset2)
-
+### Laboratorio
+- **NTB 1 —** Regresión múltiple frente a Ridge, Lasso y Elastic Net: métricas y comparación — *dataset 1*.
+- **NTB 2 —** Regresión múltiple frente a Ridge, Lasso y Elastic Net: métricas y comparación — *dataset 2*.
 
 ---
 
@@ -120,11 +124,9 @@ Construir, interpretar y evaluar modelos de clasificación binaria y multiclase 
 - Métricas en escenarios desbalanceados
 - Selección de métricas según contexto de negocio (agua potable, phising, covid)
 
-
-#### Laboratorio: Ver Colab
-- NTB 1 : Balanceo de datos
-- NTB 2 : Regresión logística
-
+### Laboratorio
+- **NTB 1 —** Balanceo de clases (oversampling, undersampling, pesos) y efecto en métricas.
+- **NTB 2 —** Regresión logística: entrenamiento, umbral, regularización y evaluación.
 
 ---
 
@@ -133,7 +135,7 @@ Construir, interpretar y evaluar modelos de clasificación binaria y multiclase 
 ### Logro de la sesión
 Construir, comparar e interpretar modelos de regresión y clasificación, usando los algoritmos kNN, Naive Bayes y SVM, comprendiendo sus supuestos, ventajas y limitaciones en distintos contextos de negocio.
 
-#### Problematica de negocio
+#### Problemática de negocio
 - Historia
 - Selección de algoritmos de clasificación según el tipo de datos
 - Comparación de desempeño entre modelos
@@ -173,9 +175,9 @@ Construir, comparar e interpretar modelos de regresión y clasificación, usando
 #### Métricas
 - Métricas en clasificacion / regresion
 
-#### Laboratorio
-- NTB1: Clasificacion con KNN, Naive Bayes y SVM
-- NTB2: Regresion con Naive Bayes y SVM
+### Laboratorio
+- **NTB 1 —** Clasificación con kNN, Naive Bayes y SVM (comparación y ajuste).
+- **NTB 2 —** Regresión con Naive Bayes y SVM.
 
 ---
 
@@ -184,7 +186,7 @@ Construir, comparar e interpretar modelos de regresión y clasificación, usando
 ### Logro de la sesión
 Construir, interpretar y comparar modelos basados en árboles de decisión y ensambles tipo Random Forest, comprendiendo su capacidad para capturar relaciones no lineales y su aplicación en problemas reales de clasificación y regresión.
 
-#### Problematica de negocio
+#### Problemática de negocio
 - Historia
 - Modelos interpretables vs modelos de alto performance
 - Manejo de relaciones no lineales y variables categóricas
@@ -227,18 +229,18 @@ Construir, interpretar y comparar modelos basados en árboles de decisión y ens
     - Permutation importance
 - Selección de métricas según objetivo de negocio
 
-#### Laboratorio
-- NTB1: Clasificacion con arboles y random forest
-- NTB2: Regresion con arboles y random forest
+### Laboratorio
+- **NTB 1 —** Clasificación con árboles de decisión y Random Forest.
+- **NTB 2 —** Regresión con árboles de decisión y Random Forest (importancia de variables).
 
 ---
 
-## Semana 7: Gradient Boosting 
+## Semana 7: Gradient Boosting
 
 ### Logro de la sesión
 Construir, optimizar e interpretar modelos de Gradient Boosting (XGBoost, LightGBM y Catboost), comprendiendo su funcionamiento secuencial y ajustando hiperparámetros para maximizar el rendimiento en problemas de clasificación y regresión.
 
-#### Problematica de negocio
+#### Problemática de negocio
 - Historia
 - Necesidad de modelos de alto rendimiento en datos tabulares
 - Mejora incremental de predicciones (reducción de error)
@@ -297,9 +299,9 @@ Construir, optimizar e interpretar modelos de Gradient Boosting (XGBoost, LightG
 - `subsample`, `colsample_bytree`: control de overfitting
 - Regularización: `lambda`, `alpha` (XGBoost)
 
-#### Laboratorio
-- NTB1: Clasificacion con XGBoost, LightGBM y Catboost
-- NTB2: Regresion con XGBoost, LightGBM y Catboost
+### Laboratorio
+- **NTB 1 —** Clasificación con XGBoost, LightGBM y CatBoost (hiperparámetros y validación).
+- **NTB 2 —** Regresión con XGBoost, LightGBM y CatBoost.
 
 ---
 
@@ -308,7 +310,7 @@ Construir, optimizar e interpretar modelos de Gradient Boosting (XGBoost, LightG
 ### Logro de la sesión
 Evaluar, validar y seleccionar modelos de machine learning de forma robusta, asegurando su capacidad de generalización mediante técnicas de validación cruzada y optimización de hiperparámetros.
 
-#### Problematica de negocio
+#### Problemática de negocio
 - Modelos que funcionan bien en entrenamiento pero fallan en producción
 - Selección del mejor modelo entre múltiples alternativas
 - Riesgo de sobreajuste en datasets pequeños o complejos
@@ -360,19 +362,18 @@ Evaluar, validar y seleccionar modelos de machine learning de forma robusta, ase
     - `GridSearchCV`
     - `RandomizedSearchCV`
 
-
-#### Laboratorio
-- NTB1: Flujo completo de Clasificación
-- NTB2: Flujo completo de Regresión
+### Laboratorio
+- **NTB 1 —** Flujo completo de clasificación: validación cruzada, búsqueda de hiperparámetros y selección de modelo.
+- **NTB 2 —** Flujo completo de regresión: curvas de aprendizaje, bias-variance y comparación de modelos.
 
 ---
 
-## Semana 9: Tecnicas de Clustering, PCA y t-SNE
+## Semana 9: Técnicas de Clustering, PCA y t-SNE
 
 ### Logro de la sesión
 Explorar y extraer valor de datos no etiquetados mediante técnicas de clustering y reducción de dimensionalidad (PCA) y t-SNE, identificando patrones, segmentos y estructuras ocultas en los datos.
 
-#### Problematica de negocio
+#### Problemática de negocio
 - Falta de etiquetas en los datos (no hay variable objetivo)
 - Necesidad de segmentar clientes o comportamientos
 - Reducción de complejidad en datasets de alta dimensionalidad
@@ -431,9 +432,9 @@ Explorar y extraer valor de datos no etiquetados mediante técnicas de clusterin
     - Escalamiento de datos antes de clustering
     - Uso de PCA para visualización
 
-#### Laboratorio
-- NTB1: Tecnicas de PCA, t-SNE
-- NTB2: Tecnicas de Clustering
+### Laboratorio
+- **NTB 1 —** PCA y t-SNE: reducción de dimensionalidad y visualización de estructura.
+- **NTB 2 —** Clustering: K-Means, DBSCAN y/o jerárquico con métricas de cohesión y silueta.
 
 ---
 
@@ -442,7 +443,7 @@ Explorar y extraer valor de datos no etiquetados mediante técnicas de clusterin
 ### Logro de la sesión
 Modelar y pronosticar datos temporales utilizando técnicas estadísticas clásicas, machine learning y librerías modernas, extrayendo patrones de tendencia, estacionalidad y ciclos.
 
-#### Problematica de negocio
+#### Problemática de negocio
 - Pronóstico de demanda y ventas para planificación
 - Detección de patrones estacionales y tendencias
 - Análisis de comportamiento temporal para optimización de recursos
@@ -497,692 +498,148 @@ Modelar y pronosticar datos temporales utilizando técnicas estadísticas clási
 - Machine learning: `sklearn`, `xgboost`, `lightgbm` aplicados a series con features temporales
 - Evaluación de modelos con métricas: MAE, MAPE, RMSE, MASE
 
-#### Laboratorio
-- NTB1: Series temporales con Prophet y modelos ML
-- NTB2: Series temporales con ARIMA y SARIMA
+### Laboratorio
+- **NTB 1 —** Series temporales con Prophet y features + modelos ML (XGBoost/LightGBM).
+- **NTB 2 —** Series temporales con ARIMA/SARIMA y diagnóstico de residuos.
 
 ---
 
-## 📘 Semana 11: Sistemas de Recomendación
+## Semana 11: Sistemas de recomendación
 
+### Logro de la sesión
 Diseñar e implementar sistemas de recomendación capaces de sugerir productos, contenidos o servicios personalizados, utilizando enfoques basados en popularidad, filtrado colaborativo y contenido.
 
----
-
-## 💼 Problemática de negocio
-
-* Sobrecarga de información (demasiadas opciones para el usuario)
-* Necesidad de personalización
-* Baja retención o engagement
-* Dificultad para descubrir nuevos productos/contenidos
-
----
-
-## 📊 Aplicaciones y casos típicos
-
-* Recomendación de productos (e-commerce)
-* Recomendación de contenido (streaming, noticias)
-* Sistemas de ranking (top items)
-* Cross-selling y up-selling
-* Personalización de feeds
-
----
-
-## 🧠 Modelado
-
-### 🔹 Enfoques básicos
-
-* **Popularidad**
-
-  * Top-N más consumidos
-  * Basado en frecuencia o rating promedio
-  * Benchmark inicial
-
----
-
-### 🔹 Filtrado basado en contenido
-
-* Uso de características de ítems
-* Similaridad (coseno, distancia)
-* Recomendación basada en perfil del usuario
-* Limitaciones:
-
-  * No descubre nuevos intereses
-  * Dependencia de features
-
----
-
-### 🔹 Filtrado colaborativo
-
-#### Basado en memoria
-
-* User-based
-* Item-based
-* Matriz usuario–ítem
-* Medidas de similitud (coseno, Pearson)
-
----
-
-#### Basado en modelos
-
-* Factorización de matrices (SVD)
-* Representación latente de usuarios e ítems
-* Predicción de ratings
-
----
-
-### 🔹 Problemas comunes
-
-* Cold start (usuarios o ítems nuevos)
-* Sparsity (matrices dispersas)
-* Escalabilidad
-
----
-
-### 🔹 Enfoques híbridos
-
-* Combinación de:
-
-  * contenido + colaborativo
-  * reglas de negocio
-
----
-
-## 📏 Métricas
-
-### Offline
-
-* RMSE / MAE (predicción de ratings)
-* Precision@K
-* Recall@K
-* MAP (Mean Average Precision)
-* NDCG (ranking)
-
----
-
-### Limitaciones
-
-* No capturan comportamiento real del usuario
-* Diferencia entre métricas offline vs impacto real
-
----
-
-## 🐍 Python
-
-* Librerías:
-
-  * `surprise` (SVD, KNN para recomendadores)
-  * `sklearn.metrics.pairwise` (similitud)
-  * `pandas` (matriz usuario–ítem)
-
-* Buenas prácticas:
-
-  * Manejo de matrices dispersas
-  * Normalización de ratings
-  * Evaluación con train/test temporal
-
----
-
-## 🧪 Laboratorio
-
-### Pipeline de sistema de recomendación:
-
-* Construcción de dataset:
-
-  * Interacciones usuario–ítem
-  * Ratings o eventos implícitos
-
-* Preprocesamiento:
-
-  * Filtrado de usuarios/ítems poco frecuentes
-  * Construcción de matriz usuario–ítem
-
-* Modelado:
-
-  * Baseline (popularidad)
-  * Filtrado colaborativo (user/item)
-  * Factorización de matrices (SVD)
-
-* Evaluación:
-
-  * Métricas de ranking (Precision@K, Recall@K)
-
-* Generación de recomendaciones:
-
-  * Top-N por usuario
-
-* Interpretación:
-
-  * Análisis de resultados
-  * Casos de éxito y errores
-
-
-
-## 📘 Semana 12: Graph ML y Geodata
-
-
-Modelar y analizar datos estructurados como grafos y datos geoespaciales, aplicando técnicas de Machine Learning para extraer relaciones, patrones espaciales y estructuras complejas en los datos.
-
----
-
-## 💼 Problemática de negocio
-
-* Relaciones complejas entre entidades (usuarios, productos, transacciones)
-* Dificultad para modelar interacciones (redes)
-* Necesidad de explotar información geográfica (ubicación, proximidad)
-* Detección de patrones no evidentes en datos no tabulares
-
----
-
-## 📊 Aplicaciones y casos típicos
-
-### 🔹 Graph ML
-
-* Sistemas de recomendación (user–item graph)
-* Detección de fraude (redes de transacciones)
-* Redes sociales (influencia, comunidades)
-* Análisis de conexiones (network analysis)
-
----
-
-### 🔹 Geodata
-
-* Segmentación geográfica (clientes por ubicación)
-* Optimización de rutas (logística)
-* Análisis de zonas (hotspots)
-* Ubicación óptima de negocios
-
----
-
-## 🧠 Modelado
-
----
-
-## 🔹 Representación de grafos
-
-* Nodos (entidades) y aristas (relaciones)
-* Grafos dirigidos vs no dirigidos
-* Grafos ponderados
-* Matriz de adyacencia
-
----
-
-## 🔹 Feature Engineering en grafos
-
-* Grado de nodo (degree)
-* Centralidad (básico)
-* Vecindad (neighbors)
-* Conteo de conexiones
-
----
-
-## 🔹 Enfoques de ML sobre grafos (sin GNN profundo)
-
-* Transformar grafos → features tabulares
-* Link prediction (conceptual)
-* Node classification (conceptual)
-
----
-
-## 🔹 Geodata: fundamentos
-
-* Coordenadas geográficas (latitud, longitud)
-* Distancias:
-
-  * Euclidiana vs Haversine
-* Escalamiento espacial
-
----
-
-## 🔹 Técnicas sobre geodata
-
-* Clustering geoespacial:
-
-  * DBSCAN con coordenadas
-* Feature engineering espacial:
-
-  * Distancia a puntos de interés
-  * Densidad de eventos
-* Mapas de calor (heatmaps)
-
----
-
-## 🔹 Problemas comunes
-
-* Alta dimensionalidad en grafos
-* Escalabilidad
-* Datos dispersos
-* Ruido en datos geográficos
-
----
-
-## 📏 Métricas
-
-### Graph ML (básico)
-
-* Accuracy / F1 (clasificación de nodos)
-* AUC (link prediction, conceptual)
-
----
-
-### Geodata
-
-* Métricas de clustering (silhouette, DB index)
-* Evaluación visual (mapas)
-
----
-
-## 🐍 Python
-
-* Librerías:
-
-  * `networkx` (grafos)
-  * `geopandas` (datos geoespaciales)
-  * `sklearn` (clustering)
-  * `haversine` (distancias)
-
-* Buenas prácticas:
-
-  * Conversión de grafos a features
-  * Escalamiento antes de clustering
-  * Visualización geoespacial
-
----
-
-## 🧪 Laboratorio
-
-### Pipeline: datos relacionales y geoespaciales
-
----
-
-### 🔹 Parte 1: Graph ML
-
-* Construcción de grafo (usuarios–productos o transacciones)
-* Extracción de features:
-
-  * grado
-  * número de vecinos
-* Modelo simple:
-
-  * clasificación o scoring
-
----
-
-### 🔹 Parte 2: Geodata
-
-* Dataset con coordenadas
-* Clustering geoespacial (DBSCAN)
-* Identificación de zonas densas
-
----
-
-### 🔹 Parte 3: Integración
-
-* Combinar features:
+#### Problemática de negocio
+- Sobrecarga de información (demasiadas opciones para el usuario).
+- Necesidad de personalización.
+- Baja retención o engagement.
+- Dificultad para descubrir nuevos productos o contenidos.
 
-  * relacionales + espaciales
-* Análisis de patrones
+#### Aplicaciones y casos típicos
+- Recomendación de productos (e-commerce) y de contenido (streaming, noticias).
+- Sistemas de ranking (top items), cross-selling y up-selling.
+- Personalización de feeds.
 
----
-
-### 🔹 Interpretación
-
-* Qué nodos son importantes
-* Qué zonas concentran actividad
-* Insights de negocio
-
-
-
-## 📘 Semana 13: Interpretabilidad de Modelos
-
-
-Comprender, analizar e interpretar el comportamiento de modelos de Machine Learning, explicando sus predicciones a nivel global y local para generar confianza, detectar sesgos y extraer insights accionables.
-
----
-
-## 💼 Problemática de negocio
-
-* Modelos tipo “caja negra” difíciles de explicar
-* Falta de confianza en decisiones automatizadas
-* Necesidad de justificar predicciones (regulación, negocio)
-* Dificultad para identificar errores o sesgos del modelo
-
----
-
-## 📊 Aplicaciones y casos típicos
-
-* Explicación de decisiones (créditos, riesgo)
-* Interpretación de variables importantes
-* Auditoría de modelos
-* Detección de sesgos
-* Comunicación con stakeholders no técnicos
-
----
-
-## 🧠 Modelado
-
----
-
-## 🔹 Tipos de interpretabilidad
-
-* Global:
-
-  * Entender el modelo completo
-* Local:
-
-  * Explicar predicciones individuales
-
----
-
-## 🔹 Modelos interpretables vs no interpretables
-
-* Interpretables:
-
-  * Regresión lineal
-  * Árboles de decisión
-* Menos interpretables:
-
-  * Random Forest
-  * Gradient Boosting
-
----
-
-## 🔹 Importancia de variables
-
-* Feature importance (model-based)
-* Limitaciones:
-
-  * Correlación entre variables
-  * Interpretación incorrecta
-
----
-
-## 🔹 Técnicas de interpretabilidad
-
-### 🔸 Permutation Importance
-
-* Medir impacto al permutar variables
-* Independiente del modelo
-
----
-
-### 🔸 SHAP (conceptual)
-
-* Contribución de cada feature
-* Explicaciones locales y globales
-* Interpretación de valores positivos/negativos
-
----
-
-### 🔸 LIME (conceptual)
-
-* Aproximación local del modelo
-* Explicación en torno a una predicción
-
----
-
-## 🔹 Visualización de interpretabilidad
-
-* Feature importance plots
-* SHAP summary plots
-* Dependence plots
-
----
-
-## 🔹 Problemas comunes
-
-* Interpretaciones erróneas
-* Correlación vs causalidad
-* Exceso de confianza en explicaciones
-* Coste computacional
-
----
-
-## 📏 Métricas
-
-*(Nota: la interpretabilidad no tiene métricas estándar universales)*
-
-Pero se pueden evaluar:
-
-* Estabilidad de explicaciones
-* Consistencia entre métodos
-* Simplicidad del modelo
-
----
-
-## 🐍 Python
-
-* Librerías:
-
-  * `sklearn.inspection` (permutation importance)
-  * `shap` (SHAP values)
-  * `lime` (explicaciones locales)
-
-* Buenas prácticas:
-
-  * Comparar múltiples métodos
-  * Usar interpretabilidad post-entrenamiento
-  * Validar resultados con conocimiento del dominio
-
----
-
-## 🧪 Laboratorio
-
-### Pipeline de interpretabilidad:
-
----
-
-### 🔹 Entrenamiento
-
-* Modelo supervisado (ej: Random Forest o Gradient Boosting)
-
----
-
-### 🔹 Interpretabilidad global
-
-* Feature importance
-* Permutation importance
-* SHAP summary plot
-
----
-
-### 🔹 Interpretabilidad local
-
-* Explicación de predicciones individuales
-* Casos:
-
-  * predicción correcta
-  * predicción errónea
-
----
-
-### 🔹 Análisis
-
-* Qué variables influyen más
-* Cómo cambian las predicciones
-* Detección de posibles sesgos
-
-
-
-## 📘 Semana 14: Evaluación en Producción y Ciclo de Vida del ML
-
-
-Comprender cómo se evalúan y gestionan los modelos de Machine Learning en entornos reales, utilizando experimentación (A/B testing), monitoreo y estrategias de mantenimiento para asegurar su desempeño a lo largo del tiempo.
-
----
-
-## 💼 Problemática de negocio
-
-* Modelos que funcionan bien offline pero fallan en producción
-* Necesidad de medir impacto real en métricas de negocio
-* Cambios en los datos a lo largo del tiempo
-* Degradación del rendimiento del modelo
-* Falta de monitoreo y control del modelo
-
----
-
-## 📊 Aplicaciones y casos típicos
-
-* Comparación de modelos en producción (A/B testing)
-* Sistemas de recomendación en plataformas reales
-* Modelos de scoring (fraude, crédito)
-* Personalización de productos y contenido
-* Optimización continua de modelos
-
----
-
-## 🧠 Modelado (conceptual)
-
----
-
-## 🔹 Evaluación offline vs online
-
-* Offline:
-
-  * Métricas en dataset (accuracy, RMSE)
-  * Limitaciones
-* Online:
-
-  * Métricas de negocio (CTR, conversión, revenue)
-  * Diferencias clave
+#### Modelado
+- **Enfoques básicos:** popularidad (top-N, frecuencia, rating medio) como benchmark.
+- **Filtrado basado en contenido:** características de ítems, similaridad (coseno, distancias), perfil de usuario; limitaciones (cold discovery, dependencia de features).
+- **Filtrado colaborativo**
+  - *Basado en memoria:* user-based, item-based, matriz usuario–ítem, similitud (coseno, Pearson).
+  - *Basado en modelos:* factorización de matrices (SVD), representaciones latentes, predicción de ratings.
+- **Problemas comunes:** cold start, sparsity, escalabilidad.
+- **Enfoques híbridos:** contenido + colaborativo, reglas de negocio.
 
----
-
-## 🔹 A/B Testing
-
-* Qué es un experimento A/B
-* División de usuarios (grupos A vs B)
-* Comparación de modelos en producción
-* Métricas online:
-
-  * CTR (Click Through Rate)
-  * Conversion rate
-* Consideraciones:
-
-  * tamaño de muestra
-  * duración del experimento
-  * significancia estadística (conceptual)
-
----
-
-## 🔹 Tipos de experimentación
-
-* A/B testing clásico
-* Multivariate testing (mención)
-* Bandits (conceptual, opcional)
-
----
-
-## 🔹 Drift en Machine Learning
-
-### 🔸 Data Drift
-
-* Cambio en la distribución de los datos de entrada
-
-### 🔸 Concept Drift
-
-* Cambio en la relación entre variables y target
-
----
-
-## 🔹 Monitoreo de modelos
+#### Métricas
+- **Offline:** RMSE / MAE (ratings), Precision@K, Recall@K, MAP, NDCG.
+- **Limitaciones:** brecha entre métricas offline y comportamiento real del usuario.
 
-* Seguimiento de métricas en producción
-* Detección de degradación
-* Alertas
+#### Python
+- Librerías: `surprise` (SVD, KNN), `sklearn.metrics.pairwise`, `pandas` (matriz usuario–ítem).
+- Buenas prácticas: matrices dispersas, normalización de ratings, evaluación con partición temporal train/test.
 
----
-
-## 🔹 Ciclo de vida del modelo
-
-* Entrenamiento → validación → despliegue (conceptual)
-* Retraining periódico
-* Versionado de modelos (conceptual)
-* Iteración continua
-
----
-
-## 🔹 Problemas comunes
-
-* Desalineación entre métricas offline y online
-* Experimentos mal diseñados
-* Falta de datos en producción
-* Retraining ineficiente
-
----
+### Laboratorio
+- **NTB 1 —** Construcción de matriz usuario–ítem, baseline de popularidad, filtrado colaborativo user/item y evaluación con Precision@K y Recall@K.
+- **NTB 2 —** Factorización (SVD), generación de top-N por usuario e interpretación de aciertos y errores (opcional: hincapié en contenido o reglas de negocio).
 
-## 📏 Métricas
-
-### Online
-
-* CTR
-* Conversion rate
-* Retención
-* Revenue (según caso)
-
 ---
-
-### Evaluación del experimento
-
-* Diferencia entre grupos (A vs B)
-* Intervalos de confianza (conceptual)
 
----
+## Semana 12: Graph ML y geodata
 
-## 🐍 Python (ligero, conceptual)
+### Logro de la sesión
+Modelar y analizar datos estructurados como grafos y datos geoespaciales, aplicando machine learning para extraer relaciones, patrones espaciales y estructuras complejas.
 
-* Simulación de A/B testing:
+#### Problemática de negocio
+- Relaciones entre entidades (usuarios, productos, transacciones) y redes difíciles de tabularizar.
+- Explotar información geográfica (ubicación, proximidad).
+- Patrones no evidentes en datos no puramente tabulares.
 
-  * `numpy`, `pandas`
+#### Aplicaciones y casos típicos
+- **Graph ML:** recomendación (grafo usuario–ítem), fraude (red de transacciones), redes sociales, análisis de conexiones.
+- **Geodata:** segmentación geográfica, rutas y logística, hotspots, ubicación de negocios.
 
-* Visualización de resultados:
+#### Modelado
+- **Grafos:** nodos y aristas, dirigidos/no dirigidos, ponderados, matriz de adyacencia.
+- **Features en grafos:** grado, centralidad básica, vecindad, conteos de conexiones.
+- **ML sobre grafos (sin GNN profundo):** grafo → features tabulares; link prediction y clasificación de nodos (nivel conceptual).
+- **Geodata:** coordenadas, distancia euclidiana vs Haversine, escalamiento espacial.
+- **Técnicas:** clustering geoespacial (p. ej. DBSCAN con coordenadas), features de distancia a POI, densidad, heatmaps.
+- **Problemas comunes:** dimensionalidad, escalabilidad, dispersión, ruido geográfico.
 
-  * `matplotlib`, `seaborn`
+#### Métricas
+- Graph ML (básico): accuracy / F1 en nodos, AUC en link prediction (conceptual).
+- Geodata: silueta, índice de Davies–Bouldin, evaluación visual en mapas.
 
-* Buenas prácticas:
+#### Python
+- `networkx`, `geopandas`, `sklearn` (clustering), `haversine` u otras distancias.
+- Buenas prácticas: conversión grafo→features, escalado antes de clustering, visualización geoespacial.
 
-  * Separar evaluación offline vs online
-  * No confiar solo en métricas tradicionales
+### Laboratorio
+- **NTB 1 —** Graph ML: construir un grafo (p. ej. usuarios–productos), extraer features (grado, vecinos), entrenar un modelo de clasificación o scoring.
+- **NTB 2 —** Geodata: dataset con coordenadas, clustering espacial (DBSCAN), zonas densas; integración opcional de features relacionales y espaciales.
 
 ---
 
-## 🧪 Laboratorio
+## Semana 13: Interpretabilidad de modelos
 
-### Simulación de evaluación en producción
+### Logro de la sesión
+Comprender, analizar e interpretar el comportamiento de modelos de machine learning, explicando predicciones a nivel global y local para generar confianza, detectar sesgos y extraer insights accionables.
 
----
+#### Problemática de negocio
+- Modelos “caja negra”, falta de confianza, necesidad de justificar predicciones (regulación, negocio), detección de errores y sesgos.
 
-### 🔹 Paso 1: Modelo base
+#### Aplicaciones y casos típicos
+- Explicación en crédito y riesgo, auditoría de modelos, comunicación con stakeholders no técnicos.
 
-* Modelo entrenado previamente (ej: clasificación o recomendador)
+#### Modelado
+- **Tipos:** interpretabilidad global vs local.
+- **Modelos interpretables vs opacos:** regresión, árboles frente a Random Forest o boosting.
+- **Importancia de variables:** feature importance intrínseco; limitaciones (correlación, interpretaciones erróneas).
+- **Técnicas:** permutation importance; SHAP (contribuciones locales/globales); LIME (aproximación local).
+- **Visualización:** importancia, SHAP summary, dependence plots.
+- **Problemas comunes:** correlación vs causalidad, coste computacional, exceso de confianza en explicaciones.
 
----
+#### Métricas
+- La interpretabilidad no tiene métricas universales; se valora estabilidad de explicaciones, consistencia entre métodos y simplicidad del modelo.
 
-### 🔹 Paso 2: Simulación A/B
+#### Python
+- `sklearn.inspection` (permutation importance), `shap`, `lime`.
+- Buenas prácticas: combinar métodos, interpretabilidad post-entrenamiento, validar con dominio.
 
-* Dividir datos en grupo A y B
-* Simular comportamiento de usuarios
-* Comparar métricas (ej: tasa de conversión)
+### Laboratorio
+- **NTB 1 —** Interpretabilidad global: entrenar un modelo supervisado (p. ej. Random Forest o boosting), feature importance, permutation importance, SHAP summary.
+- **NTB 2 —** Interpretabilidad local: explicar predicciones individuales (SHAP/LIME), casos acertados vs erróneos y lectura de posibles sesgos.
 
 ---
 
-### 🔹 Paso 3: Análisis
+## Semana 14: Evaluación en producción y ciclo de vida del ML
 
-* Evaluar si el modelo B mejora al A
-* Interpretar resultados
+### Logro de la sesión
+Comprender cómo se evalúan y gestionan los modelos de machine learning en entornos reales, mediante experimentación (A/B testing), monitoreo y mantenimiento para asegurar el desempeño en el tiempo.
 
----
+#### Problemática de negocio
+- Buen rendimiento offline y malo en producción; medir impacto en negocio; drift y degradación; monitoreo insuficiente.
 
-### 🔹 Paso 4: Simulación de drift
+#### Aplicaciones y casos típicos
+- A/B testing en producción, recomendadores, scoring (fraude, crédito), personalización, mejora continua.
 
-* Introducir cambio en los datos
-* Evaluar degradación del modelo
+#### Modelado (conceptual)
+- **Offline vs online:** métricas clásicas en dataset frente a CTR, conversión, revenue.
+- **A/B testing:** diseño, grupos A/B, métricas online, tamaño de muestra, duración, significancia (conceptual).
+- **Experimentación:** multivariante (mención), bandits (opcional).
+- **Drift:** data drift (entrada) y concept drift (relación X–y).
+- **Monitoreo:** métricas en producción, degradación, alertas.
+- **Ciclo de vida:** entrenamiento, validación, despliegue, retraining, versionado, iteración.
+- **Problemas comunes:** desalineación offline/online, experimentos mal diseñados, retraining ineficiente.
 
----
+#### Métricas
+- Online: CTR, conversión, retención, revenue (según caso).
+- Experimento: diferencia A vs B, intervalos de confianza (conceptual).
 
-### 🔹 Paso 5: Decisiones
+#### Python (ligero, conceptual)
+- Simulación con `numpy`, `pandas`; visualización con `matplotlib`, `seaborn`.
+- Buenas prácticas: separar evaluación offline y online.
 
-* ¿Reentrenar?
-* ¿Mantener modelo?
-* ¿Cambiar estrategia?
+### Laboratorio
+- **NTB 1 —** Simulación de A/B: modelo o política base, división A/B, métricas de conversión o CTR y conclusión sobre el ganador.
+- **NTB 2 —** Drift y decisiones: simular cambio en los datos, medir degradación del modelo y plantear reentrenamiento o mantenimiento.
 

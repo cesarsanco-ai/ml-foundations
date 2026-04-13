@@ -1,312 +1,287 @@
 ---
 layout: default
 ---
-# Semana 4: Regresión Logística y Balanceo de Datos
+# Sesión 4: Regresión Logística y Balance de Datos
 
-## Logro de la sesión
+### 1. Logro de la sesión
 
-El estudiante será capaz de **construir, interpretar y evaluar modelos de clasificación binaria y multiclase** mediante regresión logística, incorporando técnicas de balanceo de datos, selección de métricas adecuadas y ajuste de thresholds según objetivos de negocio.
-
----
-
-## Problemática de negocio
-
-- **Tipos de problemas de clasificación:**
-  - **Binaria:** Dos clases (ej. fraude/no fraude, churn/no churn, aprobado/rechazado).
-  - **Multiclase:** Más de dos clases (ej. clasificación de productos, tipos de clientes, diagnóstico médico múltiple).
-
-- **Impacto del desbalance de clases:**
-  Cuando la proporción de clases es muy desigual, modelos simples tienden a predecir siempre la clase mayoritaria, generando métricas engañosas (alta exactitud pero baja sensibilidad para la clase minoritaria).
-
-- **Ejemplos clásicos:**
-  - Detección de fraude financiero
-  - Churn de clientes
-  - Diagnóstico de enfermedades
-  - Score crediticio
-  - Clasificación de productos o comportamiento de clientes
-
-- **Diferencias clave con regresión:**
-  - **Regresión:** Output continuo $y \in \mathbb{R}$.
-  - **Clasificación:** Output categórico $y \in \{0,1\}$ o $y \in \{1,...,K\}$.
+Construir, interpretar y evaluar modelos de **clasificación binaria y multiclase** mediante **regresión logística**, integrando **regularización**, **técnicas de balanceo de clases** y **métricas** (incluidas ROC–PR) alineadas al **coste de error** del dominio aplicado.
 
 ---
 
-## Modelado de clasificación
+### 2. Historia y línea temporal
 
-### Regresión logística binaria
+| Periodo | Hito | Notas |
+|---------|------|-------|
+| **Finales s. XIX – 1920s** | Modelos de **dosis-respuesta** en toxicología/biología (Pearson, **Bliss**, Berkson) | Origen de transformaciones “logit” para probabilidades acotadas a $(0,1)$. |
+| **1944–1955** | Formalización estadística de modelos lineales generalizados (camino hacia GLM) | La logística como **GLM binomial** con enlace logit es estándar en estadística. |
+| **1970s en adelante** | Uso masivo en medicina, econometría discreta, biometría | Interpretación en **odds ratios** muy valorada en epidemiología. |
+| **1990s–2000s** | **Machine learning**: fronteras lineales en espacio de características, kernelización (SVM), vs redes | La logística sigue siendo **baseline** fuerte y calibrable. |
+| **Actualidad** | Regularización L1/L2 en alta dimensión; pipelines con **imbalanced-learn**; explicabilidad (odds, SHAP) | Base para *credit scoring*, fraude, marketing response models. |
 
-Función de predicción:
-
-$$ \hat{p} = P(y=1|X) = \sigma(z) = \frac{1}{1 + e^{-z}}, \quad z = \beta_0 + \sum_{i=1}^{n} \beta_i x_i $$
-
-- **Interpretación:** $\hat{p}$ es la probabilidad de pertenecer a la clase positiva.
-- **Log-odds:**
-  $$ \text{logit}(\hat{p}) = \log\frac{\hat{p}}{1-\hat{p}} = \beta_0 + \sum \beta_i x_i $$
-  Cada $\beta_i$ representa el cambio en log-odds por unidad de incremento en $x_i$.
-
-### Regresión logística multiclase
-
-- **One-vs-Rest (OvR):** Se entrena un modelo binario por cada clase.
-- **Softmax:** Probabilidad de clase $k$:
-  $$ P(y=k|X) = \frac{e^{z_k}}{\sum_{j=1}^{K} e^{z_j}}, \quad z_k = \beta_{0k} + \sum_i \beta_{ik} x_i $$
-
-### Función de pérdida y optimización
-
-- **Función de pérdida log-loss (cross-entropy):**
-  $$ L(\beta) = - \frac{1}{N} \sum_{i=1}^N \big[ y_i \log \hat{p}_i + (1-y_i) \log(1-\hat{p}_i) \big] $$
-
-- **Optimización:** Se minimiza $L(\beta)$ usando **Gradiente Descendente** o variantes (SGD, Adam):
-  $$ \beta \leftarrow \beta - \eta \nabla_\beta L(\beta) $$
-
-- **Regularización:**
-
-  La regularización controla overfitting y selecciona variables relevantes.
+**Referencia histórica:** Cox (1958) sobre modelos lineales en probabilidades; Hosmer–Lemeshow para regresión logística aplicada.
 
 ---
 
-### Desbalanceo de datos
+### 3. Marco teórico: regresión logística binaria
 
-El desbalanceo de clases ocurre cuando una clase (mayoritaria) supera significativamente a la otra (minoritaria). En regresión logística, esto es particularmente crítico porque el algoritmo optimiza la verosimilitud global, dando igual peso a todas las observaciones.
+#### 3.1 Motivación: modelar una probabilidad
 
-**Contextos comunes de desbalanceo:**
-- **Detección de fraude financiero:** 1-2% de transacciones fraudulentas.
-- **Diagnóstico médico:** enfermedades raras con incidencia <1%.
-- **Churn de clientes:** 5-10% de clientes que abandonan.
-- **Campañas de marketing:** 1-5% de conversión.
-- **Detección de spam:** 10-20% de correos no deseados.
-- **Riesgo de crédito:** 3-5% de impagos.
+En clasificación binaria, $y \in \{0,1\}$. Una regresión lineal directa sobre $\hat{p}$ no restringe $[0,1]$. Se introduce la **función logística** (sigmoide):
 
-**Consecuencias del desbalanceo en regresión logística:**
+$$ \sigma(z) = \frac{1}{1+e^{-z}} $$
 
-| Consecuencia | Explicación | Impacto en negocio |
-|--------------|-------------|-------------------|
-| **Sesgo hacia clase mayoritaria** | El modelo aprende que predecir "mayoría" minimiza error global | Subestima eventos raros (ej. fraudes no detectados) |
-| **Probabilidades sesgadas** | Las probabilidades predichas son sistemáticamente bajas para la clase minoritaria | Umbrales estándar (0.5) no funcionan |
-| **Métrica engañosa** | Accuracy alto pero modelo inútil | Falsa sensación de seguridad |
-| **Convergencia lenta** | El gradiente es dominado por la clase mayoritaria | Entrenamiento ineficiente |
+El modelo **logístico** postula:
 
-**Ejemplo numérico del problema:**
+$$ P(y=1 \mid \mathbf{x}) = \sigma(\mathbf{x}^\top \boldsymbol{\beta}) = \frac{1}{1 + e^{-\mathbf{x}^\top \boldsymbol{\beta}}} $$
 
-Supongamos 10,000 transacciones con 2% de fraude (200 fraudes, 9,800 normales). Un modelo que siempre predice "normal" tiene:
-- Accuracy = 9,800/10,000 = 98%
-- Pero detecta 0 fraudes → modelo completamente inútil para el negocio.
+#### 3.2 Logit y odds
 
-### Técnicas de Balanceo para Regresión Logística
+Definiendo $\mathrm{odds} = \frac{p}{1-p}$:
 
-#### Oversampling (Sobremuestreo)
+$$ \log \frac{P(y=1 \mid \mathbf{x})}{1 - P(y=1 \mid \mathbf{x})} = \mathbf{x}^\top \boldsymbol{\beta} $$
 
-**Descripción:** Aumenta la clase minoritaria replicando o generando muestras sintéticas.
+Así, los coeficientes $\beta_j$ actúan de forma **aditiva en la escala del logit**; al exponenciar, cada unidad de $x_j$ **multiplica los odds** por $e^{\beta_j}$ (factor multiplicativo), *ceteris paribus*.
 
-**Técnicas principales:**
+#### 3.3 Estimación: máxima verosimilitud
 
-| Técnica | Funcionamiento | Ventajas | Desventajas |
-|---------|---------------|----------|-------------|
-| **Random Oversampling** | Duplica aleatoriamente instancias de la clase minoritaria | Simple, rápido | Sobreajuste por replicación exacta |
-| **SMOTE** | Genera muestras sintéticas interpolando entre instancias existentes | Más variedad, reduce sobreajuste | Puede generar ruido en fronteras |
-| **ADASYN** | Similar a SMOTE pero enfocado en regiones difíciles | Mejora en fronteras complejas | Más sensible a outliers |
-| **Borderline-SMOTE** | SMOTE enfocado en instancias cercanas a la frontera | Mejora la frontera de decisión | Complejidad adicional |
+Bajo muestreo Bernoulli independiente, la log-verosimilitud es cóncava en $\boldsymbol{\beta}$; se maximiza con **IRLS** (mínimos cuadrados reponderados iterativos) o métodos cuasi-Newton. Por eso sklearn usa solvers como `lbfgs`, `liblinear`, `saga` (según penalización y tamaño).
 
-**Cuándo usar oversampling:**
-- Dataset pequeño a mediano (<10,000 muestras)
-- Clase minoritaria muy pequeña (<100 muestras)
-- Cuando es crítico maximizar recall
-- Preferir SMOTE sobre random oversampling para evitar sobreajuste
+#### 3.4 Regularización (Ridge / Lasso / Elastic Net sobre pesos)
 
-#### Undersampling (Submuestreo)
+**Marco:** igual que en regresión lineal penalizada, se añade término $\lambda \|\boldsymbol{\beta}\|_2^2$ (Ridge), $\lambda \|\boldsymbol{\beta}\|_1$ (Lasso) o mezcla, típicamente **sin** penalizar el intercepto si se usa `fit_intercept=True`.
 
-**Descripción:** Reduce la clase mayoritaria eliminando ejemplos para equilibrar las clases.
+**Ventajas de Ridge en logística:**
 
-**Técnicas principales:**
+- Estabiliza coeficientes con **multicolinealidad** o muchas variables dummy correlacionadas.  
+- Reduce **sobreajuste** en alta dimensión relativa a muestra.
 
-| Técnica | Funcionamiento | Ventajas | Desventajas |
-|---------|---------------|----------|-------------|
-| **Random Undersampling** | Elimina aleatoriamente instancias de la clase mayoritaria | Simple, reduce dataset | Puede perder información valiosa |
-| **Tomek Links** | Elimina pares de instancias de diferentes clases mutuamente más cercanas | Limpia fronteras, reduce ruido | No balancea completamente por sí solo |
-| **NearMiss** | Selecciona instancias mayoritarias cercanas a la minoría | Mantiene información relevante | Computacionalmente costoso |
-| **Cluster Centroids** | Reemplaza clusters mayoritarios con sus centroides | Preserva estructura | Pérdida de variabilidad |
+**Ventajas de Lasso:**
 
-**Cuándo usar undersampling:**
-- Dataset grande (>50,000 muestras) donde el costo computacional importa
-- La clase mayoritaria tiene mucha redundancia o ruido
-- Como complemento a oversampling (ej. SMOTE + Tomek)
-- Cuando la clase mayoritaria es extremadamente grande
+- Promueve **sparse** coeficientes → selección de variables interpretables.
 
-#### Ajuste de Pesos (Class Weights)
+**Elastic Net:** compromiso cuando hay **grupos correlacionados** de predictores (Zou & Hastie, 2005).
 
-**Descripción:** Asigna mayor penalización a errores en la clase minoritaria durante el entrenamiento, sin modificar los datos.
-
-**Fundamento matemático:**
-La función de costo de regresión logística con pesos es:
-
-$$ J(\theta) = -\frac{1}{n} \left[ \sum_{i=1}^{n} w_{y_i} \left( y_i \log(h_\theta(x_i)) + (1-y_i) \log(1-h_\theta(x_i)) \right) \right] $$
-
-donde $w_{y_i}$ es el peso asignado a la clase de la observación $i$.
-
-**Cálculo automático de 'balanced':**
-
-$$ w_j = \frac{n}{k \cdot n_j} $$
-
-donde:
-- $n$: total de muestras
-- $k$: número de clases
-- $n_j$: muestras en clase $j$
-
-**Ejemplo numérico:**
-Para 10,000 muestras con 200 fraudes (clase 1) y 9,800 normales (clase 0):
-
-$$ w_0 = \frac{10000}{2 \cdot 9800} = 0.51 $$
-$$ w_1 = \frac{10000}{2 \cdot 200} = 25 $$
-
-Los errores en fraudes se penalizan 49 veces más que errores en normales ($25/0.51 \approx 49$).
-
-**Ventajas del ajuste de pesos:**
-- No modifica los datos originales
-- No aumenta el tamaño del dataset
-- Preserva toda la información
-- Matemáticamente elegante (modifica la función de costo)
-- Generalmente la primera opción a probar
-
-**Desventajas:**
-- Menos efectivo en desbalanceos extremos (>100:1)
-- Puede hacer el modelo inestable con pesos muy altos
-- Requiere que el algoritmo soporte pesos (sí en regresión logística)
-
-### Comparación de Técnicas de Balanceo
-
-| Aspecto | Oversampling | Undersampling | Class Weights |
-|---------|--------------|---------------|---------------|
-| **Tamaño del dataset** | Aumenta | Disminuye | Sin cambios |
-| **Información** | Genera sintética | Descarta real | Preserva toda |
-| **Tiempo entrenamiento** | Aumenta | Disminuye | Sin cambios |
-| **Riesgo de overfitting** | Alto | Bajo | Medio |
-| **Riesgo de underfitting** | Bajo | Alto | Medio |
-| **Implementación** | Requiere imbalanced-learn | Requiere imbalanced-learn | Nativa en sklearn |
-| **Desbalanceo extremo** | Efectivo | Ineficiente | Limitado |
+En `sklearn`, `LogisticRegression` usa parámetro `C` como **inverso** de la fuerza de regularización: **C pequeño → más regularización** (convención opuesta a $\lambda$ en muchos textos de estadística).
 
 ---
 
-## Métricas de Evaluación para Regresión Logística
+### 4. Multiclase: One-vs-Rest vs Softmax
 
-### Matriz de Confusión
+| Enfoque | Mecanismo | Ventajas | Limitaciones |
+|---------|-----------|----------|--------------|
+| **One-vs-Rest (OvR)** | Un clasificador binario por clase vs el resto | Simple, paralelizable | Fronteras inconsistentes si no se calibra |
+| **Multinomial (softmax)** | Un solo modelo con función softmax sobre $K$ clases | Coherencia probabilística conjunta | Más costoso en $K$ grande |
 
-La matriz de confusión es la base fundamental para evaluar clasificadores binarios:
+`sklearn`: `multi_class='ovr'` vs `'multinomial'` (según solver).
 
-| | **Predicción: Positivo** | **Predicción: Negativo** |
-|---|---|---|
-| **Real: Positivo** | Verdadero Positivo (VP) | Falso Negativo (FN) |
-| **Real: Negativo** | Falso Positivo (FP) | Verdadero Negativo (VN) |
+#### 4.1 Detalle softmax (multinomial)
 
-### Métricas Derivadas
+Para $K$ clases, se definen scores lineales $z_k(\mathbf{x}) = \mathbf{x}^\top \boldsymbol{\beta}_k$ y probabilidades:
 
-#### Exactitud (Accuracy)
-$$ Accuracy = \frac{TP + TN}{TP + TN + FP + FN} $$
+$$ P(y=k \mid \mathbf{x}) = \frac{e^{z_k(\mathbf{x})}}{\sum_{j=1}^{K} e^{z_j(\mathbf{x})}} $$
 
-**Interpretación:** Proporción de aciertos sobre el total.
+La función es **invariante** a sumar la misma constante a todos los $z_k$; por eso se fija una referencia (p.ej. $\boldsymbol{\beta}_K=\mathbf{0}$) en algunas parametrizaciones. La pérdida típica es la **entropía cruzada multinomial**, convex en $\boldsymbol{\beta}$ en formulación estándar.
 
-**Limitación en regresión logística:** Engañosa en desbalanceo. Un modelo que siempre predice la clase mayoritaria puede tener alta accuracy pero ser inútil.
-
-#### Precisión (Precision)
-$$ Precision = \frac{TP}{TP + FP} $$
-
-**Interpretación:** De todas las predicciones positivas, ¿cuántas son correctas? Mide la confiabilidad de las alertas.
-
-**Rango:** 0 a 1 (mayor es mejor)
-
-#### Recall (Sensibilidad, TPR)
-$$ Recall = \frac{TP}{TP + FN} $$
-
-**Interpretación:** De todos los positivos reales, ¿cuántos detectamos? Mide la capacidad de encontrar la clase de interés.
-
-**Rango:** 0 a 1 (mayor es mejor)
-
-#### Especificidad (Specificity, TNR)
-$$ Especificidad = \frac{TN}{TN + FP} $$
-
-**Interpretación:** De todos los negativos reales, ¿cuántos identificamos correctamente?
-
-#### F1-Score
-$$ F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall} $$
-
-**Interpretación:** Media armónica entre precisión y recall. Penaliza valores extremos.
-
-**Rango:** 0 a 1 (mayor es mejor)
-
-### Curvas de Evaluación
-
-#### Curva ROC (Receiver Operating Characteristic)
-
-**Construcción:** Gráfica TPR (Recall) vs FPR ($1 - \text{Especificidad}$) para todos los umbrales posibles (0 a 1).
-
-**FPR (Tasa de Falsos Positivos):**
-$$ FPR = \frac{FP}{FP + TN} = 1 - Especificidad $$
-
-**AUC-ROC (Área bajo la curva ROC):**
-
-| AUC | Interpretación |
-|-----|----------------|
-| 0.5 | Clasificador aleatorio |
-| 0.6 - 0.7 | Pobre |
-| 0.7 - 0.8 | Aceptable |
-| 0.8 - 0.9 | Excelente |
-| 0.9 - 1.0 | Sobresaliente |
-
-#### Curva Precisión-Recall (PR Curve)
-
-**Construcción:** Gráfica Precisión vs Recall para todos los umbrales.
-
-**Ventaja sobre ROC:** Más informativa en datasets desbalanceados porque se enfoca en la clase minoritaria (positiva).
-
-### Selección de Métricas según Contexto de Negocio
-
-| Contexto | Métrica Principal | Justificación |
-|----------|------------------|---------------|
-| **Detección de fraude** | Recall o PR-AUC | Priorizar detección de fraudes |
-| **Filtro de spam** | Precisión | Evitar falsos positivos molestos |
-| **Diagnóstico COVID** | Recall (Sensibilidad) | No querer falsos negativos |
-| **Churn de clientes** | F1 o Recall | Balancear retención vs recursos |
-| **Recomendación** | Precisión | Mostrar solo recomendaciones relevantes |
-| **Riesgo de crédito** | F1 o PR-AUC | Balancear riesgo vs clientes rechazados |
+**Ventaja conceptual:** estima **jointly** todas las fronteras; **OvR** en cambio entrena $K$ problemas binarios independientes, lo que puede producir regiones de decisión **incoherentes** si no se recalibra (en la práctica a menudo funciona bien como aproximación rápida).
 
 ---
 
-## Comunicación de Resultados en Regresión Logística
+### 5. Umbral de decisión y costes asimétricos
 
-### Storytelling con Data Dummy
+La regla $\hat{y}=1$ si $\hat{p} \geq \tau$ con $\tau=0.5$ solo es óptima si **FP y FN** tienen el mismo coste y no hay desbalance extremo bajo criterios bayesianos simples. En la práctica:
 
-**Dataset simulado de churn de clientes:**
+- **Fraude / salud:** a menudo se baja $\tau$ para subir **recall** (aceptar más FP).  
+- **Marketing** (spam): a veces se sube $\tau$ para proteger inbox (menos FP).
 
-| Cliente | Edad | Antigüedad (años) | Consumo | Churn (0=no,1=si) |
-| ------- | ---- | ----------------- | ------- | ----------------- |
-| 1       | 25   | 1                 | 120     | 0                 |
-| 2       | 40   | 5                 | 350     | 1                 |
-| 3       | 30   | 2                 | 200     | 0                 |
-| 4       | 50   | 10                | 500     | 1                 |
-| 5       | 28   | 1                 | 150     | 0                 |
-
-Modelo de regresión logística con coeficientes:
-
-$$ \hat{p} = \frac{1}{1+e^{-(-3 + 0.02 \cdot Edad + 0.005 \cdot Consumo + 0.1 \cdot Antigüedad)}} $$
-
-**Interpretación:**
-- Cada año adicional de antigüedad aumenta log-odds de churn en 0.1.
-- Cada unidad de consumo aumenta log-odds en 0.005.
-
-**Métricas dummy:**
-- Exactitud: 0.88
-- Recall clase positiva: 0.92
-- Precisión clase positiva: 0.85
-- F1-score: 0.88
-- AUC: 0.95
+**Curvas ROC y PR** permiten elegir $\tau$ **post hoc** según el trade-off deseado (Fawcett, 2006; Davis & Goadrich, 2006 para PR en datos desbalanceados).
 
 ---
 
-### Elevator pitch
+### 6. Balanceo de datos (temario ampliado)
 
-**Equipo técnico:**
+#### 6.1 Por qué aparece el problema
 
-> "Se entrenó un modelo de regresión logística binaria para predecir churn de clientes. El modelo incluye features `Edad`, `Consumo` y `Antigüedad`. Se aplicó **regularización L2** y ajuste de **class weights** para balancear la clase minoritaria. Métricas obtenidas: AUC 0.95, recall 0.92, F1-score 0.88."
+Con **clase minoritaria muy pequeña**, minimizar pérdida global o accuracy puede llevar al clasificador trivial “siempre mayoritaria”. Los modelos lineales y muchos otros **calibran mal** la probabilidad de la clase rara sin tratamiento.
 
-**Equipo no técnico / negocio:**
+#### 6.2 Oversampling: SMOTE
 
-> "El modelo identifica clientes con alta probabilidad de abandonar el servicio. Clientes con mayor antigüedad o consumo elevado tienen más riesgo de churn. Con esta información, podemos diseñar campañas de retención dirigidas a los clientes críticos."
+**SMOTE** (Chawla et al., 2002) sintetiza ejemplos minoritarios interpolando entre vecinos en el espacio de características:
 
+$$ \mathbf{x}_{\mathrm{new}} = \mathbf{x}_i + \lambda (\mathbf{x}_{\mathrm{nn}} - \mathbf{x}_i), \quad \lambda \in (0,1) $$
+
+**Ventajas:** aumenta densidad local de la minoritaria sin duplicar exactamente.  
+**Riesgos:** puede crear ejemplos en regiones donde la clase no debería estar (ruido); sensible a outliers; **debe aplicarse solo sobre train** (evitar leakage).
+
+#### 6.3 Undersampling
+
+Elimina observaciones de la **mayoritaria** para equilibrar proporciones.
+
+**Ventajas:** rápido, reduce tiempo de entrenamiento.  
+**Desventajas:** **pérdida de información** de la mayoritaria; puede empeorar varianza si se descarta señal útil.
+
+#### 6.4 Pesos de clase (`class_weight`)
+
+Asigna mayor coste a errores en clase minoritaria sin inventar filas:
+
+```python
+LogisticRegression(class_weight="balanced")
+```
+
+**Ventajas:** no altera dimensionalidad del dataset; implementación simple.  
+**Limitaciones:** no aumenta datos reales; puede no bastar si la minoritaria es casi nula.
+
+#### 6.5 ¿Cuándo usar qué? (guía)
+
+| Escenario | Primera línea típica | Comentario |
+|-----------|----------------------|------------|
+| Minoritaria pequeña pero con señal | `class_weight` + métricas adecuadas | Menos invasivo |
+| Minoritaria muy escasa | SMOTE (train) + validación cuidadosa | Vigilar sobreajuste sintético |
+| Dataset enorme mayoritario | Undersampling aleatorio o **edited** methods | Vigilar pérdida de información |
+| Necesidad de calibración de probabilidades | Calibración (`CalibratedClassifierCV`) tras el modelo | Sesión 8/13 |
+
+---
+
+### 7. Métricas: matriz de confusión y derivadas
+
+#### 7.1 Definiciones
+
+|  | Predicho 1 | Predicho 0 |
+|--|------------|------------|
+| **Real 1** | TP | FN |
+| **Real 0** | FP | TN |
+
+- **Exactitud:** $(TP+TN)/(TP+TN+FP+FN)$ — engañosa con desbalance.  
+- **Precisión:** $TP/(TP+FP)$ — “de los que predije positivo, cuántos lo eran”.  
+- **Recall (sensibilidad):** $TP/(TP+FN)$ — “de los positivos reales, cuántos detecté”.  
+- **Especificidad:** $TN/(TN+FP)$.
+
+#### 7.2 F1 y media armónica
+
+$$ F_1 = \frac{2 \cdot \mathrm{precision} \cdot \mathrm{recall}}{\mathrm{precision} + \mathrm{recall}} $$
+
+Penaliza desequilibrios entre precisión y recall (a diferencia de la media aritmética).
+
+#### 7.3 ROC–AUC y PR–AUC
+
+- **AUC–ROC:** probabilidad de que un par (positivo, negativo) esté ordenado correctamente por score; **invariante** a umbrales pero puede ser **optimista** con fuerte desbalance.  
+- **PR–AUC:** foco en la clase positiva; a menudo más informativa cuando la positiva es rara.
+
+---
+
+### 8. Plantilla base en Python (`scikit-learn`)
+
+#### 8.1 Imports
+
+```python
+import numpy as np
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (
+    classification_report,
+    confusion_matrix,
+    roc_auc_score,
+    average_precision_score,
+    precision_recall_curve,
+    RocCurveDisplay,
+)
+```
+
+#### 8.2 Clasificador logístico con escalado
+
+```python
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, stratify=y, random_state=42
+)
+
+log_reg = Pipeline([
+    ("scaler", StandardScaler()),
+    (
+        "clf",
+        LogisticRegression(
+            penalty="l2",
+            C=1.0,
+            solver="lbfgs",
+            max_iter=2000,
+            class_weight="balanced",
+            random_state=42,
+        ),
+    ),
+])
+log_reg.fit(X_train, y_train)
+y_score = log_reg.predict_proba(X_test)[:, 1]
+y_pred = log_reg.predict(X_test)
+
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+print("ROC-AUC:", roc_auc_score(y_test, y_score))
+print("PR-AUC:", average_precision_score(y_test, y_score))
+```
+
+**Objetos útiles:**
+
+- `predict_proba`: probabilidades estimadas por clase.  
+- `decision_function`: logit lineal antes de sigmoide (clase binaria).  
+- `coef_`, `intercept_` en el paso `clf`.
+
+#### 8.3 Cambiar umbral manualmente
+
+```python
+from sklearn.metrics import precision_recall_curve
+
+prec, rec, thr = precision_recall_curve(y_test, y_score)
+# elegir thr según objetivo de negocio, p.ej. recall mínimo
+```
+
+```python
+tau = 0.35
+y_pred_tau = (y_score >= tau).astype(int)
+```
+
+#### 8.4 SMOTE dentro del pipeline (concepto)
+
+La librería **imbalanced-learn** permite `imblearn.pipeline.Pipeline` para que el resampling ocurra **solo en cada fold de CV** (Sesión 8). Esquema típico:
+
+```python
+# from imblearn.over_sampling import SMOTE
+# from imblearn.pipeline import Pipeline as ImbPipeline
+# pipe = ImbPipeline([("smote", SMOTE()), ("scaler", StandardScaler()), ("clf", LogisticRegression(...))])
+```
+
+*(Instalación: `imbalanced-learn`; usar siempre con validación anidada para evitar optimismo.)*
+
+#### 8.5 Calibración de probabilidades (puente conceptual)
+
+Las probabilidades $\hat{p}$ de la logística pueden estar **mal calibradas** (p.ej. predice 0.7 pero solo el 40 % de esos casos es positivo). Métodos como **Platt scaling** o **isotonic regression** sobre un conjunto de **calibración** ajustan la salida (`CalibratedClassifierCV` en sklearn). Importa en **decisiones económicas** donde el umbral se elige por coste esperado bayesiano.
+
+---
+
+### 9. Selección de métricas según contexto (temario)
+
+| Contexto | Énfasis típico |
+|----------|----------------|
+| **Detección de amenaza / fraude** | Recall alto (aceptar revisar FP) |
+| **Filtrado de spam** | Precisión alta (no bloquear correos legítimos) |
+| **Modelos con scores para ranking** | AUC, PR en validación temporal si aplica |
+
+---
+
+### 10. Laboratorio (según sílabo)
+
+- **NTB 1 —** Balanceo de clases (oversampling, undersampling, pesos) y efecto en métricas.  
+- **NTB 2 —** Regresión logística: entrenamiento, umbral, regularización y evaluación.
+
+---
+
+## Referencias bibliográficas principales
+
+1. Hosmer, D. W., Lemeshow, S., & Sturdivant, R. X. (2013). *Applied Logistic Regression* (3rd ed.). Wiley.  
+2. McCullagh, P., & Nelder, J. A. (1989). *Generalized Linear Models* (2nd ed.). Chapman & Hall.  
+3. Chawla, N. V., et al. (2002). SMOTE: synthetic minority over-sampling technique. *JAIR*, 16, 321–357.  
+4. Fawcett, T. (2006). An introduction to ROC analysis. *Pattern Recognition Letters*, 27(8), 861–874.  
+5. Davis, J., & Goadrich, M. (2006). The relationship between Precision-Recall and ROC curves. *ICML*.  
+6. Pedregosa, F., et al. (2011). Scikit-learn: Machine learning in Python. *JMLR*, 12, 2825–2830.  

@@ -1,280 +1,295 @@
 ---
 layout: default
 ---
-# Sesión 9: Clustering, Reducción de Dimensionalidad y Visualización
+# Sesión 9: Técnicas de Clustering, PCA y t-SNE
 
-En sesiones anteriores se trabajó con datos etiquetados, donde la variable objetivo guiaba el aprendizaje. Sin embargo, en muchos escenarios prácticos no se dispone de etiquetas. El **aprendizaje no supervisado** busca descubrir estructuras ocultas en los datos: agrupaciones naturales (clustering), representaciones de menor dimensionalidad que retengan información esencial (PCA) o visualizaciones que preserven la estructura de vecindad (t-SNE).
+### 1. Logro de la sesión
 
-Esta sesión aborda:
-- **Reducción de dimensionalidad**: PCA (lineal) y t-SNE (no lineal para visualización).
-- **Clustering**: K-Means, DBSCAN y clustering jerárquico.
-- Fundamentos matemáticos, criterios de evaluación y aplicaciones reales.
-
-## Logro de la sesión
-
-Aplicar técnicas de reducción de dimensionalidad y clustering para explorar datos no etiquetados, interpretar sus resultados y evaluar su calidad mediante métricas apropiadas.
-
-## Introducción: aprendizaje no supervisado
-
-El aprendizaje no supervisado se utiliza cuando no hay etiquetas. Los objetivos principales son:
-- Descubrir grupos o segmentos naturales (clustering).
-- Reducir la dimensionalidad para visualización, compresión o como paso previo a otros algoritmos.
-- Detectar anomalías o valores atípicos.
-
-A diferencia del aprendizaje supervisado, no hay una métrica de rendimiento única; la evaluación depende del objetivo y del conocimiento del dominio.
+Dominar el **aprendizaje no supervisado** desde tres frentes: **reducción de dimensionalidad lineal (PCA)**, **visualización no lineal (t-SNE)** y **clustering particional, densidad y jerárquico** (K-Means, DBSCAN, aglomerativo), incluyendo **criterios de elección de hiperparámetros**, **métricas internas sin etiquetas** y **patrones de código en Python** alineados al temario.
 
 ---
 
-## Reducción de dimensionalidad
+### 2. Historia y línea temporal (panorama)
 
-### Análisis de Componentes Principales (PCA)
+| Año / periodo | Tema | Referencia representativa |
+|---------------|------|-----------------------------|
+| **1901** | **PCA** (Pearson) y luego **Hotelling** (1933): direcciones de varianza máxima | Álgebra lineal aplicada a datos |
+| **1950s–60s** | Métodos factoriales y componentes en psicometría | Jolliffe (2002) |
+| **1957** | **Lloyd** publica (1982) el algoritmo k-means | Clustering particional |
+| **1996** | **DBSCAN** (Ester et al.): densidad y ruido | KDD |
+| **2002** | **Spectral clustering**, reformulaciones de corte de grafos | Ng, Jordan, Weiss |
+| **2008** | **t-SNE** (van der Maaten & Hinton) | Visualización no lineal |
+| **Actualidad** | UMAP (2018) como alternativa a t-SNE en algunos dominios | McInnes et al. (mención) |
 
-PCA es una técnica lineal que transforma las variables originales en un nuevo conjunto de variables no correlacionadas llamadas **componentes principales**, ordenadas por la cantidad de varianza que retienen.
-
-#### Fundamento matemático
-
-Dado un conjunto de datos centrados $\mathbf{X}$ de dimensiones $n \times p$:
-
-1. **Centrado**: se resta la media de cada característica.
-2. **Matriz de covarianza**:  
-   $$ \mathbf{\Sigma} = \frac{1}{n-1} \mathbf{X}^T \mathbf{X} $$
-3. **Descomposición espectral**: autovalores $\lambda_1 \ge \lambda_2 \ge \dots \ge \lambda_p$ y autovectores asociados $\mathbf{v}_1, \dots, \mathbf{v}_p$.
-
-#### Interpretación
-- Los autovalores representan la varianza explicada por cada componente.
-- **Scree plot**: gráfico de autovalores en orden descendente. Se busca un "codo" para decidir cuántos componentes retener.
-
-#### Aplicaciones
-- Visualización (proyectar a 2D/3D).
-- Reducción de ruido.
-- Preprocesamiento antes de clustering.
-
-### t-SNE (t-Distributed Stochastic Neighbor Embedding)
-
-t-SNE es una técnica **no lineal** especializada en visualización. Preserva las distancias locales, es decir, puntos cercanos en el espacio original permanecen cercanos en la proyección, pero no preserva distancias globales.
-
-#### Fundamento conceptual
-1. Convierte distancias entre puntos en probabilidades condicionales de similitud.
-2. En el espacio de baja dimensión, modela las similitudes con una distribución $t$ de Student.
-3. Minimiza la divergencia de Kullback-Leibler entre las dos distribuciones.
-
-#### Parámetros clave
-- **perplexity**: balance entre atención a vecinos locales y globales (típico: 5–50).
-- **n_iter**: número de iteraciones.
-
-#### Ventajas y limitaciones
-- **Ventaja**: excelente para visualizar clusters en 2D/3D.
-- **Limitación**: no es determinista, no permite proyectar nuevos datos fácilmente, es computacionalmente costoso.
-
-#### Comparación PCA vs t-SNE
-
-| Característica | PCA | t-SNE |
-|----------------|-----|-------|
-| Linealidad | Lineal | No lineal |
-| Preservación | Varianza global | Distancias locales |
-| Determinista | Sí | No |
-| Proyección de nuevos datos | Sí | No directamente |
-| Uso típico | Reducción general, preprocesamiento | Visualización de clusters |
+**Lectura:** el no supervisado **no tiene una métrica universal de “acierto”**; la validez depende de **estabilidad**, **utilidad de negocio** y, cuando sea posible, validación externa.
 
 ---
 
-## Algoritmos de Clustering
+### 3. PCA: fundamento matemático detallado
 
-### K-Means
+#### 3.1 Objetivo
 
-K-Means particiona los datos en $k$ grupos, donde cada punto pertenece al cluster con el centroide más cercano.
+Dado $\mathbf{X} \in \mathbb{R}^{n \times p}$ **centrado** por columnas, buscar proyecciones ortogonales $\mathbf{Z} = \mathbf{X}\mathbf{V}$ tales que las columnas de $\mathbf{Z}$ tengan **varianza máxima** sucesivamente y sean **no correlacionadas**.
 
-#### Algoritmo
-1. Inicializar $k$ centroides (K-Means++).
-2. Asignar cada punto al centroide más cercano.
-3. Recalcular centroides como la media de los puntos asignados.
-4. Repetir hasta convergencia.
+#### 3.2 Vía SVD (enfoque estándar)
 
-#### Función objetivo (inercia)
-$$ J = \sum_{j=1}^k \sum_{x \in C_j} \|x - \mu_j\|^2 $$
+Sea la descomposición en valores singulares:
 
-#### Elección de $k$
-- **Método del codo**: graficar inercia vs $k$, buscar el codo.
-- **Coeficiente de silueta**: mide cohesión y separación.
+$$ \mathbf{X} = \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^\top $$
 
-#### Limitaciones
-- Asume clusters esféricos y de tamaño similar.
-- Sensible a outliers.
-- Requiere especificar $k$.
+Las **direcciones principales** son columnas de $\mathbf{V}$; las **scores** son $\mathbf{U}\boldsymbol{\Sigma}$. Los **autovalores** de la matriz de covarianza muestral $ \mathbf{S} = \frac{1}{n-1}\mathbf{X}^\top\mathbf{X}$ son $\lambda_j = \sigma_j^2/(n-1)$.
 
-### DBSCAN (Density-Based Spatial Clustering of Applications with Noise)
+**Varianza explicada** por el componente $j$: $\lambda_j / \sum_k \lambda_k$.
 
-DBSCAN agrupa puntos basándose en densidad. No requiere número de clusters y detecta ruido.
+#### 3.3 ¿Cuántos componentes retener?
 
-#### Parámetros
-- $\varepsilon$ (eps): radio de vecindad.
-- `minPts`: mínimo de puntos para formar una región densa.
+- **Scree plot:** gráfico de $\lambda_j$ vs $j$; buscar “codo”.  
+- **Umbral acumulado:** p.ej. 90–95 % de varianza explicada (depende del uso).  
+- **Validación supervisada indirecta:** PCA como preprocesamiento y medir rendimiento downstream.
 
-#### Clasificación de puntos
-- **Núcleo**: al menos `minPts` vecinos dentro de $\varepsilon$.
-- **Borde**: vecino de un núcleo pero no es núcleo.
-- **Ruido**: no es núcleo ni borde.
+#### 3.4 Limitaciones
 
-#### Ventajas
-- No requiere especificar número de clusters.
-- Detecta clusters de forma arbitraria.
-- Identifica outliers como ruido.
+- **Linealidad:** solo rota/ proyecta linealmente.  
+- **Escalado:** obligatorio si las unidades difieren.  
+- **Interpretación:** loadings mezclan variables originales; interpretar “componentes” requiere cuidado.
 
-#### Desventajas
-- Sensible a los parámetros $\varepsilon$ y `minPts`.
-- Difícil de ajustar con densidades muy variables.
-
-### Clustering Jerárquico (Aglomerativo)
-
-Construye una jerarquía de clusters fusionando iterativamente los pares más cercanos.
-
-#### Algoritmo
-1. Cada punto es un cluster individual.
-2. Fusionar los dos clusters más cercanos según un **enlace**.
-3. Repetir hasta un solo cluster.
-
-#### Tipos de enlace
-- **Simple**: distancia mínima entre puntos.
-- **Completo**: distancia máxima.
-- **Promedio**: promedio de distancias entre todos los pares.
-- **Ward**: minimiza incremento de varianza intra-cluster.
-
-#### Dendrograma
-Representación gráfica de la jerarquía. Cortando a cierta altura se obtienen clusters.
-
-#### Ventajas y desventajas
-- No requiere $k$ previo.
-- Jerarquía interpretable.
-- Costoso computacionalmente ($O(n^3)$).
-
-### Comparación de algoritmos
-
-| Algoritmo | Forma de clusters | Número de clusters | Ruido | Escalabilidad |
-|-----------|-------------------|---------------------|-------|----------------|
-| K-Means | Esféricos | Fijo $k$ | No | Alta |
-| DBSCAN | Arbitraria | Automático | Sí | Media |
-| Jerárquico | Cualquier | Corte en dendrograma | No | Baja |
-
----
-
-## Métricas de evaluación para clustering
-
-- **Coeficiente de silueta**
-- **Índice de Davies-Bouldin**: menor valor indica mejor separación.
-- **Inercia**: útil para método del codo, pero no absoluta.
-
----
-
-## Caso integrado: Segmentación de clientes con PCA, t-SNE y múltiples clustering
-
-### Problema
-Una empresa de retail desea segmentar a sus clientes. Dispone de 5000 registros con:
-- Monto total gastado en último año.
-- Frecuencia de compra.
-- Antigüedad como cliente (meses).
-- Edad.
-
-### Preprocesamiento
-Estandarización (Z-score) para que todas las variables tengan igual influencia.
-
-### Reducción y visualización
-1. **PCA**: se retienen las 2 primeras componentes (explican 75% de varianza).
-2. **t-SNE**: se aplica sobre los datos estandarizados (perplexity=30) para visualizar estructura local de clusters.
-
-### Clustering comparativo
-
-#### K-Means
-- Se prueba $k=2..10$ con inercia y silueta.
-- Mejor $k=4$ (silueta = 0.52).
-- Clusters interpretados:
-  - Cluster 0: jóvenes, gasto medio, alta frecuencia.
-  - Cluster 1: mayores, alto gasto, baja frecuencia.
-  - Cluster 2: edad media, bajo gasto, baja frecuencia.
-  - Cluster 3: alta antigüedad, alto gasto, alta frecuencia (premium).
-
-#### DBSCAN
-- Se ajusta $\varepsilon=0.5$, `minPts=5`.
-- Detecta 3 clusters más ruido (aprox. 5% de clientes atípicos).
-
-#### Clustering Jerárquico (Ward)
-- Se construye el dendrograma.
-- Cortando a una altura que produce 4 clusters, se obtienen grupos consistentes con K-Means.
-
-### Validación final
-- Silueta promedio: K-Means 0.52, DBSCAN 0.48 (excluyendo ruido), Jerárquico 0.51.
-- Visualización con t-SNE confirma la separación de los 4 grupos.
-
-### Acciones de marketing por cluster
-- **Cluster 0**: ofertas en moda juvenil, fidelización.
-- **Cluster 1**: promociones para aumentar frecuencia.
-- **Cluster 2**: campañas de reactivación.
-- **Cluster 3**: trato VIP, descuentos exclusivos.
-
----
-
-## Implementación en Python (plantilla base)
-
-### PCA
+#### 3.5 Plantilla Python (`PCA`)
 
 ```python
-from sklearn.decomposition import PCA
+import numpy as np
 from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.pipeline import Pipeline
 
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-pca = PCA(n_components=2)
-X_pca = pca.fit_transform(X_scaled)
+pipe_pca = Pipeline([
+    ("scaler", StandardScaler()),
+    ("pca", PCA(n_components=0.95, svd_solver="full")),  # 95% varianza
+])
+X_proj = pipe_pca.fit_transform(X)
+explained = np.cumsum(pipe_pca.named_steps["pca"].explained_variance_ratio_)
+print("Componentes usados:", pipe_pca.named_steps["pca"].n_components_)
 ```
 
-### t-SNE
+---
+
+### 4. t-SNE: visualización no lineal
+
+#### 4.1 Idea
+
+Construir distribución de similitud en espacio alto $p_{ij}$ y otra en baja dimensión $q_{ij}$, minimizando **divergencia KL**:
+
+$$ C = \sum_{i,j} p_{ij} \log \frac{p_{ij}}{q_{ij}} $$
+
+Con $q_{ij}$ basado en **t-Student** para evitar compresión excesiva en el centro (crowding problem).
+
+#### 4.2 Parámetros
+
+- **perplexity:** número efectivo de vecinos (típico 5–50); controla equilibrio local/global.  
+- **learning rate**, **iteraciones**: afectan convergencia.
+
+#### 4.3 Limitaciones (críticas)
+
+- **No** hay transformación trivial para **nuevos puntos** (a diferencia de PCA).  
+- **Estocástico:** distintas semillas → distintos layouts.  
+- **No interpretar distancias globales** entre clusters lejanos como significativas.
+
+#### 4.4 Plantilla Python
 
 ```python
 from sklearn.manifold import TSNE
 
-tsne = TSNE(n_components=2, perplexity=30, random_state=42)
-X_tsne = tsne.fit_transform(X_scaled)
-```
-
-### K-Means
-
-```python
-from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
-
-kmeans = KMeans(n_clusters=4, random_state=42)
-labels_kmeans = kmeans.fit_predict(X_scaled)
-silhouette_kmeans = silhouette_score(X_scaled, labels_kmeans)
-```
-
-### DBSCAN
-
-```python
-from sklearn.cluster import DBSCAN
-
-dbscan = DBSCAN(eps=0.5, min_samples=5)
-labels_dbscan = dbscan.fit_predict(X_scaled)
-# Los puntos con label -1 son ruido
-```
-
-### Clustering jerárquico y dendrograma
-
-```python
-from scipy.cluster.hierarchy import dendrogram, linkage
-import matplotlib.pyplot as plt
-
-Z = linkage(X_scaled, method='ward')
-plt.figure(figsize=(10, 5))
-dendrogram(Z)
-plt.show()
+tsne = TSNE(
+    n_components=2,
+    perplexity=30,
+    learning_rate="auto",
+    init="pca",
+    random_state=42,
+)
+X_emb = tsne.fit_transform(X_scaled)
 ```
 
 ---
 
-## Resumen y buenas prácticas
+### 5. K-Means: algoritmo y teorema de convergencia
 
-1. **Preprocesa siempre** con escalado si usas distancias.
-2. Usa **PCA** para reducción general y **t-SNE** solo para visualización (no para preprocesamiento).
-3. Prueba múltiples algoritmos de clustering: K-Means (rápido, esférico), DBSCAN (ruido, formas arbitrarias), Jerárquico (jerarquías).
-4. Evalúa con **silueta** y valida con **visualización** (t-SNE o PCA).
-5. Interpreta los clusters con el dominio del problema.
+#### 5.1 Objetivo
+
+Minimizar inercia intra-cluster:
+
+$$ \sum_{k=1}^{K} \sum_{i \in C_k} \| x_i - \mu_k \|^2 $$
+
+#### 5.2 Lloyd (k-means estándar)
+
+1. Inicializar centroides $\mu_k$.  
+2. **Asignación:** cada punto al centroide más cercano.  
+3. **Actualización:** recalcular $\mu_k$ como media de puntos asignados.  
+4. Repetir hasta convergencia o máximo de iteraciones.
+
+**Converge** a mínimo local (no global). Múltiples **restarts** (`n_init` en sklearn).
+
+#### 5.3 Elección de $K$
+
+- **Codo:** inercia vs $K$.  
+- **Silueta media** por $K$.  
+- **Davies–Bouldin** (menor es mejor).
+
+#### 5.4 Sensibilidad
+
+- **Escala** de variables (usar `StandardScaler`).  
+- **Outliers** pueden desplazar centroides.  
+- Asume clusters **convexos** de forma aproximada (fallos en anillos concéntricos).
+
+#### 5.5 Plantilla Python
+
+```python
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
+km = Pipeline([
+    ("scaler", StandardScaler()),
+    ("kmeans", KMeans(n_clusters=5, n_init="auto", random_state=42)),
+])
+labels = km.fit_predict(X)
+```
+
+---
+
+### 6. DBSCAN: densidad y ruido
+
+#### 6.1 Conceptos
+
+- **$\epsilon$-vecindad** alrededor de $x$.  
+- **Punto núcleo** si tiene al menos `min_samples` puntos en su $\epsilon$-vecindad.  
+- **Borde** si no es núcleo pero está en vecindad de un núcleo.  
+- **Ruido** si no pertenece a ningún cluster.
+
+**Ventajas:** no requiere $K$ **a priori**; encuentra formas arbitrarias; identifica **outliers** como ruido.
+
+**Desventajas:** sensible a **$\epsilon$** y densidad variable; combina mal con **alta dimensión** (“maldición”).
+
+#### 6.2 Plantilla Python
+
+```python
+from sklearn.cluster import DBSCAN
+
+db = DBSCAN(eps=0.5, min_samples=5, metric="euclidean")
+labels = db.fit_predict(X_scaled)
+n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+n_noise = list(labels).count(-1)
+```
+
+---
+
+### 7. Clustering jerárquico aglomerativo
+
+#### 7.1 Enfoque bottom-up
+
+Comienza con cada punto como cluster y **fusiona** el par más cercano según **enlace**:
+
+| Enlace | Distancia entre clusters $A,B$ |
+|--------|----------------------------------|
+| **Single** | $\min_{a\in A, b\in B} d(a,b)$ — puede encadenar (*chaining*) |
+| **Complete** | $\max$ — clusters compactos |
+| **Average** | media de pares |
+| **Ward** | minimiza incremento de varianza intra (tendencia esférica) |
+
+**Dendrograma:** cortar a altura $h$ para obtener $K$ clusters.
+
+#### 7.2 Plantilla Python
+
+```python
+from sklearn.cluster import AgglomerativeClustering
+
+agg = AgglomerativeClustering(n_clusters=4, linkage="ward")
+labels = agg.fit_predict(X_scaled)
+```
+
+---
+
+### 8. Métricas sin *ground truth*
+
+#### 8.1 Silueta (Rousseeuw, 1987)
+
+Para punto $i$:
+
+$$ s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))} $$
+
+donde $a(i)$ es distancia media intra-cluster y $b(i)$ la menor distancia media a otro cluster.
+
+Rango $[-1,1]$; valores altos → clusters bien separados y cohesionados.
+
+#### 8.2 Davies–Bouldin
+
+Promedio sobre clusters de razones dispersión / separación; **menor** valor suele indicar mejor partición.
+
+#### 8.3 Limitaciones
+
+Todas las métricas internas tienen **supuestos** (p.ej. silueta favorece formas convexas). Validar con **negocio** y estabilidad (bootstrap).
+
+---
+
+### 9. Comparación de métodos y guía de uso
+
+| Método | Fortaleza | Debilidad típica |
+|--------|-----------|------------------|
+| K-Means | Rápido, escalable | Formas convexas, necesita $K$ |
+| DBSCAN | Formas arbitrarias, ruido | Parámetros, alta dimensión |
+| Jerárquico | Dendrograma interpretable | Coste en $n$ grande |
+| PCA | Preprocesamiento, denoising | Lineal |
+| t-SNE | Visualización | No proyecta nuevos puntos fácilmente |
+
+#### 9.1 *Kernel PCA* (mención avanzada)
+
+Si la estructura es **no lineal**, PCA lineal puede fallar. **Kernel PCA** aplica el truco del kernel igual que SVM: encuentre direcciones de varianza máxima en un espacio de características inducido por $K(\mathbf{x},\mathbf{x}')$. Coste computacional mayor; útil antes de clustering en datos curvados.
+
+#### 9.2 Clustering espectral (idea)
+
+Construye un grafo de similitud entre puntos y usa **autovectores del Laplaciano** para embeder datos en dimensiones bajas donde **K-Means** puede separar estructuras no convexas (Ng et al., 2002). `sklearn.cluster.SpectralClustering` lo implementa.
+
+#### 9.3 Selección automática de $K$ con silueta (ejemplo de bucle)
+
+```python
+from sklearn.metrics import silhouette_score
+
+sil = []
+K_range = range(2, 15)
+for k in K_range:
+    km = KMeans(n_clusters=k, n_init="auto", random_state=42)
+    lab = km.fit_predict(X_scaled)
+    sil.append(silhouette_score(X_scaled, lab))
+
+best_k = K_range[int(np.argmax(sil))]
+```
+
+**Advertencia:** maximizar silueta **no garantiza** clusters útiles para negocio; puede favorecer particiones equilibradas artificialmente.
+
+#### 9.4 *Clustering* y escalado: check-list
+
+1. `StandardScaler` (o `RobustScaler` con outliers fuertes).  
+2. Si usas **Gower** o distancias mixtas (no está en sklearn puro), considerar bibliotecas especializadas.  
+3. Para **alta dimensión**, considerar PCA previa solo si preserva varianza relevante.
+
+#### 9.5 Buenas prácticas con t-SNE
+
+- Correr **varias semillas** y comparar estabilidad visual.  
+- Probar **perplexidades** distintas; documentar la elegida.  
+- No usar t-SNE como **única** evidencia de número de clusters: puede separar o fusionar grupos según parámetros.
+
+---
+
+### 10. Laboratorio (según sílabo)
+
+- **NTB 1 —** PCA y t-SNE: reducción de dimensionalidad y visualización de estructura.  
+- **NTB 2 —** Clustering: K-Means, DBSCAN y/o jerárquico con métricas de cohesión y silueta.
+
+---
+
+## Referencias bibliográficas principales
+
+1. Jolliffe, I. T. (2002). *Principal Component Analysis* (2nd ed.). Springer.  
+2. van der Maaten, L., & Hinton, G. (2008). Visualizing data using t-SNE. *Journal of Machine Learning Research*, 9, 2579–2605.  
+3. Ester, M., Kriegel, H.-P., Sander, J., & Xu, X. (1996). A density-based algorithm for discovering clusters in large spatial databases with noise. *KDD*.  
+4. Rousseeuw, P. J. (1987). Silhouettes: a graphical aid to the interpretation and validation of cluster analysis. *Journal of Computational and Applied Mathematics*, 20, 53–65.  
+5. Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning* (cap. 14). Springer.  
+6. Ng, A. Y., Jordan, M. I., & Weiss, Y. (2002). On spectral clustering: Analysis and an algorithm. *NeurIPS*.  
