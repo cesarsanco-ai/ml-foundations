@@ -23,8 +23,8 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 * 📓 [Ejercicio 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion01/practica/SESION1-NTB1-ML.ipynb)
 * 📓 [Ejercicio 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion01/practica/SESION1-NTB2-ML.ipynb)
+
 <!-- 
-***
 
 ## 🚀 Proyectos End-to-End
 
