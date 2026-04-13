@@ -9,7 +9,6 @@ layout: default
 
 Comprender el flujo del aprendizaje automático (Supervisado y No Supervisado), en entornos de desarrollo y producción.
 
-***
 
 ## 📘 Contenido Teórico
 
@@ -17,9 +16,8 @@ Fundamentos conceptuales y arquitectura de soluciones basadas en datos.
 
 * 🖼️ [Sesión 1](../material/Sesion01/teoria/S01-ML.md)
 
-***
 
-### 💻 Ejercicios
+## 💻 Ejercicios
 
 * 📓 [Ejercicio 1](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion01/practica/SESION1-NTB1-ML.ipynb)
 * 📓 [Ejercicio 2](https://github.com/cesarsanco-ai/ml-foundations/blob/main/docs/material/Sesion01/practica/SESION1-NTB2-ML.ipynb)
