@@ -20,10 +20,10 @@ Cada sesión incluye material teórico, ejercicios, recursos complementarios y p
 | 06 | [Árboles de Decisión y Random Forest](sesiones/sesion-06.md) |
 | 07 | [Gradient Boosting](sesiones/sesion-07.md) |
 | 08 | [Bias-Variance, Validación, Optimización y Selección de Modelos](sesiones/sesion-08.md) |
-| 09 | [Técnicas de Clustering, PCA y t-SNE](sesiones/sesion-09.md) |
-| 10 | [Series de Tiempo](sesiones/sesion-10.md) |
-| 11 | [Sistemas de Recomendación](sesiones/sesion-11.md) |
-| 12 | [Graph ML y Geodata](sesiones/sesion-12.md) |
+| 09 | [Técnicas de Clustering y Reducción de Dimensionalidad](sesiones/sesion-09.md) |
+| 10 | [Anomalías, Reglas de Asociación y Modelado de Densidad](sesiones/sesion-10.md) |
+| 11 | [Series de Tiempo](sesiones/sesion-11.md) |
+| 12 | [Sistemas de Recomendación](sesiones/sesion-12.md) |
 | 13 | [Interpretabilidad de Modelos](sesiones/sesion-13.md) |
 | 14 | [Evaluación en Producción y Ciclo de Vida del ML](sesiones/sesion-14.md) |
 
